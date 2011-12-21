@@ -1,0 +1,393 @@
+=pod
+
+=head1 NAME
+
+Data::Range::Compare::Stream - Compute intersections of Ranges with Iterators
+
+=head1 SYNOPSIS
+
+  use Data::Range::Compare::Stream;
+  use Data::Range::Compare::Stream::Iterator::Array;
+  use Data::Range::Compare::Stream::Iterator::Consolidate;
+  use Data::Range::Compare::Stream::Iterator::Compare::Asc;
+
+  # create the iterator for column_a's Consolidation iterator
+  my $column_a=Data::Range::Compare::Stream::Iterator::Array->new();
+  $column_a->create_range(3,11);
+  $column_a->create_range(17,19);
+
+  # create the iterator for column_b's Consolidation iterator
+  my $column_b=Data::Range::Compare::Stream::Iterator::Array->new();
+  $column_b->create_range(0,0);
+  $column_b->create_range(1,3);
+  $column_b->create_range(5,7);
+  $column_b->create_range(6,9);
+  $column_b->create_range(11,15);
+  $column_b->create_range(17,33);
+
+  # sort columns a and be in consolidate order
+  $column_a->prepare_for_consolidate_asc;
+  $column_b->prepare_for_consolidate_asc;
+
+  # create the consolidator object for column_a our iterator to it
+  my $column_a_consolidator=Data::Range::Compare::Stream::Iterator::Consolidate->new($column_a);
+
+  # create the consolidator object for column_b our iterator to it
+  my $column_b_consolidator=Data::Range::Compare::Stream::Iterator::Consolidate->new($column_b);
+
+  # create the object that will compare columns a and b
+  my $compare=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+
+  # add column a for processing
+  $compare->add_consolidator($column_a_consolidator);
+
+  # add column b for processing
+  $compare->add_consolidator($column_b_consolidator);
+
+
+  # now we can compute the intersections of our objects
+
+  while($compare->has_next) {
+     # fetch our current result object
+    my $row=$compare->get_next;
+  
+    # if no ranges overlap with this row move on
+    next if $row->is_empty;
+  
+    # now we can output the current range
+    my $common_range=$row->get_common;
+    my $overlap_count=$row->get_overlap_count;
+  
+    print "A total of: [$overlap_count] Ranges intersected with Common range: $common_range\n";
+  
+    my $overlap_ids=$row->get_overlap_ids;
+    for each my $consolidator_id (@{$overlap_ids}) {
+  
+      if($consolidator_id==0) {
+  
+        my $result=$row->get_consolidator_result_by_id($consolidator_id);
+        print "  Column a contained the following overlaps $result\n";
+  
+      } elsif($consolidator_id==1) {
+  
+        my $result=$row->get_consolidator_result_by_id$consolidator_id);
+        print "  Column b contained the following overlaps $result\n";
+  
+      }
+  
+    }
+  
+    print "\n";
+ 
+  }
+
+=head1 DESCRIPTION
+
+The collection of modules to quickly compute intersections of 2 dimensional ranges with iterators.
+
+=head2 Getting Started
+
+The internals of Data::Range::Compare::Stream only support dealing with integers by default: This section 
+covers how to Extend Data::Range::Compare::Stream to support your data types. 
+
+=over 2
+
+=item * Creating a Package that supports comparing your Data Types
+
+If you are comparing anything other than integers then you will need to subclass Data::Range::Compare::Stream.
+
+  Example Package that compares DateTime ranges
+
+    package MyDateTypeRangeCompare;
+    
+    use strict;
+    use warnings;
+    use DateTime;
+    use base qw(Data::Range::Compare::Stream);
+    
+    #
+    # Define the class internals will use when creating a new object instance(s)
+    use constant NEW_FROM_CLASS=>'MyDateTypeRangeCompare';
+    
+    sub cmp_values ($$) {
+      my ($self,$value_a,$value_b)=@_;
+      return DateTime->compare($value_a,$value_b);
+    }
+    
+    sub add_one ($) {
+      my ($self,$value)=@_;
+      return $value->clone->add(seconds=>1);
+    }
+    
+    sub sub_one ($) {
+      my ($self,$value)=@_;
+      return $value->clone->subtract(seconds=>1);
+    }
+    
+    sub range_start_to_string {
+      my ($self)=@_;
+      return $self->range_start->strftime('%F %T');
+    }
+    
+    sub range_end_to_string {
+      my ($self)=@_;
+      return $self->range_end->strftime('%F %T');
+    }
+
+    1;
+
+=item * Making use of your new package
+
+Once you have created a new package to compare your ranges with, you can  start processing your data.
+
+  Example how how to use the new module
+
+    # load the package used to compare our ranges
+    use MyDateTypeRangeCompare;
+    
+    # load our stream compare packages
+    use Data::Range::Compare::Stream::Iterator::Array;
+    use Data::Range::Compare::Stream::Iterator::Consolidate;
+    use Data::Range::Compare::Stream::Iterator::Compare::Asc;
+    
+    # create the containers that we will use to sort our data
+    #
+    # Note: we are passing the name of our new class to the object constructors!
+    my $vpn_a=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'MyDateTypeRangeCompare');
+    my $vpn_b=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'MyDateTypeRangeCompare');;
+    my $vpn_c=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'MyDateTypeRangeCompare');;
+    
+    #
+    # Outage block for vpn_a
+    $vpn_a->create_range(
+       DateTime->new(qw(year 2010 month 01 day 02 hour 10 minute 01 second 59)),
+       DateTime->new(qw(year 2010 month 01 day 02 hour 10 minute 05 second 47))
+    );
+    
+    $vpn_a->create_range(
+       DateTime->new(qw(year 2010 month 05 day 02 hour 07 minute 41 second 32)),
+       DateTime->new(qw(year 2010 month 05 day 02 hour 08 minute 00 second 16))
+    );
+    
+    
+    #
+    # Outage block for vpn_b
+    $vpn_b->create_range(
+       DateTime->new(qw(year 2010 month 05 day 02 hour 07 minute 41 second 32)),
+       DateTime->new(qw(year 2010 month 05 day 02 hour 07 minute 58 second 13))
+    );
+    
+    $vpn_b->create_range(
+       DateTime->new(qw(year 2010 month 01 day 02 hour 10 minute 03 second 59)),
+       DateTime->new(qw(year 2010 month 01 day 02 hour 10 minute 04 second 37))
+    );
+    
+    #
+    # Outage block for vpn_c
+    $vpn_c->create_range(
+        DateTime->new(qw(year 2010 month 01 day 02 hour 10 minute 03 second 59)),
+        DateTime->new(qw(year 2010 month 01 day 02 hour 10 minute  04 second 37))
+    );
+    
+    $vpn_c->create_range(
+        DateTime->new(qw(year 2010 month 05 day 02 hour 07 minute 41 second 32)),
+        DateTime->new(qw(year 2010 month 05 day 02 hour 07 minute 58 second 13))
+    );
+    
+    $vpn_c->create_range(
+        DateTime->new(qw(year 2010 month 05 day 02 hour 07 minute 59 second 07)),
+        DateTime->new(qw(year 2010 month 05 day 02 hour 08 minute 00 second 16))
+    );
+    
+    $vpn_c->create_range(
+        DateTime->new(qw(year 2010 month 06 day 18 hour 10 minute 58 second 21)),
+        DateTime->new(qw(year 2010 month 06 day 18 hour 22 minute 06 second 55))
+      );
+    
+    # Make sure our list of vpns are sorted
+    $vpn_a->prepare_for_consolidate_asc;
+    $vpn_b->prepare_for_consolidate_asc;
+    $vpn_c->prepare_for_consolidate_asc;
+    
+    # Create our compare object
+    my $compare=Data::Range::Compare::Stream::Iterator::Compare::Asc->new;
+    
+    $compare->add_consolidator($column_a);
+    $compare->add_consolidator($column_b);
+    $compare->add_consolidator($column_c);
+    
+    my @column_names=(qw(vpn_a vpn_b vpn_c));
+    
+    while($compare->has_next) {
+      my $row=$compare->get_next;
+    
+      # skip all rows that don't completely overlap
+      next unless $row->all_overlap;
+    
+      my $common=$row->get_common;
+    
+      my $outage=$common->range_end->subtract_datetime($common->range_start);
+      print "Common outage range: $common\n";
+      print "Total Downtime: Months: $outage->{months} Days: $outage->{days} Minutes: $outage->{minutes} Seconds: $outage->{seconds}\n";
+    
+      for(my $id=0;$id<=$#column_names;++$id) {
+        print $column_names[$id],' ',$row->get_consolidator_result_by_id($id)->get_common,"\n";
+      }
+      print "\n";
+    }
+
+
+=back
+
+=head2 OO Methods
+
+This section covers the OO Methods in the package.
+
+=over 3
+
+=item * my $range=new Data::Range::Compare::Stream($range_start,$range_end);
+
+=item * my $range=new Data::Range::Compare::Stream($range_start,$range_end,$data);
+
+Object constructor:
+
+  Creates a new instance of Data::Range::Compare::Stream
+
+   Arguments an their meanings:
+
+     $range_start -- Required
+       Represents the start of this given range
+
+     $range_end -- Required
+       Represents the end of this range.
+
+     $data -- Optional
+       Used to tag this range with your data
+
+=item * my $value=$range->range_start
+
+  Returns the object that represents the start of this range.
+
+=item * my $string=$range->range_start_to_string
+
+  Returns a string that represents the start of the range.
+
+=item * my $value=$range->range_end
+
+  Returns the object that represents the end of the rage.
+
+=item * my $string=$range->range_end_to_string;
+
+  Returns a string that represents the end of the range.
+
+=item * my $new_value=$range->sub_one($value);
+
+  Computes and returns the object that came before this $value
+
+=item * my $new_value=$range->add_one($value)
+
+  Computes and returns the object that comes after this $value
+
+=item * my $cmp=$range->cmp_values($value_a,$value_b)
+
+   Returns -1,0,1 similar to <=> or cmp.
+
+=item * my $next_range_start_value=$range->next_range_start
+
+  Returns the starting value of the range that will come after this range.
+
+=item * my $previous_range_end_value=$range->previous_range_end
+
+  Returns a value that represents the end of the range that precedes this one.
+
+=item * my $data=$range->data($optional_value);
+
+  Used to get and set the data value for this range.
+
+    Sets when called with an argument
+
+      Example:
+        
+	$range->data('some value');
+
+    Gets the current data value when called without any arguments
+    
+      Example:
+
+        my $value=$range->data;
+
+=item * my $class=$range->NEW_FROM_CLASS;
+
+  Returns the name of the class new objects will be constructed from.
+
+=item *  my $new_range=$get_common_range([$range_a,$range_b,$range_c]);
+
+  Given an array reference of ranges that overlap $new_range will be the smallest intersecting range;
+
+=item * my $new_range=$range->get_overlapping_range([$range_a,$range_b,$range_c]);
+
+  Given an array reference of ranges: $new_range will contain all of the ranges listed in the array reference
+
+=item * my $cmp=$range_a->cmp_range_start($range_b);
+
+  Compares the starting values of $range_a and $range_b
+
+    Returns: -1 0 1,see perlop: <=> or cmp
+
+=item * my $cmp=$range_a->cmp_range_end($range_b);
+
+  Compares the ending values of $range_a and $range_b
+
+    Returns: -1 0 1, see perlop: <=> or cmp
+
+=item * my $cmp=$range_a->cmp_range_start_to_range_end($range_b);
+
+  Compares the start of $range_a to the end of $range_b
+
+    Returns: -1 0 1, see perlop: <=> or cmp
+
+=item * if($range->contains_value($value)) { do something }
+
+  Returns true if $range contains $value
+
+=item * if($range_a->contiguous_check($range_b)) { do something }
+
+  Returns true if $range_a is immediately followed by $range_b.
+
+=item * my $cmp=$range_a->cmp_ranges($range_b);
+
+  Compares $range_a to $range_b in Ascending order.
+    
+    Returns: -1 0 1, see perlop: <=> or cmp
+
+=item * if($range_a->overlap($range_b) { do something }
+
+  Returns true if $range_a overlaps with $range_b
+
+
+=back
+
+=head1 SEE ALSO
+
+Data::Range::Compare::Stream::Cookbook
+
+=head1 AUTHOR
+
+Michael Shipper
+
+=head1 Source-Forge Project
+
+As of version 0.001 the Project has been moved to Source-Forge.net
+
+L<Data Range Compare|https://sourceforge.net/projects/data-range-comp/>
+L<https://sourceforge.net/projects/data-range-comp/>
+
+=head1 COPYRIGHT
+
+Copyright 2011 Michael Shipper.  All rights reserved.
+
+This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+=cut
+

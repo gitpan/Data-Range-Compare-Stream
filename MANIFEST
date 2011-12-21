@@ -1,0 +1,25 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+lib/Data/Range/Compare/Stream/Iterator/Base.pm
+lib/Data/Range/Compare/Stream/Iterator/Consolidate/Result.pm
+lib/Data/Range/Compare/Stream/Iterator/Consolidate.pm
+lib/Data/Range/Compare/Stream/Iterator/Compare/Asc.pm
+lib/Data/Range/Compare/Stream/Iterator/Compare/Base.pm
+lib/Data/Range/Compare/Stream/Iterator/Compare/Result.pm
+lib/Data/Range/Compare/Stream/Iterator/Array.pm
+lib/Data/Range/Compare/Stream/Sort.pm
+lib/Data/Range/Compare/Stream/Constants.pm
+lib/Data/Range/Compare/Stream.pod
+lib/Data/Range/Compare/Stream.pm
+t/Data-Range-Compare-Stream-Iterator-Compare-Asc.t
+t/Data-Range-Compare-Stream.t
+t/Data-Range-Compare-Stream-Iterator-Array.t
+t/Data-Range-Compare-Stream-Iterator-Consolidate.t
+t/Data-Range-Compare-Stream-Sort.t
+t/Data-Range-Compare-Stream-Iterator-Consolidate-Result.t
+t/Data-Range-Compare-Stream-Iterator-Compare-Result.t
+examples/SYNOPSIS.pl
+examples/DateTime.pl
+META.yml                                 Module meta-data (added by MakeMaker)

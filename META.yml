@@ -1,0 +1,13 @@
+--- #YAML:1.0
+name:                Data-Range-Compare-Stream
+version:             0.001
+abstract:            Compute intersections of Ranges with Iterators
+license:             ~
+author:              
+    - Michael E. Shipper <mshipper@yahoo.com>
+generated_by:        ExtUtils::MakeMaker version 6.42
+distribution_type:   module
+requires:     
+meta-spec:
+    url:     http://module-build.sourceforge.net/META-spec-v1.3.html
+    version: 1.3
