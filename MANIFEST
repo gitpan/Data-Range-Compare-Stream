@@ -4,12 +4,22 @@ MANIFEST
 README
 lib/Data/Range/Compare/Stream/Iterator/Base.pm
 lib/Data/Range/Compare/Stream/Iterator/Consolidate/Result.pm
+lib/Data/Range/Compare/Stream/Iterator/Consolidate/Result.pod
+lib/Data/Range/Compare/Stream/Iterator/Array.pod
 lib/Data/Range/Compare/Stream/Iterator/Consolidate.pm
 lib/Data/Range/Compare/Stream/Iterator/Compare/Asc.pm
 lib/Data/Range/Compare/Stream/Iterator/Compare/Base.pm
+lib/Data/Range/Compare/Stream/Iterator/Compare/Asc.pod
 lib/Data/Range/Compare/Stream/Iterator/Compare/Result.pm
+lib/Data/Range/Compare/Stream/Iterator/Compare/Base.pod
+lib/Data/Range/Compare/Stream/Iterator/Compare/Result.pod
 lib/Data/Range/Compare/Stream/Iterator/Array.pm
+lib/Data/Range/Compare/Stream/Iterator/Consolidate.pod
+lib/Data/Range/Compare/Stream/Iterator/Base.pod
 lib/Data/Range/Compare/Stream/Sort.pm
+lib/Data/Range/Compare/Stream/Cookbook.pod
+lib/Data/Range/Compare/Stream/Constants.pod
+lib/Data/Range/Compare/Stream/Sort.pod
 lib/Data/Range/Compare/Stream/Constants.pm
 lib/Data/Range/Compare/Stream.pod
 lib/Data/Range/Compare/Stream.pm
@@ -18,8 +28,11 @@ t/Data-Range-Compare-Stream.t
 t/Data-Range-Compare-Stream-Iterator-Array.t
 t/Data-Range-Compare-Stream-Iterator-Consolidate.t
 t/Data-Range-Compare-Stream-Sort.t
+t/Data-Range-Compare-Stream-Iterator-Compare-Base.t
+t/Data-Range-Compare-Stream-Constants.t
 t/Data-Range-Compare-Stream-Iterator-Consolidate-Result.t
 t/Data-Range-Compare-Stream-Iterator-Compare-Result.t
+t/Data-Range-Compare-Stream-Iterator-Base.t
 examples/SYNOPSIS.pl
 examples/DateTime.pl
 META.yml                                 Module meta-data (added by MakeMaker)

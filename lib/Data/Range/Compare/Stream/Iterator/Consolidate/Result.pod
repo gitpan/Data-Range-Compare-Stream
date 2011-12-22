@@ -1,0 +1,92 @@
+=pod
+
+=head1 NAME
+
+Data::Range::Compare::Stream::Iterator::Consolidate::Result - Range Compare Consolidate Result Object
+
+=head1 DESCRIPTION
+
+This module is a result object for classes that implement:
+
+Data::Range::Compare::Stream::Iterator::Consolidate
+
+=head2 OO Methods
+
+=over 3
+
+=item * my $result=new Data::Range::Compare::Stream::Iterator::Consolidate::Result (COMMON_RANGE,START_RANGE,END_RANGE);
+
+  Objet constructor:
+
+    All argumetns are mandiotry
+
+      COMMON_RANGE
+
+        Implements Data::Range::Compare::Stream
+
+      START_RANGE 
+
+        Implements Data::Range::Compare::Stream
+
+      END_RANGE
+
+        Implements Data::Range::Compare::Stream
+
+=item * my $range=$result->get_common
+
+  Returns the common range.
+
+=item * my $range=$result->get_common_range
+
+  Alias to $result->get_common
+
+=item * my $range=$result->get_start_range
+
+  Returns the starting range
+
+=item * my $range=$result->get_start
+
+  Returns the starting range
+
+=item * my $range=$result->get_end_range
+
+  Returns the ending range
+
+=item * my $range=$result->get_end
+
+  Returns the ending range
+
+=item * my $string=$result->to_string;
+
+  Returns a string based on the following sprintf statemnet
+
+  sprintf 'Commoon Range: [%s] Starting range: [%s] Ending Range: [%s]',$self->get_common,$self->get_start,$self->get_end
+
+=back
+
+=head1 SEE ALSO
+
+Data::Range::Compare::Stream::Iterator::Compare::Asc
+
+Data::Range::Compare::Stream::Iterator::Compare::Base
+
+=head1 AUTHOR
+
+Michael Shipper
+
+=head1 Source-Forge Project
+
+As of version 0.001 the Project has been moved to Source-Forge.net
+
+L<Data Range Compare|https://sourceforge.net/projects/data-range-comp/>
+L<https://sourceforge.net/projects/data-range-comp/>
+
+=head1 COPYRIGHT
+
+Copyright 2011 Michael Shipper.  All rights reserved.
+
+This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+=cut
+

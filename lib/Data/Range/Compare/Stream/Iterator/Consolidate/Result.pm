@@ -13,12 +13,12 @@ sub new {
   bless [$common,$start,$end],$class;
 }
 
-sub get_common { $_[0]->[$_[0]->COMMON_RANGE] }
-sub get_common_range { $_[0]->[$_[0]->COMMON_RANGE] }
-sub get_start { $_[0]->[$_[0]->START_RANGE] }
-sub get_start_range { $_[0]->[$_[0]->START_RANGE] }
-sub get_end { $_[0]->[$_[0]->END_RANGE] }
-sub get_end_range { $_[0]->[$_[0]->END_RANGE] }
+sub get_common { $_[0]->[COMMON_RANGE] }
+sub get_common_range { $_[0]->[COMMON_RANGE] }
+sub get_start { $_[0]->[START_RANGE] }
+sub get_start_range { $_[0]->[START_RANGE] }
+sub get_end { $_[0]->[END_RANGE] }
+sub get_end_range { $_[0]->[END_RANGE] }
 
 sub to_string {
   my ($self)=@_;

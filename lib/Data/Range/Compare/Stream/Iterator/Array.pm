@@ -2,21 +2,14 @@ package Data::Range::Compare::Stream::Iterator::Array;
 
 use strict;
 use warnings;
-use overload '""'=>\&to_string,fallback=>1;
 use Carp qw(croak);
-
-
+use base qw(Data::Range::Compare::Stream::Iterator::Base);
 use Data::Range::Compare::Stream::Sort;
 
 sub new {
   my ($class,%args)=@_;
-  my $self=bless {qw(range_id 0 sorted 0 new_from Data::Range::Compare::Stream),range_list=>[],%args},$class;
-
-  return $self;
-
+  return $class->SUPER::new(qw(sorted 0 new_from Data::Range::Compare::Stream),range_list=>[],%args);
 }
-
-sub to_string { ref($_[0]) }
 
 sub set_sorted { $_[0]->{sorted}=$_[1] }
 
@@ -33,7 +26,6 @@ sub add_range {
   croak "Object: [$self] has all ready been sorted" if $self->sorted;
   push @{$self->{range_list}},$range;
 }
-
 
 sub create_range {
   my ($self,@args)=@_;

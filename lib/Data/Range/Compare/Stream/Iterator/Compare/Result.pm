@@ -48,6 +48,8 @@ sub get_consolidator_result_by_id {
   $self->[$self->OVERLAP_RESULTS]->[$id]
 }
 
+*get_result_by_id=\&get_consolidator_result_by_id;
+
 sub is_empty { $_[0]->get_overlap_count==0 }
 *none_overlap=\&is_empty;
 

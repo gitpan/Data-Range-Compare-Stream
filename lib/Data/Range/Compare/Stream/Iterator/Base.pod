@@ -1,0 +1,104 @@
+=pod
+
+=head1 NAME
+
+Data::Range::Compare::Stream::Iterator::Base - Abstract class
+
+=head1 SYNOPSIS
+
+  
+  package MyIterator;
+
+  use strict;
+  use warnings;
+  use base qw(Data::Range::Compare::Stream::Iterator::Base);
+  use Data::Range::Compare::Stream;
+
+  use IO::File;
+
+  sub new {
+    my ($class,%args)=@_;
+    my $has_next;
+    my $self=$class->SUPER::new(%args);
+
+    if(defined($args{filename}) {
+      my $fh=IO::File->new($args{filename});
+      if($fh) {
+         $args{fh)=$fh;
+	 my $line=$fh->getline;
+	 $self->{next_line}=$line;
+	 $has_next=$line ?  1 : 0;
+      } else {
+        $self->{msg}="Error could not open $args{filename} error was: $!";
+      }
+
+    }
+
+    $self->{has_next}=$has_next;
+    return $self;
+  }
+
+  sub get_next {
+    my ($self)=@_;
+    return undef unless $self->has_next;
+
+    my $line=$self->{next_line};
+    $self->{next_line}=$self->{fh}->getline;
+    $self->{has_next}=$self->{next_line} ?  1 : 0;
+
+    chomp $line;
+    return new Data::Range::Compare::Stream(split /\s+/,$line);
+  }
+
+=head1 DESCRIPTION
+
+This module acts as the base class for all Data::Range::Compare::Stream::Iterator classes.
+
+=head2 Methods to implement
+
+=over 3
+
+=item * my $iterator=new MyIterator(arguments=>here);
+
+ The default object constructor takes a hash of arguments, and returns a blessed anonymous hash.
+ If you want to do anything other than that you will need to overload this function!
+
+=item * while($iterator->has_next) { do something }
+
+  The internals return $self->{has_next};
+ If you want to do anything other than that you will need to overload this function!
+
+=item * my $range=$iterator->get_next;
+
+  Objects returned from this function should implement Data::Range::Compare::Stream
+
+=item * my $string=$iterator->to_string;
+
+  Returns the package name of $iterator
+
+=back
+
+=head1 SEE ALSO
+
+Data::Range::Compare::Stream::Cookbook
+
+=head1 AUTHOR
+
+Michael Shipper
+
+=head1 Source-Forge Project
+
+As of version 0.001 the Project has been moved to Source-Forge.net
+
+L<Data Range Compare|https://sourceforge.net/projects/data-range-comp/>
+L<https://sourceforge.net/projects/data-range-comp/>
+
+=head1 COPYRIGHT
+
+Copyright 2011 Michael Shipper.  All rights reserved.
+
+This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+=cut
+
