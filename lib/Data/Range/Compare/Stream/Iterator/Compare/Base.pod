@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Data::Range::Compare::Stream::Iterator::Compare::Asc - Abstract class
+Data::Range::Compare::Stream::Iterator::Compare::Base - Abstract class
 
 =head1 DESCRIPTION
 
@@ -12,7 +12,7 @@ This module provides the base shared hooks for the Comapre Asc class and any fut
 
 =over 3
 
-=item * my $compare=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+=item * my $compare=new Data::Range::Compare::Stream::Iterator::Compare::Base;
 
   Object constructor takes no arguments
 
@@ -94,13 +94,9 @@ This module provides the base shared hooks for the Comapre Asc class and any fut
 =head1 SEE ALSO
 
 Data::Range::Compare::Stream::Iterator::Compare::Asc
-
 Data::Range::Compare::Stream::Iterator::Compare::Result
-
 Data::Range::Compare::Stream::Iterator::Consolidate::Result
-
 Data::Range::Compare::Stream::Iterator::Consolidate
-
 Data::Range::Compare::Stream::Cookbook
 
 =head1 AUTHOR
