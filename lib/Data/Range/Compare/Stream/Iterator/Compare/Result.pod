@@ -16,9 +16,9 @@ Data::Range::Compare::Stream::Iterator::Compare::Asc
 
 =item * my $result=new Data::Range::Compare::Stream::Iterator::Compare::Result (COMMON_RANGE,[OVERLAP_RESULTS],[OVERLAP_IDS],[NON_OVERLAP_IDS]);
 
-  Objet constructor:
+  Object constructor:
 
-    All argumetns are mandiotry
+    All arguments are mandatory
 
       COMMON_RANGE
 

@@ -8,9 +8,9 @@ use Data::Range::Compare::Stream::Iterator::Array;
 use Data::Range::Compare::Stream::Iterator::Consolidate;
 use Data::Range::Compare::Stream::Iterator::Compare::Asc;
 
-my $vpn_a=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'MyDateTypeRangeCompare');
-my $vpn_b=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'MyDateTypeRangeCompare');;
-my $vpn_c=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'MyDateTypeRangeCompare');;
+my $vpn_a=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'Data::Range::Compare::Stream::DateTime');
+my $vpn_b=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'Data::Range::Compare::Stream::DateTime');;
+my $vpn_c=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'Data::Range::Compare::Stream::DateTime');;
 
 #
 # Outage block for vpn_a
@@ -103,7 +103,7 @@ while($compare->has_next) {
 }
 
 
-package MyDateTypeRangeCompare;
+package Data::Range::Compare::Stream::DateTime;
 
 use strict;
 use warnings;
@@ -113,7 +113,7 @@ use base qw(Data::Range::Compare::Stream);
 
 #
 # Define the class internals will use when creating a new object instance(s)
-use constant NEW_FROM_CLASS=>'MyDateTypeRangeCompare';
+use constant NEW_FROM_CLASS=>'Data::Range::Compare::Stream::DateTime';
 
 sub cmp_values ($$) {
   my ($self,$value_a,$value_b)=@_;

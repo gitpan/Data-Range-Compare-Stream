@@ -6,7 +6,71 @@ Data::Range::Compare::Stream::Cookbook - Guide for Data::Range::Compare::Stream
 
 =head1 DESCRIPTION
 
-Sorry this is pretty much under heavy construction at the moment.
+This Cook book acts as a documentation hub for Data::Range::Compare::Stream and its child modules.
+
+=head2 Comparing Data Examples
+
+This section provides examples on how to extend Data::Range::Compare::Stream to support various data types
+
+=over 3
+
+=item * IPV4 Example
+
+Data::Range::Compare::Stream::Cookbook::COMPARE_IPV4
+
+=item * DateTime Example
+
+Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime
+
+=back
+
+=head2 Range Iterator Examples
+
+This section covers how to roll your own range iterator class, based on various data source types
+
+=over 3
+
+=item * The File Example
+
+This example is on my ToDo list!
+
+=item * The DBI Example
+
+This example is on my ToDo list!
+
+=back
+
+=head2 Consolidate Iterator Examples
+
+This section covers how to roll your own Consolidate iterator class, based on various data source types
+
+=over 3
+
+=item * The File Example
+
+This example is on my ToDo list!
+
+=item * The DBI Example
+
+This example is on my ToDo list!
+
+=item * Consolidating Contiguous ranges
+
+This example is on my ToDo list!
+
+=back
+
+=head2 Compare Iterator Examples
+
+This section covers how to use the Compare iterator in differnt ways
+
+=over 3
+
+=item * The Default Example
+
+=item * The Layer Cake
+
+=back
 
 =head1 AUTHOR
 

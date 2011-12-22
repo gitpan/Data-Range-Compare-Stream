@@ -44,7 +44,7 @@ Data::Range::Compare::Stream::Iterator::Compare::Asc - Compares results overlapp
 
 =head1 DESCRIPTION
 
-This module implements the comparison engin for Data::Range::Compare::Stream.  
+This module implements the comparison engine for Data::Range::Compare::Stream.  
 
 Data::Range::Compare::Stream::Iterator::Compare::Asc compares results from Data::Range::Compare::Stream::Iterator::Consolidate;
 in the following order:
