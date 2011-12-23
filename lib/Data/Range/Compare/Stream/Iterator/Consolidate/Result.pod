@@ -18,7 +18,7 @@ Data::Range::Compare::Stream::Iterator::Consolidate
 
   Objet constructor:
 
-    All argumetns are mandiotry
+    All arguments are mandatory
 
       COMMON_RANGE
 

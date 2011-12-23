@@ -90,21 +90,14 @@ The collection of modules to quickly compute intersections of 2 dimensional rang
 The internals of Data::Range::Compare::Stream only support dealing with integers by default: This section 
 covers how to Extend Data::Range::Compare::Stream to support your data types. 
 
-=over 3
 
-=item * Creating IPV4 Range Support
-
-See:
+=head3 Creating IPV4 Range Support See:
 
 Data::Range::Compare::Stream::Cookbook::COMPARE_IPV4
 
-=item * Creating DateTime Range Support
-
-See:
+=head3 Creating DateTime Range Support See:
 
 Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime
-
-=back
 
 =head2 OO Methods
 

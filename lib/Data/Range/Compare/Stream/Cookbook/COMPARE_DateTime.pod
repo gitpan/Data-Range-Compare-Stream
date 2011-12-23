@@ -11,10 +11,7 @@ for a way to compare date ranges for overlaps this is a great starting point.
 
 =head1 Special notes
 
-Comparing DateTime ranges requires having 2 DateTime objects per range: One as the start value
-and one as the end value.  This means the constructor call will get a little ugly, becase the new 
-involves 2 DateTime->new(xxx) calls and all of thier arguments for the new class.  On the positive
-side the interface implementation is pretty straight forward.
+Comparing DateTime ranges requires having 2 DateTime objects per range: One as the start value and one as the end value.  
 
 =head2 Implementing a new Data::Range::Compare::Stream class
 

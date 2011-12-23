@@ -6,3 +6,6 @@ Revision history for Perl extension Data::Range::Compare::Stream.
 
 0.04  Thu Dec  22 
   -- Beteen 0.002 and 0.004 pod pod pod
+
+0.05 Thu Dec 22
+  -- More pod changes
