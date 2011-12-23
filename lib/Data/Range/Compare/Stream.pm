@@ -7,7 +7,7 @@ use Data::Range::Compare::Stream::Constants qw(RANGE_START RANGE_END RANGE_DATA)
 
 use constant NEW_FROM_CLASS=>'Data::Range::Compare::Stream';
 
-our $VERSION='0.005';
+our $VERSION='0.006';
 
 sub new {
   my ($class,@args)=@_;

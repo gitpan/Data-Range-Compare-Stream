@@ -12,14 +12,13 @@ This Cook book acts as a documentation hub for Data::Range::Compare::Stream and 
 
 This section provides examples on how to extend Data::Range::Compare::Stream to support various data types
 
-
 =head2 IPV4 Example See:
 
-Data::Range::Compare::Stream::Cookbook::COMPARE_IPV4
+L<Data::Range::Compare::Stream::Cookbook::COMPARE_IPV4|Data::Range::Compare::Stream::Cookbook::COMPARE_IPV4>
 
 =head2 DateTime Example See:
 
-Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime
+L<Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime|Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime>
 
 =head1 Range Iterator Examples
 

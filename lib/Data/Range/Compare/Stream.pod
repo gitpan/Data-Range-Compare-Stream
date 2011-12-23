@@ -93,11 +93,11 @@ covers how to Extend Data::Range::Compare::Stream to support your data types.
 
 =head3 Creating IPV4 Range Support See:
 
-Data::Range::Compare::Stream::Cookbook::COMPARE_IPV4
+L<Data::Range::Compare::Stream::Cookbook::COMPARE_IPV4|Data::Range::Compare::Stream::Cookbook::COMPARE_IPV4>
 
 =head3 Creating DateTime Range Support See:
 
-Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime
+L<Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime|Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime>
 
 =head2 OO Methods
 
