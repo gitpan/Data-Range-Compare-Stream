@@ -8,13 +8,13 @@
 use strict;
 use warnings;
 use Data::Dumper;
-use Test::More tests => 29;
+use Test::More tests => 26;
 
 BEGIN { use_ok('Data::Range::Compare::Stream') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Sort') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Array') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate::Result') };
-BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate') };
+BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc') };
 
 #########################
 
@@ -36,14 +36,14 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate') };
 {
   my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
   my @range_set_a=qw(
-   5 7
    0 0
    1 2
    2 3
-   11 15
    5 9
-   27 31
+   5 7
+   11 15
    17 29
+   27 31
    30 31
    30 33
   );
@@ -53,47 +53,37 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate') };
   }
 
   $obj->prepare_for_consolidate_asc;
-  my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+  my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc->new($obj);
   {
     my $range=$iterator->get_next;
-    cmp_ok($range->get_common,'eq','0 - 0',"Consolidate ASC  Common range check 1");
+    cmp_ok($range->get_common,'eq','0 - 3',"Consolidate ASC  Common range check 1");
     cmp_ok($range->get_start,'eq','0 - 0',"Consolidate ASC Start range check 1");
-    cmp_ok($range->get_end,'eq','0 - 0',"Consolidate ASC End range check 1");
+    cmp_ok($range->get_end,'eq','2 - 3',"Consolidate ASC End range check 1");
   }
 
   {
     my $range=$iterator->get_next;
-    cmp_ok($range->get_common,'eq','1 - 3',"Consolidate ASC  Common range check 2");
-    cmp_ok($range->get_start,'eq','1 - 2',"Consolidate ASC Start range check 2");
-    cmp_ok($range->get_end,'eq','2 - 3',"Consolidate ASC End range check 2");
+    cmp_ok($range->get_common,'eq','5 - 9',"Consolidate ASC  Common range check 2");
+    cmp_ok($range->get_start,'eq','5 - 7',"Consolidate ASC Start range check 2");
+    cmp_ok($range->get_end,'eq','5 - 9',"Consolidate ASC End range check 2");
   }
 
   {
     my $range=$iterator->get_next;
-    cmp_ok($range->get_common,'eq','5 - 9',"Consolidate ASC  Common range check 3");
-    cmp_ok($range->get_start,'eq','5 - 7',"Consolidate ASC Start range check 3");
-    cmp_ok($range->get_end,'eq','5 - 9',"Consolidate ASC End range check 3");
+    cmp_ok($range->get_common,'eq','11 - 15',"Consolidate ASC  Common range check 3");
+    cmp_ok($range->get_start,'eq','11 - 15',"Consolidate ASC Start range check 3");
+    cmp_ok($range->get_end,'eq','11 - 15',"Consolidate ASC End range check 3");
   }
 
   {
     my $range=$iterator->get_next;
-    cmp_ok($range->get_common,'eq','11 - 15',"Consolidate ASC  Common range check 4");
-    cmp_ok($range->get_start,'eq','11 - 15',"Consolidate ASC Start range check 4");
-    cmp_ok($range->get_end,'eq','11 - 15',"Consolidate ASC End range check 4");
+    cmp_ok($range->get_common,'eq','17 - 33',"Consolidate ASC  Common range check 4");
+    cmp_ok($range->get_start,'eq','17 - 29',"Consolidate ASC Start range check 4");
+    cmp_ok($range->get_end,'eq','30 - 33',"Consolidate ASC End range check 4") or diag(Dumper($range));
   }
 
-
-
-
-  {
-    my $range=$iterator->get_next;
-    cmp_ok($range->get_common,'eq','17 - 33',"Consolidate ASC  Common range check 5");
-    cmp_ok($range->get_start,'eq','17 - 29',"Consolidate ASC Start range check 5");
-    cmp_ok($range->get_end,'eq','30 - 33',"Consolidate ASC End range check 5");
-  }
-
-  my $last_iterator=$iterator->get_next;
-  ok(!$last_iterator,"Iterator should be empty!") or diag(Dumper($last_iterator));
+  my $last_iterator=$iterator->has_next;
+  ok(!$last_iterator,"Iterator should be empty!") or diag(Dumper($iterator));
   ok(!$obj->get_next,"Collection should be empty!");
 
 }
@@ -111,7 +101,7 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate') };
   }
 
   $obj->prepare_for_consolidate_asc;
-  my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+  my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc->new($obj);
   {
     my $range=$iterator->get_next;
     cmp_ok($range->get_common,'eq','0 - 0',"Consolidate Single Common range check 1");
@@ -123,3 +113,4 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate') };
   ok(!$obj->get_next,"Collection should be empty!");
 
 }
+

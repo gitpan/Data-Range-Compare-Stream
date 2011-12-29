@@ -4,9 +4,12 @@ MANIFEST
 README
 lib/Data/Range/Compare/Stream/Cookbook/COMPARE_IPV4.pod
 lib/Data/Range/Compare/Stream/Cookbook/COMPARE_DateTime.pod
+lib/Data/Range/Compare/Stream/Cookbook/ConsolidateAdjacent.pod
 lib/Data/Range/Compare/Stream/Iterator/Base.pm
+lib/Data/Range/Compare/Stream/Iterator/Consolidate/AdjacentAsc.pm
 lib/Data/Range/Compare/Stream/Iterator/Consolidate/Result.pm
 lib/Data/Range/Compare/Stream/Iterator/Consolidate/Result.pod
+lib/Data/Range/Compare/Stream/Iterator/Consolidate/AdjacentAsc.pod
 lib/Data/Range/Compare/Stream/Iterator/Array.pod
 lib/Data/Range/Compare/Stream/Iterator/Consolidate.pm
 lib/Data/Range/Compare/Stream/Iterator/Compare/Asc.pm
@@ -34,8 +37,10 @@ t/Data-Range-Compare-Stream-Iterator-Compare-Base.t
 t/Data-Range-Compare-Stream-Constants.t
 t/Data-Range-Compare-Stream-Iterator-Consolidate-Result.t
 t/Data-Range-Compare-Stream-Iterator-Compare-Result.t
+t/Data-Range-Compare-Stream-Iterator-Consolidate-AdjacentAsc.t
 t/Data-Range-Compare-Stream-Iterator-Base.t
 examples/IPV4Parse.pl
 examples/SYNOPSIS.pl
 examples/DateTime.pl
+examples/ConsolidateAdjacent.pl
 META.yml                                 Module meta-data (added by MakeMaker)

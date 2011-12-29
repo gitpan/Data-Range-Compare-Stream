@@ -224,6 +224,9 @@ Object constructor:
 
   Returns true if $range_a overlaps with $range_b
 
+=item * my ($start,$end)=Data::Range::Compare::Stream->find_smallest_outer_ranges($array_ref_ranges);
+
+  Returns the smallest outter most ranges as $start and $end
 
 =back
 

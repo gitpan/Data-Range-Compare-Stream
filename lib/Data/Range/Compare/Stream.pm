@@ -7,7 +7,7 @@ use Data::Range::Compare::Stream::Constants qw(RANGE_START RANGE_END RANGE_DATA)
 
 use constant NEW_FROM_CLASS=>'Data::Range::Compare::Stream';
 
-our $VERSION='0.006';
+our $VERSION='0.007';
 
 sub new {
   my ($class,@args)=@_;
@@ -60,6 +60,32 @@ sub get_common_range ($) {
   }
 
   $class->NEW_FROM_CLASS->new($range_start->range_start,$range_end->range_end);
+}
+
+sub find_smallest_outer_ranges {
+  my ($self,$ref)=@_;
+  my $start=$ref->[0];
+  my $end=$ref->[0];
+
+  foreach my $range (@$ref) {
+    {
+      my $cmp=$start->cmp_range_start($range);
+      if($cmp==1) {
+        $start=$range;
+      } elsif($cmp==0 && $start->cmp_range_end($range)==1) {
+        $start=$range;
+      }
+    }
+    {
+      my $cmp=$end->cmp_range_end($range);
+      if($cmp==-1) {
+        $end=$range;
+      } elsif($cmp==0 && $end->cmp_range_start($range)==-1) {
+        $end=$range;
+      }
+    }
+  }
+  return ($start,$end);
 }
 
 sub get_overlapping_range ($) {

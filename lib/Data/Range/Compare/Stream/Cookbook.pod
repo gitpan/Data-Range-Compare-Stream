@@ -22,7 +22,7 @@ L<Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime|Data::Range::Compare:
 
 =head1 Range Iterator Examples
 
-This section covers how to roll your own range iterator class, based on various data source types
+This section covers how to create your own range iterator class, based on various data source types
 
 =head2 The File Example
 
@@ -34,7 +34,7 @@ This example is on my ToDo list!
 
 =head2 Consolidate Iterator Examples
 
-This section covers how to roll your own Consolidate iterator class, based on various data source types
+The Adjacent Range example: L<Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc>
 
 =head2 The File Example See:
 

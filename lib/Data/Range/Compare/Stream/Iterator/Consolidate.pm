@@ -36,16 +36,18 @@ sub get_next {
     my $next_range=$self->{iterator}->get_next;
     if($overlapping_range->overlap($next_range)) {
       $overlapping_range=$overlapping_range->get_overlapping_range([$overlapping_range,$next_range]);
-      $end_range=$next_range;
+      ($start_range,$end_range)=$overlapping_range->find_smallest_outer_ranges([$start_range,$end_range,$next_range]);
     } else {
       $self->{last_range}=$next_range;
-      return $self->RESULT_CLASS->new($overlapping_range,$start_range,$end_range);
+      my ($start,$end)=$start_range->find_smallest_outer_ranges([$start_range,$end_range]);
+      return $self->RESULT_CLASS->new($overlapping_range,$start,$end);
     }
 
     
   }
   $self->{last_range}=undef;
-  return $self->RESULT_CLASS->new($overlapping_range,$start_range,$end_range);
+  my ($start,$end)=$start_range->find_smallest_outer_ranges([$start_range,$end_range]);
+  return $self->RESULT_CLASS->new($overlapping_range,$start,$end);
 }
 
 1;

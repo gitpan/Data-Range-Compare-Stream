@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use Data::Dumper;
-use Test::More tests => 29;
+use Test::More tests => 31;
 
 BEGIN { use_ok('Data::Range::Compare::Stream') };
 
@@ -114,5 +114,18 @@ BEGIN { use_ok('Data::Range::Compare::Stream') };
 
   my $range_common=Data::Range::Compare::Stream->get_common_range([$range_b,$range_c]);
   cmp_ok($range_common,'eq','2 - 2','The overlapping range for all [2 - 2 and 2 - 3] is [2 - 2]');
+}
+
+{
+  my $ranges=[];
+  my @ranges=qw(0 1 0 2 3 5 2 5 1 5);
+  while(my ($start,$end)=splice(@ranges,0,2)) {
+    my $range=Data::Range::Compare::Stream->new($start,$end);
+    push @$ranges,$range;
+  }
+  my ($start,$end)=Data::Range::Compare::Stream->find_smallest_outer_ranges($ranges);
+
+  cmp_ok($start,'eq','0 - 1',"find_smallest_outer_ranges start");
+  cmp_ok($end,'eq','3 - 5',"find_smallest_outer_ranges end");
 }
 

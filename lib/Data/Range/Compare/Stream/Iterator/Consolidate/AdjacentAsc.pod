@@ -2,13 +2,13 @@
 
 =head1 NAME
 
-Data::Range::Compare::Stream::Iterator::Consolidate - Consolidates overlapping and duplicate ranges
+Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc - Consolidates Adjacent, Duplicate and Overlaping ranges
 
 =head1 SYNOPSIS
 
   use Data::Range::Compare::Stream;
   use Data::Range::Compare::Stream::Iterator::Array;
-  use Data::Range::Compare::Stream::Iterator::Consolidate;
+  use Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc;
 
   my $iterator=Data::Range::Compare::Stream::Iterator::Array->new(
     new_from=>'Data::Range::Compare::Stream',
@@ -23,7 +23,7 @@ Data::Range::Compare::Stream::Iterator::Consolidate - Consolidates overlapping a
   $iterator->add_range($range);
 
   $iterator->prepare_for_consolidate_asc;
-  my $processor=Data::Range::Compare::Stream::Iterator::Consolidate->new($iterator);
+  my $processor=Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc->new($iterator);
 
   while($processor->has_next) {
     
@@ -33,10 +33,10 @@ Data::Range::Compare::Stream::Iterator::Consolidate - Consolidates overlapping a
 
 =head1 DESCRIPTION
 
-This module implements the consolidation engine for Data::Range::Compare::Stream.  
+This module implements the consolidation engine for Data::Range::Compare::Stream, and it additionally consolidates adjacent ranges.
 
 Data::Range::Compare::Stream::Iterator::Consolidate can consolidate ranges sorted
-in the following order:
+in the following order(s):
 
   Consolidation Asc
 
@@ -46,7 +46,7 @@ in the following order:
 
 =over 3
 
-=item * my $processor=new Data::Range::Compare::Stream::Iterator::Consolidate($iterator);
+=item * my $processor=new Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc($iterator);
 
   Object constructor takes only one argument: $processor
 
