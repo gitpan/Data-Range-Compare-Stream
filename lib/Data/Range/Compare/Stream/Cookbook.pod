@@ -26,35 +26,37 @@ This section covers how to create your own range iterator class, based on variou
 
 =head2 The File Example
 
-This example is on my ToDo list!
-
-=head2 The DBI Example
-
-This example is on my ToDo list!
-
 =head2 Consolidate Iterator Examples
 
 The Adjacent Range example: L<Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc>
 
 =head2 The File Example See:
 
-This example is on my ToDo list!
+=over 3
 
-=head2 The DBI Example See:
+=item * Basic File example
 
-This example is on my ToDo list!
+If your raw fileis sorted with the start range value in ASC and the range end value DESC order 
+then refer to the Base Iterator class.
 
-=head2 Consolidating Contiguous ranges
+L<Data::Range::Compare::Stream::Iterator::Base>
 
-This example is on my ToDo list!
+=item * Basic File Result Example
 
-=head1 Compare Iterator Examples
+If you your raw file has no duplicates, overlaps and is sorted use this example:
 
-This section covers how to use the Compare iterator in differnt ways
+L<Data::Range::Compare::Stream::Cookbook::FILE_RESULT_EXAMPLE>
 
-=head2 The Default Example See:
+=back
 
-=head2 The Layer Cake See:
+=head2 The Layer Cake:
+
+More of a foot note, Data::Range::Compare::Stream::Iterator::Compare::Asc only requires that the result objects 
+implemente the $object->get_common interface.  This means that an instance of Data::Range::Compare::Stream::Iterator::Compare::Asc
+can be handed to another instance of Data::Range::Compare::Stream::Iterator::Compare::Asc as an iterator object.
+
+Since Data::Range::Compare::Stream::Iterator::Compare::Asc always returns contiguous ranges, it makes sense to create an iterator
+that filters only the common result ranges you are intending to compare.
 
 =head1 AUTHOR
 
@@ -65,7 +67,10 @@ Michael Shipper
 As of version 0.001 the Project has been moved to Source-Forge.net
 
 L<Data Range Compare|https://sourceforge.net/projects/data-range-comp/>
-L<https://sourceforge.net/projects/data-range-comp/>
+
+=head1 SVN Location
+
+L<http://data-range-comp.svn.sourceforge.net/viewvc/data-range-comp/>
 
 =head1 COPYRIGHT
 

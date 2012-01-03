@@ -3,6 +3,7 @@ Makefile.PL
 MANIFEST
 README
 lib/Data/Range/Compare/Stream/Cookbook/COMPARE_IPV4.pod
+lib/Data/Range/Compare/Stream/Cookbook/FILE_RESULT_EXAMPLE.pod
 lib/Data/Range/Compare/Stream/Cookbook/COMPARE_DateTime.pod
 lib/Data/Range/Compare/Stream/Cookbook/ConsolidateAdjacent.pod
 lib/Data/Range/Compare/Stream/Iterator/Base.pm
@@ -41,6 +42,9 @@ t/Data-Range-Compare-Stream-Iterator-Consolidate-AdjacentAsc.t
 t/Data-Range-Compare-Stream-Iterator-Base.t
 examples/IPV4Parse.pl
 examples/SYNOPSIS.pl
+examples/FILE_RESULT_EXAMPLE.pl
 examples/DateTime.pl
+examples/FILE_EXAMPLE.pl
 examples/ConsolidateAdjacent.pl
+examples/file_example.src
 META.yml                                 Module meta-data (added by MakeMaker)

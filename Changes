@@ -19,3 +19,8 @@ Revision history for Perl extension Data::Range::Compare::Stream.
   -- Pod Updates
   -- Added new Feature/Example
     Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc
+
+1.008
+  -- No longer in the Alpha Stage, now considerd developed
+  -- Pod changes most of the pod change are complete
+  -- added more examples
