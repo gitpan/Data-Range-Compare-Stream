@@ -54,6 +54,10 @@ Data::Range::Compare::Stream::Iterator::Compare::Asc
 
   Returns the number of elements in OVERLAP_RESULTS that matched the common range
 
+=item * my $string=$result->to_string;
+
+  Returns a string representing the result
+
 =item * my $count=$result->get_column_count;
 
   Returns the number of columns that are in OVERLAP_RESULTS
@@ -86,7 +90,7 @@ Data::Range::Compare::Stream::Iterator::Compare::Asc
 
 =item * my $boolean=$result->is_empty;
 
-  $boolean is true when no ranges overlaped with the common range
+  $boolean is true when no ranges overlapped with the common range
 
 =item * my $boolean=$result->none_overlap;
 
@@ -106,7 +110,7 @@ Data::Range::Compare::Stream::Iterator::Compare::Asc
 
 =item * my $ref=$result->get_non_overlapping_containers;
 
-  Returns an array ref of undefs for every column that did not overlap
+  Returns an array ref of undef for every column that did not overlap
 
 =back
 

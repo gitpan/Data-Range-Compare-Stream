@@ -8,14 +8,14 @@
 use strict;
 use warnings;
 use Data::Dumper;
-use Test::More tests => 168;
+use Test::More tests => 215;
 
 BEGIN { use_ok('Data::Range::Compare::Stream') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Sort') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Array') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate::Result') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate') };
-BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Compare::Asc') };
+BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Compare::LayerCake') };
 
 #########################
 
@@ -23,7 +23,7 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Compare::Asc') };
 # its man page ( perldoc Test::More ) for help writing this test script.
 
 if(1){
-  my $obj=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $obj=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   ok($obj,'Object should exist');
 
   # instance startup behavior validation checks!
@@ -34,7 +34,7 @@ if(1){
 #
 # column iterator progression start up logic single column progression tests
 if(1){
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
   $obj->create_range(0,1);
   $obj->create_range(2,3);
@@ -62,11 +62,10 @@ if(1){
   ok($cmp->iterators_empty,'iterators should still be empty');
 }
 
-
 # 
 # 1 column iterator test
 if(1){
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
     my @range_set_a=qw(
@@ -86,7 +85,7 @@ if(1){
 
 
   {
-    ok($cmp->has_next,"has_next should return true!");
+    ok($cmp->has_next);
     my $row=$cmp->get_next;
     cmp_ok($row->get_common_range,'eq','3 - 11','Row 0 check');
   }
@@ -104,10 +103,48 @@ if(1){
     ok(!$row,'iterator should be empty now!') or diag(Dumper($row));
   }
 }
+
+# 1 colum iterator test with ignore empty
+if(1){
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake(ignore_empty=>1);
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    my @range_set_a=qw(
+      3 11
+      17 41
+    );
+    my @ranges;
+    while(my ($start,$end)=splice(@range_set_a,0,2)) {
+      $obj->create_range($start,$end);
+    }
+  
+    $obj->prepare_for_consolidate_asc;
+    my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+    cmp_ok($cmp->add_consolidator($iterator),'==',0,"Consolidator id should be 0");
+  }
+  cmp_ok($cmp->get_column_count,'==',0,'Column count should be: [0]');
+
+
+  {
+    ok($cmp->has_next);
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','3 - 11','Row 0 ignore empty check');
+  }
+  {
+    ok($cmp->has_next,'Row 2 check should have next') or die 'cannot continue testing!';
+    my $row=$cmp->get_next;
+    ok($row->is_full,'row should always be full!') or die diag(Dumper($cmp));
+    cmp_ok($row->get_common_range,'eq','17 - 41','Row 1 ignore empty check');
+  }
+  {
+    my $row=$cmp->has_next;
+    ok(!$row,'iterator should be empty now!') or diag(Dumper($row));
+  }
+}
 #
 # 2 column iterator sequential tests
 if(1){
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
     my @range_set_a=qw(
@@ -145,7 +182,7 @@ if(1){
 
 
   {
-    ok($cmp->has_next,'Should have rows');
+    ok($cmp->has_next);
     my $row=$cmp->get_next;
     cmp_ok($row->get_common_range,'eq','0 - 0','Row 0 check 2 column complex data check');
   }
@@ -194,10 +231,105 @@ if(1){
     ok(!$row,'iterator should be empty now!') or diag(Dumper($row));
   }
 }
+
+# 2 column iterator ignore empty check
+if(1){
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake(ignore_empty=>1);
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    my @range_set_a=qw(
+      3 11
+      17 41
+    );
+    my @ranges;
+    while(my ($start,$end)=splice(@range_set_a,0,2)) {
+      $obj->create_range($start,$end);
+    }
+  
+    $obj->prepare_for_consolidate_asc;
+    my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+    cmp_ok($cmp->add_consolidator($iterator),'==',0,"The consolidator id should be 0");
+  }
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    my @range_set_a=qw(
+     0 0
+     1 3
+     5 9
+     11 15
+     17 33
+    );
+    my @ranges;
+    while(my ($start,$end)=splice(@range_set_a,0,2)) {
+      $obj->create_range($start,$end);
+    }
+  
+    $obj->prepare_for_consolidate_asc;
+    my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+    ok($cmp->add_consolidator($iterator),"Should add the consolidator without error");
+  }
+  cmp_ok($cmp->get_column_count,'==',1,'Column count should be: [1] not [0]');
+
+
+  {
+    my $row=$cmp->get_next;
+    ok(!$row->is_empty,'row should not be empty!');
+    cmp_ok($row->get_common_range,'eq','0 - 0','Row 0 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    ok(!$row->is_empty,'row should not be empty!');
+    cmp_ok($row->get_common_range,'eq','1 - 2','Row 1 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    ok(!$row->is_empty,'row should not be empty!');
+    cmp_ok($row->get_common_range,'eq','3 - 3','Row 2 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    ok(!$row->is_empty,'row should not be empty!');
+    cmp_ok($row->get_common_range,'eq','4 - 4','Row 3 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    ok(!$row->is_empty,'row should not be empty!');
+    cmp_ok($row->get_common_range,'eq','5 - 9','Row 4 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    ok(!$row->is_empty,'row should not be empty!');
+    cmp_ok($row->get_common_range,'eq','10 - 10','Row 5 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    ok(!$row->is_empty,'row should not be empty!');
+    cmp_ok($row->get_common_range,'eq','11 - 11','Row 6 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    ok(!$row->is_empty,'row should not be empty!');
+    cmp_ok($row->get_common_range,'eq','12 - 15','Row 7 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    ok(!$row->is_empty,'row should not be empty!');
+    cmp_ok($row->get_common_range,'eq','17 - 33','Row 9 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    ok(!$row->is_empty,'row should not be empty!');
+    cmp_ok($row->get_common_range,'eq','34 - 41','Row 10 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->has_next;
+    ok(!$row,'iterator should be empty now!') or diag(Dumper($row));
+  }
+}
 #
 # 2 column iterator non overlap
 if(1){
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
     my @range_set_a=qw(
@@ -232,7 +364,7 @@ if(1){
 
 
   {
-    ok($cmp->has_next,"should have rows in this set of data!");
+    $cmp->has_next;
     my $row=$cmp->get_next;
     cmp_ok($row->get_common_range,'eq','3 - 11','Row 0 check for non overlap');
     ok(!$row->is_full,'Row 0 check for non overlap should not show as matching every column');
@@ -279,7 +411,7 @@ if(1){
 }
 
 {
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   {
     for(0 .. 1) {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
@@ -321,7 +453,7 @@ if(1){
 
 # 3 column all ranges identical
 {
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   {
     for(0 .. 2) {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
@@ -363,7 +495,7 @@ if(1){
 
 # 3 columns all sequential
 {
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   {
     {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
@@ -438,7 +570,7 @@ if(1){
 
 # 3 columns gaps between all 3 columns
 {
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   {
     {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
@@ -516,7 +648,7 @@ if(1){
 # 
 # 3 column complex data check
 {
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   {
     {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
@@ -609,7 +741,7 @@ if(1){
   }
 }
 {
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   {
     {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
@@ -683,7 +815,7 @@ if(1){
   }
 }
 {
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   {
     {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
@@ -746,7 +878,7 @@ if(1){
 
 # 3 column all ranges overlap at some level
 {
-  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
   {
     {
       my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
@@ -864,4 +996,62 @@ if(1){
     my $row=$cmp->has_next;
     ok(!$row,'iterator should be empty now!');
   }
+}
+{
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake(ignore_full=>1);
+  #my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
+  my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+  $obj->create_range(0,1);
+  $obj->create_range(3,4);
+  $obj->prepare_for_consolidate_asc;
+  my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+
+  cmp_ok($cmp->add_consolidator($iterator),'==',0,'should just have 1 column when creating our ignore_full set');
+  #$DB::single=1;
+  ok($cmp->has_next,"Should have only 1 row") or diag(Dumper($cmp));
+  my $result=$cmp->get_next;
+  ok($result,"Should have a result");
+  ok(!$cmp->has_next,"Iterator should  be empty now!");
+}
+{
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake(ignore_full=>1);
+  #my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake;
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    $obj->create_range(0,1);
+    $obj->create_range(3,4);
+    $obj->prepare_for_consolidate_asc;
+    my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+    cmp_ok($cmp->add_consolidator($iterator),'==',0,'should just have 1 column when creating our ignore_full2 set');
+  }
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    $obj->create_range(0,1);
+    $obj->create_range(3,4);
+    $obj->create_range(7,7);
+    $obj->prepare_for_consolidate_asc;
+    my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+    cmp_ok($cmp->add_consolidator($iterator),'==',1,'should have 2 columns when creating our ignore_full2 set');
+  }
+
+  #$DB::single=1;
+  {
+    ok($cmp->has_next,"ignore full row: 0") or diag(Dumper($cmp));
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common,'eq','2 - 2','first row should be: 2 - 2');
+    ok($result,"Should have a result");
+  }
+  {
+    ok($cmp->has_next,"ignore full row: 1") or diag(Dumper($cmp));
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common,'eq','5 - 6','second row should be: 5 - 6');
+    ok($result,"Should have a result");
+  }
+  {
+    ok($cmp->has_next,"ignore full row: 2") or diag(Dumper($cmp));
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common,'eq','7 - 7','last row should be: 7 - 7');
+    ok($result,"Should have a result");
+  }
+  ok(!$cmp->has_next,'ignore full row test should be empty now');
 }

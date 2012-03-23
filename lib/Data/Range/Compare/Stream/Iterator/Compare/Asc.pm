@@ -3,6 +3,7 @@ package Data::Range::Compare::Stream::Iterator::Compare::Asc;
 use strict;
 use warnings;
 use base qw(Data::Range::Compare::Stream::Iterator::Compare::Base);
+use Carp qw(croak);
 
 sub has_next {
   my ($self)=@_;
@@ -77,10 +78,11 @@ sub prepare {
 
 sub get_next {
   my ($self)=@_;
-  return undef unless $self->has_next;
 
+  $self->prepare unless $self->prepared;
   # get the current row
   my $current_row=$self->get_current_row;
+  croak "Fatal: get_next called befor has_next or after the iterator set is empty" unless defined($current_row);
 
   my $result=[];
   my $column_count=$self->get_column_count_human_readable;

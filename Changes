@@ -24,3 +24,13 @@ Revision history for Perl extension Data::Range::Compare::Stream.
   -- No longer in the Alpha Stage, now considerd developed
   -- Pod changes most of the pod change are complete
   -- added more examples
+
+2.009
+  -- Changed the perl version required from perl 5.10 to 5.6.1
+  -- added the layer cake example and modules
+   -- Bug fix/Major change to internals for Compare
+     -- get_next no longer makes calls to has_next
+       This caused a race contition when sub classing the the compare interface.
+  -- Added major documentation improvements, 
+    what this package does should now be very clear ( I hope )
+  -- Added to_string operator for Compare Result object

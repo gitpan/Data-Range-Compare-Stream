@@ -17,7 +17,9 @@ lib/Data/Range/Compare/Stream/Iterator/Compare/Asc.pm
 lib/Data/Range/Compare/Stream/Iterator/Compare/Base.pm
 lib/Data/Range/Compare/Stream/Iterator/Compare/Asc.pod
 lib/Data/Range/Compare/Stream/Iterator/Compare/Result.pm
+lib/Data/Range/Compare/Stream/Iterator/Compare/LayerCake.pod
 lib/Data/Range/Compare/Stream/Iterator/Compare/Base.pod
+lib/Data/Range/Compare/Stream/Iterator/Compare/LayerCake.pm
 lib/Data/Range/Compare/Stream/Iterator/Compare/Result.pod
 lib/Data/Range/Compare/Stream/Iterator/Array.pm
 lib/Data/Range/Compare/Stream/Iterator/Consolidate.pod
@@ -31,6 +33,7 @@ lib/Data/Range/Compare/Stream.pod
 lib/Data/Range/Compare/Stream.pm
 t/Data-Range-Compare-Stream-Iterator-Compare-Asc.t
 t/Data-Range-Compare-Stream.t
+t/Data-Range-Compare-Stream-Iterator-Compare-LayerCake.t
 t/Data-Range-Compare-Stream-Iterator-Array.t
 t/Data-Range-Compare-Stream-Iterator-Consolidate.t
 t/Data-Range-Compare-Stream-Sort.t
@@ -43,8 +46,13 @@ t/Data-Range-Compare-Stream-Iterator-Base.t
 examples/IPV4Parse.pl
 examples/SYNOPSIS.pl
 examples/FILE_RESULT_EXAMPLE.pl
+examples/FORMAT_EXAMPLE.pl
 examples/DateTime.pl
 examples/FILE_EXAMPLE.pl
+examples/HTML_EXAMPLE.pl
 examples/ConsolidateAdjacent.pl
+examples/source_a.src
+examples/source_b.src
+examples/source_c.src
 examples/file_example.src
 META.yml                                 Module meta-data (added by MakeMaker)

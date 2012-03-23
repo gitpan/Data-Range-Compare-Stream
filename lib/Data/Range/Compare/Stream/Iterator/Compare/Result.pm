@@ -8,6 +8,7 @@ use constant OVERLAP_RESULTS=>1;
 use constant OVERLAP_COUNT=>2;
 use constant OVERLAP_IDS=>3;
 use constant NON_OVERLAP_IDS=>4;
+use constant PRINT_FORMAT=>'Commoon Range: [%s] Column id(s) that Overlap: [%s]';
 
 sub new {
   my ($class,@args)=@_;
@@ -49,6 +50,8 @@ sub get_consolidator_result_by_id {
 }
 
 *get_result_by_id=\&get_consolidator_result_by_id;
+*get_column_by_id=\&get_consolidator_result_by_id;
+
 
 sub is_empty { $_[0]->get_overlap_count==0 }
 *none_overlap=\&is_empty;
@@ -72,5 +75,11 @@ sub get_non_overlapping_containers {
   my ($self)=@_;
   [@{$self->[$self->OVERLAP_RESULTS]}[@{$self->get_non_overlap_ids}]]
 }
+
+sub to_string {
+  my ($self)=@_;
+  return sprintf $self->PRINT_FORMAT,$self->get_common,join(',',@{$self->get_overlap_ids});
+}
+
 
 1;

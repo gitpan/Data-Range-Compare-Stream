@@ -51,12 +51,9 @@ L<Data::Range::Compare::Stream::Cookbook::FILE_RESULT_EXAMPLE>
 
 =head2 The Layer Cake:
 
-More of a foot note, Data::Range::Compare::Stream::Iterator::Compare::Asc only requires that the result objects 
-implemente the $object->get_common interface.  This means that an instance of Data::Range::Compare::Stream::Iterator::Compare::Asc
-can be handed to another instance of Data::Range::Compare::Stream::Iterator::Compare::Asc as an iterator object.
+Quick and dirty result filtering how to can be found here.
 
-Since Data::Range::Compare::Stream::Iterator::Compare::Asc always returns contiguous ranges, it makes sense to create an iterator
-that filters only the common result ranges you are intending to compare.
+L<Data::Range::Compare::Stream::Iterator::Compare::LayerCake>>
 
 =head1 AUTHOR
 
