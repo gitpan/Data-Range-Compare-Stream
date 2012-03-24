@@ -38,4 +38,6 @@ Revision history for Perl extension Data::Range::Compare::Stream.
 2.010
   -- Documentaion clean up.. still trying to explain things, more pod clean ups to come.
 
-2.010 More pod clean ups.. more to come I'm sure.
+2.011 More pod clean ups.. more to come I'm sure.
+
+2.021 More pod changes, should make sense now.. had a bunch of people review the docs and give input.

@@ -83,14 +83,13 @@ Data::Range::Compare::Stream - Compute intersections of Ranges with Iterators
 
 =head1 DESCRIPTION
 
-This library implements an algorithm that can be used to compute gaps and intersections across multiple sets of 2 dimensional ranges, from both a vertical and horizontal perspective.
+This library implements an algorithm that can be used to compute gaps and intersections across multiple sets of 2 dimensional ranges, from both a vertical and horizontal perspective.  The algorithm itself generates missing data creating contiguous ranges allowing for parallel comparisons.  Once missing ranges have been generated what was once despondent sets of ranges can now be aligned and compared for intersections.
 
-=head2 Overview
+Figures 1 through 5 represent aspects of the comparison process:  These steps although explained individually are actually completed on a parallel.
 
+=head2 Figure 1 ( Example Data )
 
 Given 3 complex sets of data we will outline the process used to compute the horizontal intersections and vertical gaps in these sets of ranges.  See Figure 1 for the example sets of data.
-
-  Figure 1 ( Example Data )
 
   Numeric Range set: A
   +----------+
@@ -115,12 +114,11 @@ Given 3 complex sets of data we will outline the process used to compute the hor
   +-----------+
 
 
+=head2 Figure 2 ( Numeric range set: A, post consolidation )
+
 Looking over data sets A,B, and C we can see several problems: Set A contains ranges that overlap with each other, and sets A through C do not align on consistent boundaries.
 
-Part of the process of comparing sets of data involves making sure there are no duplicates or overlaps in each individual source of data.  The first action taken is the removal of duplicate and consolidation of overlapping ranges, this process can be seen by looking at the resulting conversion for "Numeric Range set: A" seen in  see: Figure 2. The overlapping range "17 - 23" is contained by a larger range in the set "13 - 44" thus "17 - 33" needs to be removed.
-
-
-  Figure 2 ( Numeric range set: A, post consolidation )
+Part of the process of comparing sets of data involves making sure there are no duplicates or overlaps in each individual source of data.  The first action taken is the removal of duplicates and consolidation of overlapping ranges:  This process can be seen by looking at the resulting conversion for "Numeric Range Set: A" seen in Figure 2. The overlapping range "17 - 23" is contained by a larger range in the set "13 - 44" thus "17 - 33" needs to be removed.  Data Sets B and C do not contain any duplicated or overlapping ranges and thus require no changes.
 
   Consolidated Numeric Range set: A
   +----------+
@@ -129,10 +127,11 @@ Part of the process of comparing sets of data involves making sure there are no 
   | 55 - 66  |
   +----------+
 
+=head2 Figure 3 ( Numeric Ranges, gaps filled )
+
 The next step in the comparison process is iterating through our data and figuring out where the gaps are in each data set.  Each set of data contains gaps between ranges, and those gaps need be calculated in order for a proper comparison of the data to begin.
 
 
-  Figure 3 ( Numeric Ranges, gaps filled )
 
   Numeric Range set: A
   +----------+
@@ -159,11 +158,12 @@ The next step in the comparison process is iterating through our data and figuri
   | 241 - 250 |
   +-----------+
 
-The intersecting range represents overlapping points between ranges or the "Common Range".  The concept is not just limited to missing columns, the algorithm itself will also compute missing rows.  In Figure 4 row 0 the Common Range is defined as  "0 - 0", this is because the only column with overlapping data is in "Numeric Range B" 0 - 1.  0 - 1 also overlaps with "Numeric Column A: 1 - 11", this means the first common range is "0 - 0", and the second common range is defined as "1 - 1".  The relation ship of the common range is defined not just by the current ranges being compared, but also by the next common range to be computed as well.
+=head2 Figure 4 ( Results )
 
-Three result rows stand out became they contain no data in sets A,B or C: "45 - 54","67 - 87","134 - 219" these 3 rows represent a horizontal gap in our 3 sources of data, and can be exclude from the result set to make the data more consistent for some one reviewing just the intersections of the data from sets A,B, and C  see: Figure 5.
+The intersecting range represents overlapping points between ranges or the "Common Range".  The concept is not just limited to missing columns, the algorithm itself will also compute missing rows.  In Figure 4 Row 0 the Common Range is defined as  "0 - 0".  This is because the only column with overlapping data is in "Numeric Range B" 0 - 1.  0 - 1 also overlaps with "Numeric Column A: 1 - 11".  This means the first common range is "0 - 0", and the second common range is defined as "1 - 1".  The relationship of the common range is defined not just by the current ranges being compared but also by the next common range to be computed as well.
 
-  Figure 4 ( Results )
+Three result rows stand out because they contain no data in sets A,B or C: "45 - 54","67 - 87","134 - 219".  These 3 rows represent a horizontal gap in our 3 sources of data and can be excluded from the result set to make the data more consistent for someone reviewing just the intersections of the data from sets A,B, and C  see: Figure 5.
+
   +--------------------------------------------------------------------+
   | Common Range | Numeric Range A | Numeric Range B | Numeric Range C |
   +--------------------------------------------------------------------+
@@ -183,9 +183,10 @@ Three result rows stand out became they contain no data in sets A,B or C: "45 - 
   | 241 - 250    |   No Data       |   No Data       |   241 - 250     |
   +--------------------------------------------------------------------+
 
+=head2 Figure 5 ( Filtered results )
+
 Looking at the results form the compare process we can see the "Common Range" explains the overlap.  Figure 4 shows not only sets of data we have, but it also shows sets of data that we don't have: these additional ranges are a bi-product of the comparison process and have been filtered out of the result set in Figure 5.
 
-  Figure 5 ( Filtered results )
   +--------------------------------------------------------------------+
   | Common Range | Numeric Range A | Numeric Range B | Numeric Range C |
   +--------------------------------------------------------------------+
