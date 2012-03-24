@@ -34,3 +34,6 @@ Revision history for Perl extension Data::Range::Compare::Stream.
   -- Added major documentation improvements, 
     what this package does should now be very clear ( I hope )
   -- Added to_string operator for Compare Result object
+
+2.010
+  -- Documentaion clean up.. still trying to explain things, more pod clean ups to come.

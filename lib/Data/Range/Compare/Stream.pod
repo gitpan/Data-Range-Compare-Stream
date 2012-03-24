@@ -83,11 +83,12 @@ Data::Range::Compare::Stream - Compute intersections of Ranges with Iterators
 
 =head1 DESCRIPTION
 
-Given multiple sets of 2d data, this package will organize consolidate and explain gaps and intersections in the given sets of data.  
+This library implements an algorithom that can be used to compute gaps and intersections accross multiple sets of 2 dimensional ranges, from both a vertical and horizontal perspective.
 
 =head2 OverView
 
-The objective of this overview is to compare 3 sets of ranges side by side: see  Figure 1
+
+Given 3 complex sets of data we will outline the process used to compute the horizontal intersections and vertical gaps in these sets of ranges.  See Figure 1 for the exaple sets of data.
 
   Figure 1 ( Example Data )
 
@@ -113,10 +114,10 @@ The objective of this overview is to compare 3 sets of ranges side by side: see 
   | 241 - 250 |
   +-----------+
 
-When we look closely at the data ( Figure 1 ) we see "Numeric Range Set: A" contains ranges that overlap with each other.  When trying to align each set of data against another it's not hard to tell that range sets A B and C have almost no common boundary points, only overlap to some degree, and the sets of data are not contiguous.
 
+Looking over data sets A,B, and C we can ses several problems: Set A contains ranges that overlap with each oher, and sets A through C do not align on consistent boundries.
 
-Part of the process of comparing sets of data involves making sure there are no duplicates or overlaps in each individual source of data.  The first action taken is the removal of duplicate and consolidation of overlapping ranges, this process can be seen by looking at the resulting confversion for "Numeric Range set: A" seen in  see: Figure 2.
+Part of the process of comparing sets of data involves making sure there are no duplicates or overlaps in each individual source of data.  The first action taken is the removal of duplicate and consolidation of overlapping ranges, this process can be seen by looking at the resulting conversion for "Numeric Range set: A" seen in  see: Figure 2. THe overlapping range "17 - 23" is containted by a larger range in the set "13 - 44" thus "17 - 33" needs to be removed.
 
 
   Figure 2 ( Numeric range set: A, post consolidation )
@@ -158,7 +159,7 @@ The next step in the comparison process is iterating through our data and figuri
   | 241 - 250 |
   +-----------+
 
-The Data::Range::Compare::Stream library solves all of the above problems, allowing for a clean and simple side by side comparison of each set of data in parallel.  We arn't just conserned about what ranges overlap, but also at what boundry range(s) that do overlap:  see figure 4.
+The intersecting range represents overlapping points between ranges or the "Common Range".  The concept is not just limited to misling columns, the algorithom itself will also compute missing rows.  In Figure 4 row 0 the Common Range is defined as  "0 - 0", this is becase the only column with overlapping data is in "Numeric Range B" 0 - 1.  0 - 1 also overlaps with "Numeric Column A: 1 - 11", this means the first common range is "0 - 0", and the second common range is defined as "1 - 1".  The relationa ship of the common range is defined not just by he current ranges being compared, but also by the next common range to be computed as well.
 
 
   Figre 4 ( Results )
@@ -200,8 +201,8 @@ Looking at the reults form the compare process we can see the "Common Range" exp
   | 241 - 250    |   No Data       |   No Data       |   241 - 250     |
   +--------------------------------------------------------------------+
 
+The final stage, only ranges dirived from our original source data is presented and we have excluded any rows that contain none of our original data.
 
-The final stage, only ranges dirived from our original source data is presented.  In reality this layred process happens almost completly in parallel, and can easly be abstracted to fit almost any data set type.
 
 =head2 Getting Started
 

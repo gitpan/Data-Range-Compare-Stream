@@ -53,7 +53,7 @@ L<Data::Range::Compare::Stream::Cookbook::FILE_RESULT_EXAMPLE>
 
 Quick and dirty result filtering how to can be found here.
 
-L<Data::Range::Compare::Stream::Iterator::Compare::LayerCake>>
+L<Data::Range::Compare::Stream::Iterator::Compare::LayerCake>
 
 =head1 AUTHOR
 
