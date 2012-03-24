@@ -24,13 +24,11 @@ L<Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime|Data::Range::Compare:
 
 This section covers how to create your own range iterator class, based on various data source types
 
-=head2 The File Example
-
 =head2 Consolidate Iterator Examples
 
 The Adjacent Range example: L<Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc>
 
-=head2 The File Example See:
+=head2 The File Examples:
 
 =over 3
 
