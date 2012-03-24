@@ -55,4 +55,5 @@ examples/source_a.src
 examples/source_b.src
 examples/source_c.src
 examples/file_example.src
+examples/MyIterator.pm
 META.yml                                 Module meta-data (added by MakeMaker)

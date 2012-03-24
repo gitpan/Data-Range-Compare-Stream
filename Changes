@@ -43,3 +43,6 @@ Revision history for Perl extension Data::Range::Compare::Stream.
 2.012 More pod changes, should make sense now.. had a bunch of people review the docs and give input.
 
 2.013 Cleaned up a long standing oops in the CookBook
+
+2.014 
+  -- added missing example MyIterator.pm in the examples folder...
