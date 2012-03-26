@@ -46,3 +46,6 @@ Revision history for Perl extension Data::Range::Compare::Stream.
 
 2.014 
   -- added missing example MyIterator.pm in the examples folder...
+
+2.015
+  -- Fixed prototype missmatch warning showing in tests versions of perl 5.6.2
