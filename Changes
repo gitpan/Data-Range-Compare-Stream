@@ -49,3 +49,10 @@ Revision history for Perl extension Data::Range::Compare::Stream.
 
 2.015
   -- Fixed prototype missmatch warning showing in tests versions of perl 5.6.2
+
+2.016
+  -- Pod fix ups
+  -- Added 2 file iterator interfaces taken from the example folder as a base starting point
+    1. Consolidator
+    2. Iterator
+

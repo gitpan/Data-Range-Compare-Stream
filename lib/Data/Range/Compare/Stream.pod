@@ -85,7 +85,7 @@ Data::Range::Compare::Stream - Compute intersections of Ranges with Iterators
 
 This library implements an algorithm that can be used to compute gaps and intersections across multiple sets of 2 dimensional ranges, from both a vertical and horizontal perspective.  The algorithm itself generates missing data creating contiguous ranges allowing for parallel comparisons.  Once missing ranges have been generated what was once despondent sets of ranges can now be aligned and compared for intersections.
 
-Figures 1 through 5 represent aspects of the comparison process:  These steps although explained individually are actually completed on a parallel.
+Figures 1 through 5 represent aspects of the comparison process:  Although these steps are explained individually each operation is completed in parallel.
 
 =head2 Figure 1 ( Example Data )
 

@@ -45,6 +45,16 @@ If you your raw file has no duplicates, overlaps and is sorted use this example:
 
 L<Data::Range::Compare::Stream::Cookbook::FILE_RESULT_EXAMPLE>
 
+=item * File Iterator support classes
+
+Basic File iterator class
+
+L<Data::Range::Compare::Stream::Iterator::File>
+
+Basic Consolidator ( assuming your data is sorted and consolidated all ready )
+
+L<Data::Range::Compare::Stream::Iterator::Consolidate::FileAsc>
+
 =back
 
 =head2 The Layer Cake:
