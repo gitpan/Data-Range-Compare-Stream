@@ -10,6 +10,10 @@ use warnings;
 use Data::Dumper;
 use Test::More tests => 68;
 
+
+# uncomment to enable compatibility with perl versions prior to 5.8
+#use sort '_quicksort';  
+
 BEGIN { use_ok('Data::Range::Compare::Stream') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Sort') };
 
@@ -133,15 +137,15 @@ use Data::Range::Compare::Stream::Sort;
   }
   my @sorted=sort sort_largest_range_start_first @ranges;
   cmp_ok($#sorted,'==',8,'Should have 8 ranges to compare last index == 8');
-  cmp_ok($sorted[0],'eq','30 - 31',"Largest Start Range sort 1");
-  cmp_ok($sorted[1],'eq','30 - 33',"Largest Start Range sort 2");
-  cmp_ok($sorted[2],'eq','17 - 29',"Largest Start Range sort 3");
-  cmp_ok($sorted[3],'eq','11 - 15',"Largest Start Range sort 4");
-  cmp_ok($sorted[4],'eq','5 - 7',"Largest Start Range sort 5");
-  cmp_ok($sorted[5],'eq','5 - 9',"Largest Start Range sort 6");
-  cmp_ok($sorted[6],'eq','2 - 3',"Largest Start Range sort 7");
-  cmp_ok($sorted[7],'eq','1 - 2',"Largest Start Range sort 8");
-  cmp_ok($sorted[8],'eq','0 - 0',"Largest Start Range sort 9");
+  cmp_ok($sorted[0]->range_start,'==','30',"Largest Start Range sort 1");
+  cmp_ok($sorted[1]->range_start,'==','30',"Largest Start Range sort 2");
+  cmp_ok($sorted[2]->range_start,'==','17',"Largest Start Range sort 3");
+  cmp_ok($sorted[3]->range_start,'==','11',"Largest Start Range sort 4");
+  cmp_ok($sorted[4]->range_start,'==','5',"Largest Start Range sort 5");
+  cmp_ok($sorted[5]->range_start,'==','5',"Largest Start Range sort 6");
+  cmp_ok($sorted[6]->range_start,'==','2',"Largest Start Range sort 7");
+  cmp_ok($sorted[7]->range_start,'==','1',"Largest Start Range sort 8");
+  cmp_ok($sorted[8]->range_start,'==','0',"Largest Start Range sort 9");
 }
 
 

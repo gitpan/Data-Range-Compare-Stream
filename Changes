@@ -56,3 +56,7 @@ Revision history for Perl extension Data::Range::Compare::Stream.
     1. Consolidator
     2. Iterator
 
+2.017
+  -- More pod fix ups.. more to come
+  -- updated Data-Range-Compare-Stream-Sort.t  the code wasn't broken the tests were..
+   perl versions prior to 5.8 used quick sort: The unit tests have been updated to reflect this.

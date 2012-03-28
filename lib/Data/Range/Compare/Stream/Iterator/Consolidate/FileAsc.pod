@@ -20,7 +20,7 @@ Data::Range::Compare::Stream::Iterator::Consolidate::FileAsc - iterator for Pre 
 
 =head1 DESCRIPTION
 
-This module implements a very simple file iterator interface.  This iterator interface assumes that the data is pre-sorted and pre-consolidated. The result objects returned are a container class: Result containers are constructed from $iterator->RESULT_FROM.  The class the objects contained within the result object are constructed from $iterator->NEW_FROM.  Parsing is handled by $iterator->parse_line.
+This module implements a very simple file iterator interface.  This iterator interface assumes that the data is pre-sorted and pre-consolidated. The result objects returned are a container class: Result containers are constructed from $iterator->RESULT_FROM.  The class objects contained within the result object are constructed from $iterator->NEW_FROM.  Parsing is handled by $iterator->parse_line.
 
 =head2 OO Methods
 
