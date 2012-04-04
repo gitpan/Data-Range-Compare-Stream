@@ -60,3 +60,13 @@ Revision history for Perl extension Data::Range::Compare::Stream.
   -- More pod fix ups.. more to come
   -- updated Data-Range-Compare-Stream-Sort.t  the code wasn't broken the tests were..
    perl versions prior to 5.8 used quick sort: The unit tests have been updated to reflect this.
+
+2.018
+  -- Updated some examples
+  -- More pod fixups
+  -- Added new Consolidate class
+    The new class dynamically adds columns to the iterator object based on column overlaps!
+  -- Added new Compare package
+  -- Added new support classe(s)
+  -- added new result sub classe(s)
+  -- Most classes and pods have been extended and or updated, no compatibility changes, just added alot of what was missing

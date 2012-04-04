@@ -2,6 +2,9 @@ package Data::Range::Compare::Stream::Iterator::Compare::Result;
 
 use strict;
 use warnings;
+use overload
+ '""'=>\&to_string,
+ fallback=>1;
 
 use constant COMMON_RANGE=>0;
 use constant OVERLAP_RESULTS=>1;

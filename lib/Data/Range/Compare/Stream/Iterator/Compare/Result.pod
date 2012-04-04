@@ -40,7 +40,11 @@ Data::Range::Compare::Stream::Iterator::Compare::Asc
 
     NON_OVERLAP_IDS
 
-      An array ref represetnig the ids of OVERLAP_RESULTS that are undef
+      An array ref representing the ids of OVERLAP_RESULTS that are undef
+
+=item * print $result
+
+When used in a string context the object will return $result->to_string.
 
 =item * my $range=$result->get_common
 
@@ -74,17 +78,17 @@ Data::Range::Compare::Stream::Iterator::Compare::Asc
 
   Returns the number of columns that did not overlap with the common range
 
-=item * my $range=$result->get_consolidator_result_by_id($id);
+=item * my $result=$result->get_consolidator_result_by_id($id);
 
   $id represents the column
 
-  $range will be undef if the column did not overlap with the common range
+  $result will be undef if the column did not overlap with the common range
   
     or
 
-  $range will be an object that implements Daa::Range::Compare::Stream
+  $result will be an object that implements: Data::Range::Compare::Stream::Iterator::Consolidate::Result
 
-=item * my $range=$result->get_result_by_id($id);
+=item * my $result=$result->get_result_by_id($id);
 
   alias to get_consolidator_result_by_id
 

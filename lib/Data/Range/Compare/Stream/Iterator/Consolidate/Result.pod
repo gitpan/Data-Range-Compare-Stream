@@ -16,7 +16,7 @@ Data::Range::Compare::Stream::Iterator::Consolidate
 
 =item * my $result=new Data::Range::Compare::Stream::Iterator::Consolidate::Result (COMMON_RANGE,START_RANGE,END_RANGE);
 
-  Objet constructor:
+  Object constructor:
 
     All arguments are mandatory
 
@@ -58,7 +58,7 @@ Data::Range::Compare::Stream::Iterator::Consolidate
 
 =item * my $string=$result->to_string;
 
-  Returns a string based on the following sprintf statemnet
+  Returns a string based on the following sprintf statement
 
   sprintf 'Commoon Range: [%s] Starting range: [%s] Ending Range: [%s]',$self->get_common,$self->get_start,$self->get_end
 

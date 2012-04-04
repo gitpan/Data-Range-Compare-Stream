@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use Data::Dumper;
-use Test::More tests => 168;
+use Test::More tests => 211;
 
 BEGIN { use_ok('Data::Range::Compare::Stream') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Sort') };
@@ -530,6 +530,7 @@ if(1){
     $obj->prepare_for_consolidate_asc;
     my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
       cmp_ok($cmp->add_consolidator($iterator),'==',0,"Should add consolidator 0 without error");
+      cmp_ok($iterator->get_column_id,'==',0,"Column ID Should be 0");
     }
     {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
@@ -544,6 +545,7 @@ if(1){
     $obj->prepare_for_consolidate_asc;
     my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
       ok($cmp->add_consolidator($iterator),"Should add the second consolidator without error");
+      cmp_ok($iterator->get_column_id,'==',1,"Column ID Should be 1");
     }
     {
     my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
@@ -556,6 +558,7 @@ if(1){
     $obj->prepare_for_consolidate_asc;
     my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
       ok($cmp->add_consolidator($iterator),"Should add the second consolidator without error");
+      cmp_ok($iterator->get_column_id,'==',2,"Column ID Should be 2");
     }
   }
   ok($cmp->has_next,'should have next');
@@ -859,6 +862,221 @@ if(1){
   {
     my $row=$cmp->get_next;
     cmp_ok($row->get_common_range,'eq','49 - 54','1 3 column 2 ranges always overlap Row 16 check');
+  }
+  {
+    my $row=$cmp->has_next;
+    ok(!$row,'iterator should be empty now!');
+  }
+}
+
+# 2 column dynamically add a 3rd
+{
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    my @range_set_a=qw(
+      3 11
+      17 41
+    );
+    my @ranges;
+    while(my ($start,$end)=splice(@range_set_a,0,2)) {
+      $obj->create_range($start,$end);
+    }
+  
+    $obj->prepare_for_consolidate_asc;
+    my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+    cmp_ok($cmp->add_consolidator($iterator),'==',0,"The consolidator id should be 0");
+  }
+
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    my @range_set_a=qw(
+     0 0
+     1 3
+     5 9
+     11 15
+     17 33
+    );
+    my @ranges;
+    while(my ($start,$end)=splice(@range_set_a,0,2)) {
+      $obj->create_range($start,$end);
+    }
+  
+    $obj->prepare_for_consolidate_asc;
+    my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+    ok($cmp->add_consolidator($iterator),"Should add the consolidator without error");
+  }
+
+  my $cmp_dynamic;
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    my @range_set_a=qw(
+     3 3
+     5 9
+     11 15
+     17 33
+    );
+    my @ranges;
+    while(my ($start,$end)=splice(@range_set_a,0,2)) {
+      $obj->create_range($start,$end);
+    }
+  
+    $obj->prepare_for_consolidate_asc;
+    my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+    $cmp_dynamic=$iterator;
+  }
+  cmp_ok($cmp->get_column_count,'==',1,'Column count should be: [1] not [0]');
+
+
+  {
+    ok($cmp->has_next,'Should have rows');
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','0 - 0','Row 0 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','1 - 2','Row 1 check 2 column complex data check');
+  }
+  {
+    my $id=$cmp->insert_consolidator($cmp_dynamic);
+    cmp_ok($id,'==',2,"Should now have 3 columns");
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','3 - 3','Row 2 check 2 column complex data check');
+    ok($row->is_full,"Should have all 3 columns overlapping!");
+    cmp_ok($row->get_consolidator_result_by_id(0)->get_common,'eq','3 - 11',"Check new column [0] value");
+    cmp_ok($row->get_consolidator_result_by_id(1)->get_common,'eq','1 - 3',"Check new column [1] value");
+    cmp_ok($row->get_consolidator_result_by_id(2)->get_common,'eq','3 - 3',"Check new column [2] value");
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','4 - 4','Row 3 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','5 - 9','Row 4 check 2 column complex data check');
+    cmp_ok($row->get_consolidator_result_by_id(1)->get_common,'eq','5 - 9',"Check new column [1] value");
+    cmp_ok($row->get_consolidator_result_by_id(2)->get_common,'eq','5 - 9',"Check new column [2] value");
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','10 - 10','Row 5 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','11 - 11','Row 6 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','12 - 15','Row 7 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','16 - 16','Row 8 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','17 - 33','Row 9 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','34 - 41','Row 10 check 2 column complex data check');
+  }
+  {
+    my $row=$cmp->has_next;
+    ok(!$row,'iterator should be empty now!') or diag(Dumper($row));
+  }
+}
+{
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  {
+    {
+      my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+      my @range_set_a=qw(
+        0 0
+	1 4
+	10 20
+      );
+      while(my ($start,$end)=splice(@range_set_a,0,2)) { $obj->create_range($start,$end); }
+  
+      $obj->prepare_for_consolidate_asc;
+      my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+      cmp_ok($cmp->add_consolidator($iterator),'==',0,"Should add consolidator 0 without error");
+    }
+    {
+      my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+      my @range_set_a=qw(
+        0 0
+	2 3
+	4 5
+	11 19
+      );
+      while(my ($start,$end)=splice(@range_set_a,0,2)) { $obj->create_range($start,$end); }
+  
+      $obj->prepare_for_consolidate_asc;
+      my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+      ok($cmp->add_consolidator($iterator),"Should add the second consolidator without error");
+    }
+    {
+      my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+      my @range_set_a=qw(
+        12 18
+    );
+      while(my ($start,$end)=splice(@range_set_a,0,2)) { $obj->create_range($start,$end); }
+  
+      $obj->prepare_for_consolidate_asc;
+      my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+      ok($cmp->add_consolidator($iterator),"Should add the second consolidator without error");
+    }
+  }
+  ok($cmp->has_next,'should have next');
+  cmp_ok($cmp->get_column_count,'==',2,'Column count should be: [2]');
+
+
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','0 - 0','1 3 column 2 ranges always overlap Row 0 check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','1 - 1','1 3 column 2 ranges always overlap Row 1 check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','2 - 3','1 3 column 2 ranges always overlap Row 1 check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','4 - 4','1 3 column 2 ranges always overlap Row 1 check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','5 - 5','1 3 column 2 ranges always overlap Row 1 check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','6 - 9','1 3 column 2 ranges always overlap Row 1 check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','10 - 10','1 3 column 2 ranges always overlap Row 1 check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','11 - 11','1 3 column 2 ranges always overlap Row 1 check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','12 - 18','1 3 column 2 ranges always overlap Row 1 check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','19 - 19','1 3 column 2 ranges always overlap Row 1 check');
+  }
+  {
+    my $row=$cmp->get_next;
+    cmp_ok($row->get_common_range,'eq','20 - 20','1 3 column 2 ranges always overlap Row 1 check');
   }
   {
     my $row=$cmp->has_next;

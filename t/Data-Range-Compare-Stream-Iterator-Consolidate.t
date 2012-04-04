@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use Data::Dumper;
-use Test::More tests => 29;
+use Test::More tests => 31;
 
 BEGIN { use_ok('Data::Range::Compare::Stream') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Sort') };
@@ -122,4 +122,68 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate') };
   ok(!$last_iterator,"Iterator should be empty!") or diag(Dumper($last_iterator));
   ok(!$obj->get_next,"Collection should be empty!");
 
+}
+
+#
+# Create our subclass for extending the data.
+{
+  our $CONSOLIDATE=0;
+  our $UNIQUE=0;
+  our %VALIDATE;
+  {
+    package ConsolidateSubClass;
+    use base qw(Data::Range::Compare::Stream::Iterator::Consolidate);
+    sub on_consolidate {
+      my ($self,$new_range,$last_range,$next_range)=@_;
+     ++$CONSOLIDATE;
+      if(my $id=$last_range->data) {
+        $UNIQUE++ unless $VALIDATE{$id}++;
+      } 
+      if(my $id=$next_range->data) {
+        $UNIQUE++ unless $VALIDATE{$id}++;
+      } 
+    }
+    1;
+  }
+
+  my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+  my @range_set_a=qw(
+   0 0
+   0 0
+
+   3 4
+   4 7
+   5 7
+
+   9 10 
+
+   11 12
+
+   13 14
+
+   15 16
+
+   17 18
+   
+   19 19
+
+
+   20 21
+   21 22
+   20 23
+  );
+  my @ranges;
+  my $id=0;
+  while(my ($start,$end)=splice(@range_set_a,0,2)) {
+    my $range=new Data::Range::Compare::Stream($start,$end,++$id);
+    $obj->add_range($range);
+  }
+  $obj->prepare_for_consolidate_asc;
+
+  my $cons=new ConsolidateSubClass($obj);
+  while($cons->has_next) {
+    $cons->get_next;
+  }
+  cmp_ok($CONSOLIDATE,'==',5,"Should be 5 Consolidations");
+  cmp_ok($UNIQUE,'==',scalar(keys %VALIDATE),"Should have 8 unique ranges passing through the call back");
 }

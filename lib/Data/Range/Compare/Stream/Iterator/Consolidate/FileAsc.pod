@@ -47,7 +47,7 @@ $class will contain the name of the class new result objects will be constructed
 
 =item * my $ref=$self->parss_line($line);
 
-This is the actual parser interface: $ref is an anonymous array representing the constructor arguments to be passed to the class refered to via $iterator->NEW_FROM.
+This is the actual parser interface: $ref is an anonymous array representing the constructor arguments to be passed to the class referee to via $iterator->NEW_FROM.
 
 The parser logic is very simple and can be described as follows.
 
@@ -57,7 +57,7 @@ The parser logic is very simple and can be described as follows.
       return [split /\s+/,$line];
     }
 
-If the data you are dealing with is not parseable usng the above code then you will need to extend this package and overload the $iterator->parse_line interface.
+If the data you are dealing with is not parse-able using the above code then you will need to extend this package and overload the $iterator->parse_line interface.
 
 =item * while($iterator->has_next) { ... }
 
@@ -65,7 +65,7 @@ Returns true when there are more rows to fetch.
 
 =item * my $range=$iterator->get_next;
 
-Returns the next Consolidated Rresult Object from the given source file.
+Returns the next Consolidated Result Object from the given source file.
 
 =back
 

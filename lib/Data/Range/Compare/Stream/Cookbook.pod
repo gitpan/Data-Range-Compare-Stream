@@ -34,7 +34,7 @@ The Adjacent Range example: L<Data::Range::Compare::Stream::Iterator::Consolidat
 
 =item * Basic File example
 
-If your raw fileis sorted with the start range value in ASC and the range end value DESC order 
+If your raw files sorted with the start range value in ASC and the range end value DESC order 
 then refer to the Base Iterator class.
 
 L<Data::Range::Compare::Stream::Iterator::Base>

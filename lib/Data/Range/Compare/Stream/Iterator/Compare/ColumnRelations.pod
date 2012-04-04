@@ -1,0 +1,130 @@
+=pod
+
+=head1 NAME
+
+Data::Range::Compare::Stream::Iterator:Compare:::ColumnRelations - Consolidate to Compare to Result Helper Module
+
+=head1 SYNOPSIS
+
+  use Data::Range::Compare::Stream::Iterator::File;
+  use Data::Range::Compare::Stream;
+  use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
+  use Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  use Data::Range::Compare::Stream::Iterator::Compare::ColumnRelations;
+  
+  my $compare=new  Data::Range::Compare::Stream::Iterator::Compare::Asc();
+  my $relations=new Data::Range::Compare::Stream::Iterator::Compare::ColumnRelations($compare);
+  
+  my $source_a=Data::Range::Compare::Stream::Iterator::File->new(filename=>'source_a.src');
+  my $consolidator_a=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($source_a,$compare);
+  $compare->add_consolidator($consolidator_a);
+  
+  my $source_b=Data::Range::Compare::Stream::Iterator::File->new(filename=>'source_b.src');
+  my $consolidator_b=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($source_b,$compare);
+  $compare->add_consolidator($consolidator_b);
+  
+  my $source_c=Data::Range::Compare::Stream::Iterator::File->new(filename=>'source_c.src');
+  my $consolidator_c=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($source_c,$compare);
+  $compare->add_consolidator($consolidator_c);
+  
+  my $source_d=Data::Range::Compare::Stream::Iterator::File->new(filename=>'source_d.src');
+  my $consolidator_d=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($source_d,$compare);
+  $compare->add_consolidator($consolidator_d);
+  
+  my $format='| %-12s | %-26s |  %-26s|  %-26s|  %-26s|'."\n";
+  my $break="+--------------+----------------------------+----------------------------+----------------------------+----------------------------+\n";
+  printf "$break$format$break","Intersection","Source A",'Source B','Source C','Source D';
+  
+  while($compare->has_next) {
+  
+    my $result=$compare->get_next;
+    next if $result->is_empty;
+  
+    my $columns=$relations->get_root_results($result);
+    my @row=($result->get_common);
+    foreach my $id (@{$relations->get_root_ids}) {
+      if(exists $columns->{$id}) {
+      push @row, join ', ',map { $_->get_common } @{$columns->{$id}};
+      } else {
+        push @row,"No Data";
+      }
+    }
+  
+    printf $format,@row;
+    print $break;
+  }
+
+=head1 DESCRIPTION
+
+This module can be used to associate dynamically added columns created by Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn with the original column that spawned them.
+
+=head2 OO Methods
+
+=over 3
+
+=item * my $relations=new Data::Range::Compare::Stream::Iterator::Compare::ColumnRelations($compare);
+
+Object Constructor:  $compare is an object that implements Data::Range::Compare::Stream::Iterator::Compare::Asc.
+
+=item * my $id=$relations->get_last_id;
+
+Returns the last consolidator object id evaluated.
+
+=item * my $relations->set_last_id($id);
+
+Sets the $relations->get_last_id value to $id
+
+=item * my $cmp=$relations->get_compare;
+
+Returns the compare object passed into the constructor.
+
+=item * my $ref=$relations->get_root_ids;
+
+Returns an array ref that contains the object ids that represent root_ids from within the compare and result object.
+
+=item * $self->build_map;
+
+Internal function:  Builds the internal mappings. 
+
+=item * my $ref=$relations->get_map;
+
+Returns an anonymous hash: The keys represent column ids.  The values refer to the root object, root columns are defined as key==value.
+
+=item * my $ref=$relations->get_root_results($result);
+
+Returns an anonymous hash: Keys represent the root_ids.  Values are anonymous arrays that contain the result objects from the consolidation process associated with the root_id.  $result implements Data::Range::Compare::Stream::Compare::Result.
+
+=item * my $ref=$relations->get_root_result_ids($result)
+
+Returns an anonymous hash: Keys represent the root_ids.  Values are anonymous arrays that contain the result ids from the consolidation process associated with the root_id.  $result implements Data::Range::Compare::Stream::Compare::Result.
+
+=back
+
+=head1 SEE ALSO
+
+Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn::Result
+
+Data::Range::Compare::Stream::Iterator::Base
+
+Data::Range::Compare::Stream::Cookbook
+
+=head1 AUTHOR
+
+Michael Shipper
+
+=head1 Source-Forge Project
+
+As of version 0.001 the Project has been moved to Source-Forge.net
+
+L<Data Range Compare|https://sourceforge.net/projects/data-range-comp/>
+L<https://sourceforge.net/projects/data-range-comp/>
+
+=head1 COPYRIGHT
+
+Copyright 2011 Michael Shipper.  All rights reserved.
+
+This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+=cut
+

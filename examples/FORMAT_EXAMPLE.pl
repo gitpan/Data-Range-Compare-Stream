@@ -6,16 +6,16 @@ use Data::Dumper;
 use lib qw(./ ../lib);
 
 # custom package from FILE_EXAMPLE.pl
-use MyIterator; 
+use Data::Range::Compare::Stream::Iterator::File; 
 
 
 use Data::Range::Compare::Stream;
 use Data::Range::Compare::Stream::Iterator::Consolidate;
 use Data::Range::Compare::Stream::Iterator::Compare::Asc;
 
-my $source_a=MyIterator->new(filename=>'source_a.src');
-my $source_b=MyIterator->new(filename=>'source_b.src');
-my $source_c=MyIterator->new(filename=>'source_c.src');
+my $source_a=Data::Range::Compare::Stream::Iterator::File->new(filename=>'source_a.src');
+my $source_b=Data::Range::Compare::Stream::Iterator::File->new(filename=>'source_b.src');
+my $source_c=Data::Range::Compare::Stream::Iterator::File->new(filename=>'source_c.src');
 
 my $consolidator_a=new Data::Range::Compare::Stream::Iterator::Consolidate($source_a);
 my $consolidator_b=new Data::Range::Compare::Stream::Iterator::Consolidate($source_b);

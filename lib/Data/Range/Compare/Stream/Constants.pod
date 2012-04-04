@@ -28,7 +28,7 @@ The following constants are exported by default.
    Defines the key that refers to the range_end raw value
 
   RANGE_DATA
-    Defines the key tha refers to the optional data value
+    Defines the key that refers to the optional data value
 
 =head1 SEE ALSO
 

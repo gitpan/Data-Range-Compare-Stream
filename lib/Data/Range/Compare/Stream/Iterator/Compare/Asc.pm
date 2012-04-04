@@ -14,16 +14,16 @@ sub has_next {
 sub prepare {
   my ($self,%args)=@_;
   return undef if $self->prepared;
-  $self->{prepared}=1;
   
-  my $column_count=$self->get_column_count_human_readable;
-
   my $min_range_start;
   my $min_range_end;
   my $iterators_has_next_count;
   my $min_range_start_column_id=0;
-  for(my $id=0;$id<$column_count;++$id)  {
+
+  for(my $id=0;$id<$self->get_column_count_human_readable;++$id)  {
+
     my $iterator=$self->{consolidateors}->[$id];
+
     unless($iterator->has_next) {
       $self->{has_next}=0;
       return undef;
@@ -55,7 +55,7 @@ sub prepare {
 
   my $next_range=$min_range_end->get_common->NEW_FROM_CLASS->new($min_range_start->get_common->range_start,$min_range_end->get_common->range_end);
 
-  for(my $id=0;$id<$column_count;++$id)  {
+  for(my $id=0;$id<$self->get_column_count_human_readable;++$id)  {
     # stop here if this is the column started on
     
     my $cmp=$self->{raw_row}->[$id]->get_common;
@@ -73,6 +73,7 @@ sub prepare {
   $self->{current_row}=$next_range;
   $self->{processed_ranges}=1;
 
+  $self->{prepared}=1;
   1;
 }
 
@@ -85,7 +86,6 @@ sub get_next {
   croak "Fatal: get_next called befor has_next or after the iterator set is empty" unless defined($current_row);
 
   my $result=[];
-  my $column_count=$self->get_column_count_human_readable;
 
   my $next_range_start=$current_row->next_range_start;
   my $iterators_has_next_count;
@@ -97,7 +97,7 @@ sub get_next {
   my $created_range=0;
   my $next_range;
 
-  for(my $id=0;$id<$column_count;++$id)  {
+  for(my $id=0;$id<$self->get_column_count_human_readable;++$id)  {
     
     # Objects we will use throught the loop
     my $raw_range=$self->{raw_row}->[$id];

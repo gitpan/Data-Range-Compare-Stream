@@ -27,6 +27,11 @@ sub add_range {
   push @{$self->{range_list}},$range;
 }
 
+sub insert_range {
+  my ($self,$range)=@_;
+  push @{$self->{range_list}},$range;
+}
+
 sub create_range {
   my ($self,@args)=@_;
   croak "Object: [$self] has all ready been sorted" if $self->sorted;

@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc - Consolidates Adjacent, Duplicate and Overlaping ranges
+Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc - Consolidates Adjacent, Duplicate and Overlapping ranges
 
 =head1 SYNOPSIS
 
@@ -58,11 +58,11 @@ in the following order(s):
 
      my $range=$processor->get_next;
 
-       $range must impliment the interfaces of Data::Range::Compare::Stream
+       $range must implement the interfaces of Data::Range::Compare::Stream
 
 =item * while($processor->has_next) { do something }
 
-  Returns true when the there are more rangs to consolidate
+  Returns true when the there are more ranges to consolidate
 
 =item * my $range=$processor->get_next;
 

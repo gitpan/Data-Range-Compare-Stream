@@ -48,7 +48,7 @@ This module implements an array iterator.
 
       range_list =>  []
         
-	Defines the array refernce used internally
+	Defines the array reference used internally
 
       sorted     =>  0
 
@@ -56,47 +56,43 @@ This module implements an array iterator.
 
 =item * $iterator->add_range($obj)
 
-  Adds $obj to the internal array.
-
-    This function returns false once $iterator has been sorted
+Adds $obj to the internal array.  This function returns false once $iterator has been sorted
 
 =item * $iterator->create_range(0,0);
 
-  Creates a new range object and adds it to the internal array.
-
-    This function returns false once $iterator has been sorted
+Creates a new range object and adds it to the internal array.  This function returns false once $iterator has been sorted.
 
 =item * $iterator->prepare_for_consolidate_asc;
 
-  Sorts the internal array and sets the sorted flag
-
-    $iterator->has_next returns false until the internal array has been sorted
+Sorts the internal array and sets the sorted flag $iterator->has_next returns false until the internal array has been sorted.
 
 =item * $iterator->prepare_for_consolidate_desc;
 
-  Sorts the internal array and sets the sorted flag
-
-    $iterator->has_next returns false until the internal array has been sorted
+Sorts the internal array and sets the sorted flag: $iterator->has_next returns false until the internal array has been sorted.
 
 =item * $iterator->set_sorted(0|1);
 
-  Used to set the internal array sorted flag
+Used to set the internal array sorted flag
 
 =item * if($iterator->sorted) { do something }
 
-  Returns the sorted state
+Returns the sorted state
 
 =item * while($iterator->has_next) { do something }
 
-  Returns true when the internal array has been sorted and still contains data
+Returns true when the internal array has been sorted and still contains data
 
 =item * my $range=$iterator->get_next;
 
-  if $iterator->has_next returns true, then the next value from the internal array is returned
+If $iterator->has_next returns true, then the next value from the internal array is returned
 
 =item * my $string=$iterator->to_string;
 
-  Returns the instance name of $iterator
+Returns the instance name of $iterator
+
+=item * $iterator->insert_range($range);
+
+Inserts a range into a the iterator regardless of the "sorted" state. Use with cation!
 
 =back
 

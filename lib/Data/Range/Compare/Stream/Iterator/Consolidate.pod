@@ -35,8 +35,7 @@ Data::Range::Compare::Stream::Iterator::Consolidate - Consolidates overlapping a
 
 This module implements the consolidation engine for Data::Range::Compare::Stream.  
 
-Data::Range::Compare::Stream::Iterator::Consolidate can consolidate ranges sorted
-in the following order:
+Data::Range::Compare::Stream::Iterator::Consolidate can consolidate ranges sorted in the following order:
 
   Consolidation Asc
 
@@ -52,23 +51,47 @@ in the following order:
 
     An $iterator object must implement Data::Range::Compare::Stream::Iterator::Base
 
-     my $boolean=processor->has_next
+     my $boolean=$iterator->has_next
 
        Boolean value indicating if there are any more ranges
 
-     my $range=$processor->get_next;
+     my $range=$iterator->get_next;
 
-       $range must impliment the interfaces of Data::Range::Compare::Stream
+       $range must implement the interfaces of Data::Range::Compare::Stream
 
 =item * while($processor->has_next) { do something }
 
-  Returns true when the there are more rangs to consolidate
+  Returns true when the there are more ranges to consolidate
 
 =item * my $range=$processor->get_next;
 
   if $processor->has_next returns true
     
     Returns a instance of Data::Range::Compare::Stream::Iterator::Consolidate::Result
+
+=item * $self->on_consolidate($new_range,$overlapping_range,$next_range)
+
+Intended for sub classing:  Called when ranges are being consolidated receives 3 arguments along with "$self": 1. $new_range, 2. Overlapping Range 3. The next range returned by  $iterator that overlaps with the Overlapping Range.
+
+=item * $processor->set_column_id($id);
+
+Sets the column_id value.  This is used by the Compare Layer
+
+=item * my $id=$processor->get_column_id($id);
+
+Gets the column_id, returns undef if not set.
+
+=item * $processor->set_root_column_id($id)
+
+Sets the parent object's column id.
+
+=item * my $id=$processor->get_root_column_id;
+
+Gets the parent object's column_id, returns undef if not set.
+
+=item * if($processor->is_child) { ... }
+
+Returns true if this object is a child of another Consolidaor object.
 
 =back
 

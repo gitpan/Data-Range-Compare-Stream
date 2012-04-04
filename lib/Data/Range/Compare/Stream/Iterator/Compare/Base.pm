@@ -19,12 +19,38 @@ sub add_consolidator {
 
   croak "Fatal error, cannot add new objects once the consolidator has been called!!" if $self->prepared;
   push @{$self->{consolidateors}},$consolidator;
-  return $#{$self->{consolidateors}}
+  my $id=$#{$self->{consolidateors}};
+
+  $consolidator->set_column_id($id);
+  return $id
 }
 
+sub insert_consolidator {
+  my ($self,$consolidator)=@_;
+
+  push @{$self->{consolidateors}},$consolidator;
+  my $id=$#{$self->{consolidateors}};
+
+  $consolidator->set_column_id($id);
+
+  if($self->prepared) {
+    croak "cannot insert empty consolidators!" unless $consolidator->has_next;
+    $self->{raw_row}->[$id]=$consolidator->get_next;
+  }
+
+  return $id;
+}
+
+sub get_iterator_by_id {
+  my ($self,$id)=@_;
+  croak "id out of bounds" if !defined($id) or $id>$#{$_[0]->{consolidateors}} or $id<0;
+  return $self->{consolidateors}->[$id];
+}
 sub get_column_count_human_readable { 1 + $_[0]->get_column_count}
 
 sub get_column_count { $#{$_[0]->{consolidateors}} }
+
+sub get_consolidateors { @{$_[0]->{consolidateors}} }
 
 sub get_current_row { $_[0]->{current_row} } 
 

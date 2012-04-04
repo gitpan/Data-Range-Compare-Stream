@@ -4,7 +4,7 @@
 
 Data::Range::Compare::Stream - Compute intersections of Ranges with Iterators
 
-=head1 SYNOPSIS
+=head1 SYNOPSIS A
 
   use Data::Range::Compare::Stream;
   use Data::Range::Compare::Stream::Iterator::Array;
@@ -132,7 +132,6 @@ Part of the process of comparing sets of data involves making sure there are no 
 The next step in the comparison process is iterating through our data and figuring out where the gaps are in each data set.  Each set of data contains gaps between ranges, and those gaps need be calculated in order for a proper comparison of the data to begin.
 
 
-
   Numeric Range set: A
   +----------+
   | 1 - 11   |
@@ -205,14 +204,235 @@ Looking at the results form the compare process we can see the "Common Range" ex
 
 The final stage, only ranges derived from our original source data is presented and we have excluded any rows that contain none of our original data.
 
+=head1 SYNOPSIS B 
+
+
+  # Use a file as our stream iterator source
+  use Data::Range::Compare::Stream::Iterator::File;
+
+  # Objects to be compared are loaded from this Class
+  use Data::Range::Compare::Stream;
+
+  # Consolidation Class
+  use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
+
+  # Compare Class
+  use Data::Range::Compare::Stream::Iterator::Compare::Asc;
+
+  # Class used to find relations between columns
+  use Data::Range::Compare::Stream::Iterator::Compare::ColumnRelations;
+  
+  # create our compare object
+  my $compare=new  Data::Range::Compare::Stream::Iterator::Compare::Asc();
+
+  # Create our relation object
+  my $relations=new Data::Range::Compare::Stream::Iterator::Compare::ColumnRelations($compare);
+  
+  # open each one of our files and add them to the compare process
+  foreach my $file (qw(source_a.src source_b.src source_d.src source_c.src source_d.src)) {
+    # load our ranges from a file
+    my $src=Data::Range::Compare::Stream::Iterator::File->new(filename=>$file);
+    my $con=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($src,$compare);
+    $compare->add_consolidator($con);
+  }
+  
+  my $format='  | %-12s | %-26s |  %-26s|  %-26s|  %-26s|'."\n";
+  my $break="  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+\n";
+  printf "$break$format$break","Intersection","Set A",'Set B','Set C','Set D';
+  
+  while($compare->has_next) {
+  
+    my $result=$compare->get_next;
+    next if $result->is_empty;
+  
+    # organize the results in a way we can understand
+    my $columns=$relations->get_root_results($result);
+
+    # This array will be used to fill out our printf statement. First element is the common range
+    my @row=($result->get_common);
+
+    # Look at data from our original column perspective
+    foreach my $id (@{$relations->get_root_ids}) {
+      # Consolidate our related columns and fill in the overlaps if any
+      if(exists $columns->{$id}) {
+
+        push @row, join ', ',map { $_->get_common } @{$columns->{$id}};
+      } else {
+        push @row,"No Data";
+      }
+    }
+  
+    printf $format,@row;
+    print $break;
+  }
+
+
+=head1 Going Beyond Simple Consolidation
+
+SYNOPSIS A and Figures 1 through 5 provide a very basic concept for consolidation and comparison:  But an alternate way to deal with duplicates and overlaps is to copy the duplicates and overlaps to additional columns:  For every duplicate and overlap found that data is then moved over to an additional column.
+
+SYNOPSES B and Figures 6 through 8 represent aspects of the extended comparison process:  Although these steps are explained individually each operation is completed in parallel.
+
+=head2 Figure 6 ( Example Data )
+
+Given 4 sets of data we will look at the extended consolidation process.
+
+  +-----------+
+  | Set A     |
+  +-----------+
+  | 1 - 11    |
+  +-----------+
+  | 13 - 44   |
+  +-----------+
+  | 17 - 24   |
+  +-----------+
+  | 55 - 66   |
+  +-----------+
+
+  +-----------+
+  | Set B     |
+  +-----------+
+  | 0 - 1     |
+  +-----------+
+  | 2 - 29    |
+  +-----------+
+  | 88 - 133  |
+  +-----------+
+
+  +-----------+
+  | Set C     |
+  +-----------+
+  | 17 - 29   |
+  +-----------+
+  | 220 - 240 |
+  +-----------+
+  | 241 - 250 |
+  +-----------+
+
+  +-----------+
+  | Set D     |
+  +-----------+
+  | 0 - 1     |
+  +-----------+
+  | 0 - 0     |
+  +-----------+
+  | 1 - 1     |
+  +-----------+
+  | 5 - 7     |
+  +-----------+
+  | 7 - 9     |
+  +-----------+
+  | 11 - 19   |
+  +-----------+
+  | 12 - 18   |
+  +-----------+
+  | 17 - 29   |
+  +-----------+
+  | 220 - 240 |
+  +-----------+
+  | 241 - 250 |
+  +-----------+
+
+=head2 Figure 7 ( Moving duplicates and overlaps to new columns )
+
+Duplicates and overlaps are moved to additional columns and compared for a common range:  Columns A becomes 2 columns, Column D Becomes 3 Columns.   Once the additional columns are created each set of data can be compared for the common range.
+
+  +---------------------+----------------------------+
+  | Set A Common Ranges | Duplicates and Overlaps    |
+  +---------------------+----------------------------+
+  | 1 - 11              | 1 - 11                     |
+  | 13 - 16             | 13 - 44                    |
+  | 17 - 24             | 13 - 44, 17 - 24           |
+  | 25 - 44             | 13 - 44                    |
+  | 55 - 66             | 55 - 66                    |
+  +---------------------+----------------------------+
+
+  +---------------------+----------------------------+
+  | Set B Common Ranges | Duplicates and Overlaps    |
+  +---------------------+----------------------------+
+  | 0 - 1               | 0 - 1                      |
+  | 2 - 29              | 2 - 29                     |
+  | 88 - 133            | 88 - 133                   |
+  +---------------------+----------------------------+
+
+  +---------------------+----------------------------+
+  | Set C Common Ranges | Duplicates and Overlaps    |
+  +---------------------+----------------------------+
+  | 17 - 29             | 17 - 29                    |
+  | 220 - 240           | 220 - 240                  |
+  | 241 - 250           | 241 - 250                  |
+  +---------------------+----------------------------+
+
+  +---------------------+----------------------------+
+  | Set D Common Ranges | Duplicates and Overlaps    |
+  +---------------------+----------------------------+
+  | 0 - 0               | 0 - 1, 0 - 0               |
+  | 1 - 1               | 0 - 1, 1 - 1               |
+  | 5 - 6               | 5 - 7                      |
+  | 7 - 7               | 5 - 7, 7 - 9               |
+  | 8 - 9               | 7 - 9                      |
+  | 11 - 11             | 11 - 19                    |
+  | 12 - 16             | 11 - 19, 12 - 18           |
+  | 17 - 18             | 11 - 19, 12 - 18, 17 - 29  |
+  | 19 - 19             | 11 - 19, 17 - 29           |
+  | 20 - 29             | 17 - 29                    |
+  | 220 - 240           | 220 - 240                  |
+  | 241 - 250           | 241 - 250                  |
+  +---------------------+----------------------------+
+
+=head2 Figure 8
+
+Once the duplicates and overlaps have been moved into additional columns the sets of data can be compared in parallel.
+
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | Intersection | Set A                      |  Set B                     |  Set C                     |  Set D                     |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 0 - 0        | No Data                    |  0 - 1                     |  No Data                   |  0 - 1, 0 - 0              |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 1 - 1        | 1 - 11                     |  0 - 1                     |  No Data                   |  0 - 1, 1 - 1              |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 2 - 4        | 1 - 11                     |  2 - 29                    |  No Data                   |  No Data                   |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 5 - 6        | 1 - 11                     |  2 - 29                    |  No Data                   |  5 - 7                     |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 7 - 7        | 1 - 11                     |  2 - 29                    |  No Data                   |  5 - 7, 7 - 9              |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 8 - 9        | 1 - 11                     |  2 - 29                    |  No Data                   |  7 - 9                     |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 10 - 10      | 1 - 11                     |  2 - 29                    |  No Data                   |  No Data                   |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 11 - 11      | 1 - 11                     |  2 - 29                    |  No Data                   |  11 - 19                   |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 12 - 12      | No Data                    |  2 - 29                    |  No Data                   |  11 - 19, 12 - 18          |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 13 - 16      | 13 - 44                    |  2 - 29                    |  No Data                   |  11 - 19, 12 - 18          |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 17 - 18      | 13 - 44, 17 - 24           |  2 - 29                    |  17 - 29                   |  11 - 19, 12 - 18, 17 - 29 |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 19 - 19      | 13 - 44, 17 - 24           |  2 - 29                    |  17 - 29                   |  11 - 19, 17 - 29          |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 20 - 24      | 13 - 44, 17 - 24           |  2 - 29                    |  17 - 29                   |  17 - 29                   |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 25 - 29      | 13 - 44                    |  2 - 29                    |  17 - 29                   |  17 - 29                   |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 30 - 44      | 13 - 44                    |  No Data                   |  No Data                   |  No Data                   |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 55 - 66      | 55 - 66                    |  No Data                   |  No Data                   |  No Data                   |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 88 - 133     | No Data                    |  88 - 133                  |  No Data                   |  No Data                   |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 220 - 240    | No Data                    |  No Data                   |  220 - 240                 |  220 - 240                 |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+  | 241 - 250    | No Data                    |  No Data                   |  241 - 250                 |  241 - 250                 |
+  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+
+
 
 =head2 Getting Started
 
 The internals of Data::Range::Compare::Stream only support dealing with integers by default: This section 
 covers how to Extend Data::Range::Compare::Stream to support your data types. 
 
-
-=head3 Creating IPV4 Range Support See:
+=head2 Creating IPV4 Range Support See:
 
 L<Data::Range::Compare::Stream::Cookbook::COMPARE_IPV4|Data::Range::Compare::Stream::Cookbook::COMPARE_IPV4>
 
@@ -220,7 +440,7 @@ L<Data::Range::Compare::Stream::Cookbook::COMPARE_IPV4|Data::Range::Compare::Str
 
 L<Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime|Data::Range::Compare::Stream::Cookbook::COMPARE_DateTime>
 
-=head2 OO Methods
+=head1 OO Methods
 
 This section covers the OO Methods in the package.
 
@@ -234,120 +454,112 @@ Object constructor:
 
   Creates a new instance of Data::Range::Compare::Stream
 
-   Arguments an their meanings:
+Arguments an their meanings:
 
-     $range_start -- Required
-       Represents the start of this given range
+  $range_start -- Required
+    Represents the start of this given range
 
-     $range_end -- Required
-       Represents the end of this range.
+  $range_end -- Required
+    Represents the end of this range.
 
-     $data -- Optional
-       Used to tag this range with your data
+  $data -- Optional
+    Used to tag this range with your data
 
 =item * my $value=$range->range_start
 
-  Returns the object that represents the start of this range.
+Returns the object that represents the start of this range.
 
 =item * my $string=$range->range_start_to_string
 
-  Returns a string that represents the start of the range.
+Returns a string that represents the start of the range.
 
 =item * my $value=$range->range_end
 
-  Returns the object that represents the end of the rage.
+Returns the object that represents the end of the rage.
 
 =item * my $string=$range->range_end_to_string;
 
-  Returns a string that represents the end of the range.
+Returns a string that represents the end of the range.
 
 =item * my $new_value=$range->sub_one($value);
 
-  Computes and returns the object that came before this $value
+Computes and returns the object that came before this $value
 
 =item * my $new_value=$range->add_one($value)
 
-  Computes and returns the object that comes after this $value
+Computes and returns the object that comes after this $value
 
 =item * my $cmp=$range->cmp_values($value_a,$value_b)
 
-   Returns -1,0,1 similar to <=> or cmp.
+Returns -1,0,1 similar to <=> or cmp.
 
 =item * my $next_range_start_value=$range->next_range_start
 
-  Returns the starting value of the range that will come after this range.
+Returns the starting value of the range that will come after this range.
 
 =item * my $previous_range_end_value=$range->previous_range_end
 
-  Returns a value that represents the end of the range that precedes this one.
+Returns a value that represents the end of the range that precedes this one.
 
 =item * my $data=$range->data($optional_value);
 
-  Used to get and set the data value for this range.
+Used to get and set the data value for this range.
 
-    Sets when called with an argument
+Sets when called with an argument
 
-      Example:
+Example:
         
-	$range->data('some value');
+  $range->data('some value');
 
-    Gets the current data value when called without any arguments
+Gets the current data value when called without any arguments
     
-      Example:
+Example:
 
-        my $value=$range->data;
+  my $value=$range->data;
 
 =item * my $class=$range->NEW_FROM_CLASS;
 
-  Returns the name of the class new objects will be constructed from.
+Returns the name of the class new objects will be constructed from.
 
 =item *  my $new_range=$get_common_range([$range_a,$range_b,$range_c]);
 
-  Given an array reference of ranges that overlap $new_range will be the smallest intersecting range;
+Given an array reference of ranges that overlap $new_range will be the smallest intersecting range;
 
 =item * my $new_range=$range->get_overlapping_range([$range_a,$range_b,$range_c]);
 
-  Given an array reference of ranges: $new_range will contain all of the ranges listed in the array reference
+Given an array reference of ranges: $new_range will contain all of the ranges listed in the array reference
 
 =item * my $cmp=$range_a->cmp_range_start($range_b);
 
-  Compares the starting values of $range_a and $range_b
-
-    Returns: -1 0 1,see perlop: <=> or cmp
+Compares the starting values of $range_a and $range_b. Returns: -1 0 1,see perlop: <=> or cmp.
 
 =item * my $cmp=$range_a->cmp_range_end($range_b);
 
-  Compares the ending values of $range_a and $range_b
-
-    Returns: -1 0 1, see perlop: <=> or cmp
+Compares the ending values of $range_a and $range_b returns: -1 0 1, see perlop: <=> or cmp
 
 =item * my $cmp=$range_a->cmp_range_start_to_range_end($range_b);
 
-  Compares the start of $range_a to the end of $range_b
-
-    Returns: -1 0 1, see perlop: <=> or cmp
+Compares the start of $range_a to the end of $range_b.  Returns: -1 0 1, see perlop: <=> or cmp
 
 =item * if($range->contains_value($value)) { do something }
 
-  Returns true if $range contains $value
+Returns true if $range contains $value.
 
 =item * if($range_a->contiguous_check($range_b)) { do something }
 
-  Returns true if $range_a is immediately followed by $range_b.
+Returns true if $range_a is immediately followed by $range_b.
 
 =item * my $cmp=$range_a->cmp_ranges($range_b);
 
-  Compares $range_a to $range_b in Ascending order.
-    
-    Returns: -1 0 1, see perlop: <=> or cmp
+Compares $range_a to $range_b in Ascending order.  Returns: -1 0 1, see perlop: <=> or cmp
 
 =item * if($range_a->overlap($range_b) { do something }
 
-  Returns true if $range_a overlaps with $range_b
+Returns true if $range_a overlaps with $range_b
 
 =item * my ($start,$end)=Data::Range::Compare::Stream->find_smallest_outer_ranges($array_ref_ranges);
 
-  Returns the smallest outter most ranges as $start and $end
+Returns the smallest outer most ranges as $start and $end
 
 =back
 

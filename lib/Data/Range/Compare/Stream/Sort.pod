@@ -32,7 +32,7 @@ This module defines the constants used by Data::Range::Compare::Stream
 The following sort functions are exported by default
 
     sort_in_presentation_order
-      Function for sorting ranges in a very human readable fasion
+      Function for sorting ranges in a very human readable fashion
 
     sort_in_consolidate_order_asc
       Function for sorting ranges in asc order for consolidation

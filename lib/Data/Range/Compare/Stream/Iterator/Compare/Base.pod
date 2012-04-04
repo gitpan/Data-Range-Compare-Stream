@@ -89,6 +89,14 @@ This module provides the base shared hooks for the Compare Asc class and any fut
 
     Returns an instance of Data::Range::Compare::Stream::Iterator::Compare::Result
 
+=item * my $id=$compare->insert_consolidator($consolidator);
+
+Inserts a consolidator object into a prepared and or running $compare object.  This interface can be dangerous, use with caution!
+
+=item * my $consolidator=$compare->get_iterator_by_id($id);
+
+Returns the consolidator identified by $id.  Fatal if $id does not exist.
+
 =back
 
 =head1 SEE ALSO

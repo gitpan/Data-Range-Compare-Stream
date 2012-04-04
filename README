@@ -12,7 +12,7 @@ INSTALLATION
 
 BEFORE YOU UPGRADE TO 2.xxx
 
-Major changes were made to the  Data::Range::Compare::Stream::Iterator::Compare::Asc.pm module
+Major changes were made to the Data::Range::Compare::Stream::Iterator::Compare::Asc module
 before has_next must always be called before get_next!
 
 To install this module type the following:

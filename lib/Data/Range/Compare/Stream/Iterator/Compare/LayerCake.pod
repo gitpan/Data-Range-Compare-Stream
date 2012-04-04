@@ -90,7 +90,7 @@ in the following order:
 
 =item * while($compare->has_next) { do something }
 
-  Returns true when the there are more rangs to consolidate
+  Returns true when the there are more ranges to consolidate
 
 =item * my $result=$compare->get_next;
 
