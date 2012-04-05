@@ -70,3 +70,7 @@ Revision history for Perl extension Data::Range::Compare::Stream.
   -- Added new support classe(s)
   -- added new result sub classe(s)
   -- Most classes and pods have been extended and or updated, no compatibility changes, just added alot of what was missing
+
+2.019
+  -- More pod Fopas cleaned up.
+  -- bug fix: AdjacentAsc.pm did not call on_consolidate, this has been fixed

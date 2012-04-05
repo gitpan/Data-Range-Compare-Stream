@@ -31,7 +31,6 @@ Data::Range::Compare::Stream::Iterator::Compare::Asc - Compares results overlapp
   my $consolidate_a=Data::Range::Compare::Stream::Iterator::Consolidate->new($iterator_a);
   my $consolidate_b=Data::Range::Compare::Stream::Iterator::Consolidate->new($iterator_b);
   
-
   my $compare=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
 
   $compare->add_consolidator($consolidate_a);
@@ -49,9 +48,7 @@ This module implements the comparison engine for Data::Range::Compare::Stream.
 Data::Range::Compare::Stream::Iterator::Compare::Asc compares results from Data::Range::Compare::Stream::Iterator::Consolidate;
 in the following order:
 
-  Consolidation Asc
-
-    range_start asc,range_end desc
+Consolidation Asc: range_start asc,range_end desc
 
 =head2 OO Methods
 
@@ -59,27 +56,11 @@ in the following order:
 
 =item * my $compare=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
 
-  Object constructor takes no arguments
+Object constructor takes no arguments.
 
 =item * $compare->add_consolidator($iterator_a);
 
-    An $iterator object must implement one of the following iterator classes
-
-      Data::Range::Compare::Stream::Iterator::Consolidate
-       
-      Data::Range::Compare::Stream::Iterator::Compare::Asc
-
-     my $boolean=$iterator_a->has_next
-
-       Boolean value indicating if there are any more ranges
-
-     my $result=$iterator_a->get_next;
-
-       $result must implement one of the following result objects:
-
-         Data::Range::Compare::Stream::Iterator::Consolidate::Result
-	   
-         Data::Range::Compare::Stream::Iterator::Compare::Result
+An $iterator object must implement one of the following iterator classes: Data::Range::Compare::Stream::Iterator::Consolidate, Data::Range::Compare::Stream::Iterator::Compare::Asc.  Result objects must implement the $result->get_common interface, or one of the following classes: Data::Range::Compare::Stream::Iterator::Consolidate::Result, Data::Range::Compare::Stream::Iterator::Compare::Result.
 
 =item * while($compare->has_next) { do something }
 
@@ -87,27 +68,27 @@ Returns true when the there are more ranges to consolidate
 
 =item * my $result=$compare->get_next;
 
-if $compare->has_next returns true Returns a instance of Data::Range::Compare::Stream::Iterator::Compare::Result
+if $compare->has_next returns true Returns a instance of Data::Range::Compare::Stream::Iterator::Compare::Result.
 
 =item * my $count=$compare->get_column_count_human_readable;
 
-Returns a human readable count of the columns in the comparison object
+Returns a human readable count of the columns in the comparison object.
 
 =item * my $count=$compare->get_column_count;
 
-Returns the last index id of the iterator column counts
+Returns the last index id of the iterator column counts.
 
 =item * my $range=$compare->get_current_row;
 
-Returns the range object that will be used in the $compare->get_next call
+Returns the range object that will be used in the $compare->get_next call.
 
 =item * my $boolean=$compare->iterators_empty;
 
-Returns false when all iterator objects in $compare are depleted
+Returns false when all iterator objects in $compare are depleted.
 
 =item * my $result=$compare->get_next;
 
-If $compare->has_next returns true Returns an instance of Data::Range::Compare::Stream::Iterator::Compare::Result
+If $compare->has_next returns true Returns an instance of Data::Range::Compare::Stream::Iterator::Compare::Result.
 
 =item * my $id=$compare->insert_consolidator($consolidator);
 

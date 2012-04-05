@@ -38,21 +38,19 @@ This module implements an array iterator.
 
 =item * my $iterator=new Data::Range::Compare::Stream::Iterator::Array;
 
-  Instance Constructor, all arguments are optional
+Instance Constructor, all arguments are optional:
   
-    Arguments:
-      
-      new_from   =>  Data::Range::Compare::Stream
+      new_from   =>  'Data::Range::Compare::Stream'
         
-	Defines what class to call new against for $iterator->create_range(x,x,x)
+	# Defines what class to call new against for $iterator->create_range(x,x,x)
 
       range_list =>  []
         
-	Defines the array reference used internally
+	# Defines the array reference used internally
 
       sorted     =>  0
 
-        Sets the sorted state
+        # Sets the sorted state
 
 =item * $iterator->add_range($obj)
 

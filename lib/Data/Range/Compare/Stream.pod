@@ -450,9 +450,7 @@ This section covers the OO Methods in the package.
 
 =item * my $range=new Data::Range::Compare::Stream($range_start,$range_end,$data);
 
-Object constructor:
-
-  Creates a new instance of Data::Range::Compare::Stream
+Object constructor: Creates a new instance of Data::Range::Compare::Stream.
 
 Arguments an their meanings:
 

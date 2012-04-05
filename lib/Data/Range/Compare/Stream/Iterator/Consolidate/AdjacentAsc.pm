@@ -48,6 +48,8 @@ sub get_next {
 
     # compute the overlap
     my $overlap=$common->get_overlapping_range([$common,$next]);
+    $self->on_consolidate($overlap,$common,$next);
+
     my ($start,$end)=$common->find_smallest_outer_ranges([$result->get_start,$result->get_end,$last_result->get_start,$last_result->get_end]);
 
     # get our new result

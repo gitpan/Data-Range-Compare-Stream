@@ -60,21 +60,19 @@ This module acts as the base class for all Data::Range::Compare::Stream::Iterato
 
 =item * my $iterator=new MyIterator(arguments=>here);
 
- The default object constructor takes a hash of arguments, and returns a blessed anonymous hash.
- If you want to do anything other than that you will need to overload this function!
+The default object constructor takes a hash of arguments, and returns a blessed anonymous hash.  If you want to do anything other than that you will need to overload this function!
 
 =item * while($iterator->has_next) { do something }
 
-  The internals return $self->{has_next};
- If you want to do anything other than that you will need to overload this function!
+The internals return $self->{has_next}. If you want to do anything other than that you will need to overload this function!
 
 =item * my $range=$iterator->get_next;
 
-  Objects returned from this function should implement Data::Range::Compare::Stream
+Objects returned from this function should implement Data::Range::Compare::Stream
 
 =item * my $string=$iterator->to_string;
 
-  Returns the package name of $iterator
+Returns the package name of $iterator
 
 =back
 

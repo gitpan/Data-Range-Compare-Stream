@@ -33,46 +33,25 @@ Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc - Consolidates 
 
 =head1 DESCRIPTION
 
-This module implements the consolidation engine for Data::Range::Compare::Stream, and it additionally consolidates adjacent ranges.
-
-Data::Range::Compare::Stream::Iterator::Consolidate can consolidate ranges sorted
-in the following order(s):
-
-  Consolidation Asc
-
-    range_start asc,range_end desc
+This module extends Data::Range::Compare::Stream::Iterator::Consolidate the consolidation engine and consolidates adjacent ranges.  Data::Range::Compare::Stream::Iterator::Consolidate can consolidate ranges sorted in the following order: Consolidation Asc range_start asc,range_end desc.
 
 =head2 OO Methods
 
 =over 3
 
-=item * my $processor=new Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc($iterator);
+=item * while($processor->has_next) { ...  }
 
-  Object constructor takes only one argument: $processor
-
-    An $iterator object must implement Data::Range::Compare::Stream::Iterator::Base
-
-     my $boolean=processor->has_next
-
-       Boolean value indicating if there are any more ranges
-
-     my $range=$processor->get_next;
-
-       $range must implement the interfaces of Data::Range::Compare::Stream
-
-=item * while($processor->has_next) { do something }
-
-  Returns true when the there are more ranges to consolidate
+Returns true when the there are more ranges to consolidate.consolidate.
 
 =item * my $range=$processor->get_next;
 
-  if $processor->has_next returns true
-    
-    Returns a instance of Data::Range::Compare::Stream::Iterator::Consolidate::Result
+If $processor->has_next returns true Returns a instance of Data::Range::Compare::Stream::Iterator::Consolidate::Result
 
 =back
 
 =head1 SEE ALSO
+
+Data::Range::Compare::Stream::Iterator::Consolidate
 
 Data::Range::Compare::Stream::Iterator::Consolidate::Result
 

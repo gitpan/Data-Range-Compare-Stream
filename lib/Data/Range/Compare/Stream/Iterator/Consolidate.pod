@@ -37,9 +37,7 @@ This module implements the consolidation engine for Data::Range::Compare::Stream
 
 Data::Range::Compare::Stream::Iterator::Consolidate can consolidate ranges sorted in the following order:
 
-  Consolidation Asc
-
-    range_start asc,range_end desc
+Consolidation Asc range_start asc,range_end desc.
 
 =head2 OO Methods
 
@@ -47,27 +45,15 @@ Data::Range::Compare::Stream::Iterator::Consolidate can consolidate ranges sorte
 
 =item * my $processor=new Data::Range::Compare::Stream::Iterator::Consolidate($iterator);
 
-  Object constructor takes only one argument: $processor
-
-    An $iterator object must implement Data::Range::Compare::Stream::Iterator::Base
-
-     my $boolean=$iterator->has_next
-
-       Boolean value indicating if there are any more ranges
-
-     my $range=$iterator->get_next;
-
-       $range must implement the interfaces of Data::Range::Compare::Stream
+Object constructor takes only one argument: $iterator.  An $iterator object must extend Data::Range::Compare::Stream::Iterator::Base.  Results from the $iterator->get_next call are required to extend or implement  Data::Range::Compare::Stream.
 
 =item * while($processor->has_next) { do something }
 
-  Returns true when the there are more ranges to consolidate
+Returns true when the there are more ranges to consolidate
 
 =item * my $range=$processor->get_next;
 
-  if $processor->has_next returns true
-    
-    Returns a instance of Data::Range::Compare::Stream::Iterator::Consolidate::Result
+If $processor->has_next returns true Returns a instance of Data::Range::Compare::Stream::Iterator::Consolidate::Result.
 
 =item * $self->on_consolidate($new_range,$overlapping_range,$next_range)
 

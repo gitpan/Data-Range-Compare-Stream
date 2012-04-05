@@ -60,9 +60,7 @@ This module extends the consolidation engine for Data::Range::Compare::Stream.  
 
 Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn can consolidate ranges sorted in the following order:
 
-  Consolidation Asc
-
-    range_start asc,range_end desc
+Consolidation Asc range_start asc,range_end desc.
 
 =head2 OO Methods
 
