@@ -25,6 +25,16 @@ sub add_consolidator {
   return $id
 }
 
+sub set_column_id { $_[0]->{column_id}=$_[1] }
+
+sub get_column_id { $_[0]->{column_id} }
+
+sub set_root_column_id { $_[0]->{root_id}=$_[1] }
+
+sub get_root_column_id { $_[0]->{root_id} }
+
+sub is_child { defined($_[0]->{root_id}) }
+
 sub insert_consolidator {
   my ($self,$consolidator)=@_;
 

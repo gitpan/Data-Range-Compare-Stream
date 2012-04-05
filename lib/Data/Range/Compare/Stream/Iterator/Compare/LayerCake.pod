@@ -44,14 +44,9 @@ Data::Range::Compare::Stream::Iterator::Compare::LayerCake - Compare Result Filt
 
 =head1 DESCRIPTION
 
-This module implements the comparison engine for Data::Range::Compare::Stream.  
+This module extends Data::Range::Compare::Stream::Iterator::Compare::Asc.
 
-Data::Range::Compare::Stream::Iterator::Compare::LayerCake compares results from Data::Range::Compare::Stream::Iterator::Consolidate;
-in the following order:
-
-  Consolidation Asc
-
-    range_start asc,range_end desc
+Data::Range::Compare::Stream::Iterator::Compare::LayerCake compares results from Data::Range::Compare::Stream::Iterator::Consolidate in the following order: Consolidation Asc range_start asc,range_end desc
 
 =head2 OO Methods
 

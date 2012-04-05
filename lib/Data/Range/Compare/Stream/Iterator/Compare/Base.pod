@@ -76,6 +76,14 @@ Inserts a consolidator object into a prepared and or running $compare object.  T
 
 Returns the consolidator identified by $id.  Fatal if $id does not exist.
 
+=item * $compare->set_column_id($id)
+
+Used to set the column_id for the compare object.
+
+=item * my $id=$compare->get_column_id;
+
+Used to fetch the column_id;
+
 =back
 
 =head1 SEE ALSO

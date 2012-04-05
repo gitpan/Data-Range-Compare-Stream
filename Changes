@@ -74,3 +74,10 @@ Revision history for Perl extension Data::Range::Compare::Stream.
 2.019
   -- More pod Fopas cleaned up.
   -- bug fix: AdjacentAsc.pm did not call on_consolidate, this has been fixed
+
+2.020
+  -- More pod clean ups..
+    SOME OME SAVE ME FROM THIS MONSTER KNOWN AS DOCUMENTATION!!!!  It feeds on my time, so much time!
+  -- Bug fix: implemented the column id related interfaces in Compare::Base.pm
+  -- Added a true LayerCake example in the examples folder.
+     -- Will make cookbook pod in a future release explaining it.

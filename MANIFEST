@@ -64,6 +64,7 @@ examples/PrintSources.pl
 examples/PushOverlapsIntoColumns.pl
 examples/DateTime.pl
 examples/FILE_EXAMPLE.pl
+examples/LayerCake.pl
 examples/PrintConsolidatedSources.pl
 examples/HTML_EXAMPLE.pl
 examples/ConsolidateAdjacent.pl

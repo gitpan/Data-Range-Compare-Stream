@@ -90,7 +90,7 @@ Returns the instance name of $iterator
 
 =item * $iterator->insert_range($range);
 
-Inserts a range into a the iterator regardless of the "sorted" state. Use with cation!
+Inserts a range into a the iterator regardless of the "sorted" state. Use with caution!
 
 =back
 

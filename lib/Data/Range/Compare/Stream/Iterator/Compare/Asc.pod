@@ -43,12 +43,9 @@ Data::Range::Compare::Stream::Iterator::Compare::Asc - Compares results overlapp
 
 =head1 DESCRIPTION
 
-This module implements the comparison engine for Data::Range::Compare::Stream.  
+This module implements Data::Range::Compare::Stream::Iterator::Compare::Base.
 
-Data::Range::Compare::Stream::Iterator::Compare::Asc compares results from Data::Range::Compare::Stream::Iterator::Consolidate;
-in the following order:
-
-Consolidation Asc: range_start asc,range_end desc
+Data::Range::Compare::Stream::Iterator::Compare::Asc compares results from Data::Range::Compare::Stream::Iterator::Consolidate in the following order: Consolidation Asc: range_start asc,range_end desc.
 
 =head2 OO Methods
 
@@ -97,6 +94,14 @@ Inserts a consolidator object into a prepared and or running $compare object.  T
 =item * my $consolidator=$compare->get_iterator_by_id($id);
 
 Returns the consolidator identified by $id.  Fatal if $id does not exist.
+
+=item * $compare->set_column_id($id)
+
+Used to set the column_id for the compare object.
+
+=item * my $id=$compare->get_column_id;
+
+Used to fetch the column_id;
 
 =back
 
