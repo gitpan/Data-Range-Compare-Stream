@@ -3,16 +3,15 @@
 # custom package from FILE_EXAMPLE.pl
 use strict;
 use warnings;
+use Data::Dumper;
 use lib qw(./ ../lib);
 
 use Data::Range::Compare::Stream::Iterator::File; 
 use Data::Range::Compare::Stream;
 use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
 use Data::Range::Compare::Stream::Iterator::Compare::Asc;
-use Data::Range::Compare::Stream::Iterator::Compare::ColumnRelations;
 
 my $compare=new  Data::Range::Compare::Stream::Iterator::Compare::Asc();
-my $relations=new Data::Range::Compare::Stream::Iterator::Compare::ColumnRelations($compare);
 
 foreach my $file (qw(source_a.src source_b.src source_d.src source_c.src source_d.src)) {
   my $src=Data::Range::Compare::Stream::Iterator::File->new(filename=>$file);
@@ -29,11 +28,11 @@ while($compare->has_next) {
   my $result=$compare->get_next;
   next if $result->is_empty;
 
-  my $columns=$relations->get_root_results($result);
+  my $columns=$result->get_root_results($result);
   my @row=($result->get_common);
-  foreach my $id (@{$relations->get_root_ids}) {
-    if(exists $columns->{$id}) {
-    push @row, join ', ',map { $_->get_common } @{$columns->{$id}};
+  foreach my $id (@{$result->get_root_ids}) {
+    if($#{$columns->[$id]}!=-1) {
+    push @row, join ', ',map { $_->get_common } @{$columns->[$id]};
     } else {
       push @row,"No Data";
     }

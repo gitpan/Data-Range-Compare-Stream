@@ -33,7 +33,7 @@ Data::Range::Compare::Stream::Iterator::Consolidate - Consolidates overlapping a
 
 =head1 DESCRIPTION
 
-This module implements the consolidation engine for Data::Range::Compare::Stream.  
+This module extends Data::Range::Compare::Stream::Iterator::Base and implements the consolidation engine for Data::Range::Compare::Stream.  
 
 Data::Range::Compare::Stream::Iterator::Consolidate can consolidate ranges sorted in the following order:
 
@@ -67,9 +67,6 @@ Sets the column_id value.  This is used by the Compare Layer
 
 Gets the column_id, returns undef if not set.
 
-=item * $processor->set_root_column_id($id)
-
-Sets the parent object's column id.
 
 =item * my $id=$processor->get_root_column_id;
 

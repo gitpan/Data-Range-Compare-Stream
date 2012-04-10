@@ -3,6 +3,7 @@ package Data::Range::Compare::Stream::Iterator::Consolidate;
 use strict;
 use warnings;
 
+use base qw(Data::Range::Compare::Stream::Iterator::Base);
 use constant RESULT_CLASS=>'Data::Range::Compare::Stream::Iterator::Consolidate::Result';
 use Data::Range::Compare::Stream::Iterator::Consolidate::Result;
 
@@ -11,13 +12,6 @@ sub new {
   bless {iterator=>$iterator},$class;
 }
 
-sub set_column_id {
-  my ($self,$id)=@_;
-  $self->{column_id}=$id;
-}
-
-sub get_column_id { $_[0]->{column_id} } 
-
 sub has_next {
   my ($self)=@_;
   return 1 if $self->{iterator}->has_next;
@@ -25,13 +19,6 @@ sub has_next {
   return undef;
 }
 
-sub is_child { defined($_[0]->{root_id}) }
-
-sub set_root_column_id { $_[0]->{root_id}=$_[1] }
-
-sub get_root_column_id { $_[0]->{root_id} }
-
-sub on_consolidate { }
 
 sub get_next {
   my ($self)=@_;
@@ -46,11 +33,13 @@ sub get_next {
 
   my $overlapping_range=$start_range;
   my $end_range=$start_range;
+  my $did_overlap=0;
 
   while($self->{iterator}->has_next) {
     my $next_range=$self->{iterator}->get_next;
     if($overlapping_range->overlap($next_range)) {
 
+      $did_overlap=1;
       my $new_range=$overlapping_range->get_overlapping_range([$overlapping_range,$next_range]);
       $self->on_consolidate($new_range,$overlapping_range,$next_range);
       $overlapping_range=$new_range;
@@ -60,14 +49,14 @@ sub get_next {
     } else {
       $self->{last_range}=$next_range;
       my ($start,$end)=$start_range->find_smallest_outer_ranges([$start_range,$end_range]);
-      return $self->RESULT_CLASS->new($overlapping_range,$start,$end);
+      return $self->RESULT_CLASS->new($overlapping_range,$start,$end,0,$did_overlap);
     }
 
     
   }
   $self->{last_range}=undef;
   my ($start,$end)=$start_range->find_smallest_outer_ranges([$start_range,$end_range]);
-  return $self->RESULT_CLASS->new($overlapping_range,$start,$end);
+  return $self->RESULT_CLASS->new($overlapping_range,$start,$end,0,$did_overlap);
 }
 
 1;

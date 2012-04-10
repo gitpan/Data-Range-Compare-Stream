@@ -6,7 +6,7 @@ Data::Range::Compare::Stream::Iterator::Compare::Base - Abstract class
 
 =head1 DESCRIPTION
 
-This module provides the base shared hooks for the Compare Asc class and any future compare classes.
+This module extends Data::Range::Compare::Stream::Iterator::Base and provides the shared hooks for the Compare Asc class and any future compare classes.
 
 =head2 OO Methods
 

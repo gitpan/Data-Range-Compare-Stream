@@ -14,7 +14,7 @@ Data::Range::Compare::Stream::Iterator::Compare::Asc
 
 =over 3
 
-=item * my $result=new Data::Range::Compare::Stream::Iterator::Compare::Result (COMMON_RANGE,[OVERLAP_RESULTS],[OVERLAP_IDS],[NON_OVERLAP_IDS]);
+=item * my $result=new Data::Range::Compare::Stream::Iterator::Compare::Result (COMMON_RANGE,[OVERLAP_RESULTS],[OVERLAP_IDS],[NON_OVERLAP_IDS],[COLUMN_MAP],[ROOT_IDS]);
 
 Object constructor: All arguments are mandatory!
 
@@ -39,7 +39,16 @@ Object constructor: All arguments are mandatory!
       NON_OVERLAP_IDS
 
           An array ref representing the ids of OVERLAP_RESULTS that are undef
+      
+      COLUMN_MAP
+        
+	An array ref that maps each element to the root_id column
 
+      ROOT_IDS
+
+	  An array ref that represents the non auto generated columns
+
+      
 =item * print $result
 
 When used in a string context the object will return $result->to_string.
@@ -107,6 +116,22 @@ Returns an array ref of OVERLAP_RESULTS.
 =item * my $ref=$result->get_non_overlapping_containers;
 
 Returns an array ref of undef for every column that did not overlap.
+
+=item * my $ref=$result->get_column_map;
+
+Returns a unique copy of the column map array ref.
+
+=item * my $ref=$result->get_root_ids;
+
+Returns a unique copy of the column map array ref.
+
+=item * my $ref=$relations->get_root_results;
+
+Returns an anonymous array: element ids represent the root_ids.  Values are anonymous arrays that contain the result objects from the consolidation process associated with the root_id.
+
+=item * my $ref=$relations->get_root_result_ids;
+
+Returns an anonymous array: element ids represent the root_ids.  Values are anonymous arrays that contain the result ids from the consolidation process associated with the root_id.
 
 =back
 

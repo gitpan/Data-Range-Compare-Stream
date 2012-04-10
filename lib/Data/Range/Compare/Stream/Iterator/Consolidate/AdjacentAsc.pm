@@ -53,7 +53,7 @@ sub get_next {
     my ($start,$end)=$common->find_smallest_outer_ranges([$result->get_start,$result->get_end,$last_result->get_start,$last_result->get_end]);
 
     # get our new result
-    $result=$self->RESULT_CLASS->new($overlap,$start,$end);
+    $result=$self->RESULT_CLASS->new($overlap,$start,$end,0,1);
 
     # update the internals
     $self->{last_result}=undef;

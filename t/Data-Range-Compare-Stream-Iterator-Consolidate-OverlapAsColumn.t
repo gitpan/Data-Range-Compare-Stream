@@ -1,7 +1,7 @@
 
 use strict;
 use warnings;
-use Test::More tests=>274;
+use Test::More tests=>358;
 use Data::Dumper;
 
 use Data::Range::Compare::Stream::Iterator::Compare::Asc;
@@ -796,5 +796,212 @@ if(1){
     }
   }
   ok(!$cmp->has_next,'compare object should be empty now');
+
+}
+
+{
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    my @range_set_a=qw(
+      0 0
+      0 0
+      0 0
+
+      1 1
+      1 1
+
+      2 2
+      2 2
+      
+      4 4
+      4 4
+
+    );
+    my @ranges;
+    while(my ($start,$end)=splice(@range_set_a,0,2)) {
+      $obj->create_range($start,$end);
+    }
+    $obj->prepare_for_consolidate_asc;
+    my $column=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($obj,$cmp);
+    $cmp->add_consolidator($column);
+  }
+  {
+    ok($cmp->has_next,'cmp has next check');
+    my $column_a=$cmp->get_iterator_by_id(0);
+    my $column_b=$cmp->get_iterator_by_id(1);
+    my $column_c=$cmp->get_iterator_by_id(2);
+
+    cmp_ok($cmp->{raw_row}->[0]->get_common,'eq','0 - 0','internal raw_row check');
+    cmp_ok($cmp->{raw_row}->[1]->get_common,'eq','0 - 0','internal raw_row check');
+    cmp_ok($cmp->{raw_row}->[2]->get_common,'eq','0 - 0','internal raw_row check');
+
+    my $result=$cmp->get_next;
+    cmp_ok($column_a->get_child_column_id,'==',2,'child column_id check');
+    cmp_ok($column_c->get_child_column_id,'==',1,'child column_id check');
+    cmp_ok($column_b->get_root_column_id,'==',2,'root column_id check');
+    cmp_ok($column_c->get_root_column_id,'==',0,'root column_id check');
+    cmp_ok($result->get_common,'eq','0 - 0','column value check');
+    cmp_ok($result->get_overlap_count,'==',3,'overlap count check');
+
+
+  }
+  {
+    ok($cmp->has_next,'cmp has next check');
+
+    cmp_ok($cmp->{raw_row}->[0]->get_common,'eq','1 - 1','internal raw_row check');
+    cmp_ok($cmp->{raw_row}->[1]->get_common,'eq','0 - 0','internal raw_row check');
+    cmp_ok($cmp->{raw_row}->[2]->get_common,'eq','1 - 1','internal raw_row check');
+    $cmp->delete_iterator(1);
+
+    my $result=$cmp->get_next;
+
+    cmp_ok($cmp->get_iterator_by_id(0)->get_column_id,'==',0,'iterator column_id check');
+    cmp_ok($cmp->get_iterator_by_id(1)->get_column_id,'==',1,'iterator column_id check');
+    cmp_ok($cmp->get_column_count,'==',1,'column count check');
+
+    cmp_ok($result->get_common,'eq','1 - 1','column value check');
+    cmp_ok($result->get_overlap_count,'==',2,'overlap count check');
+
+  }
+  {
+    ok($cmp->has_next,'cmp has next check');
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common,'eq','2 - 2','column value check');
+    cmp_ok($result->get_overlap_count,'==',2,'overlap count check');
+
+    cmp_ok($cmp->get_iterator_by_id(0)->get_column_id,'==',0,'iterator column_id check');
+    cmp_ok($cmp->get_iterator_by_id(1)->get_column_id,'==',1,'iterator column_id check');
+    cmp_ok($cmp->get_column_count,'==',1,'column count check');
+
+  }
+  {
+    ok($cmp->has_next,'cmp has next check');
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common,'eq','3 - 3','column value check');
+    cmp_ok($result->get_overlap_count,'==',0,'overlap count check');
+
+    cmp_ok($cmp->get_iterator_by_id(0)->get_column_id,'==',0,'iterator column_id check');
+    cmp_ok($cmp->get_iterator_by_id(1)->get_column_id,'==',1,'iterator column_id check');
+    cmp_ok($cmp->get_column_count,'==',1,'column count check');
+
+  }
+  {
+    ok($cmp->has_next,'cmp has next check');
+    cmp_ok($cmp->{raw_row}->[0]->get_common,'eq','4 - 4','internal raw_row check');
+    cmp_ok($cmp->{raw_row}->[1]->get_common,'eq','4 - 4','internal raw_row check');
+
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common,'eq','4 - 4','column value check');
+    cmp_ok($result->get_overlap_count,'==',2,'overlap count check');
+  }
+  ok(!$cmp->has_next,'cmp should be empty');
+
+}
+{
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    my @range_set_a=qw(
+      0 0
+      0 0
+      0 0
+
+      1 1
+
+      2 2
+      
+      4 4
+
+    );
+    my @ranges;
+    while(my ($start,$end)=splice(@range_set_a,0,2)) {
+      $obj->create_range($start,$end);
+    }
+    $obj->prepare_for_consolidate_asc;
+    my $column=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($obj,$cmp);
+    $cmp->add_consolidator($column);
+  }
+  {
+    ok($cmp->has_next,'cmp has next check');
+    my $column_a=$cmp->get_iterator_by_id(0);
+    my $column_b=$cmp->get_iterator_by_id(1);
+    my $column_c=$cmp->get_iterator_by_id(2);
+
+    cmp_ok($cmp->{raw_row}->[0]->get_common,'eq','0 - 0','internal raw_row check');
+    cmp_ok($cmp->{raw_row}->[1]->get_common,'eq','0 - 0','internal raw_row check');
+    cmp_ok($cmp->{raw_row}->[2]->get_common,'eq','0 - 0','internal raw_row check');
+
+    my $result=$cmp->get_next;
+    cmp_ok($column_a->get_child_column_id,'==',2,'child column_id check');
+    cmp_ok($column_c->get_child_column_id,'==',1,'child column_id check');
+    cmp_ok($column_b->get_root_column_id,'==',2,'root column_id check');
+    cmp_ok($column_c->get_root_column_id,'==',0,'root column_id check');
+    cmp_ok($result->get_common,'eq','0 - 0','column value check');
+    cmp_ok($result->get_overlap_count,'==',3,'overlap count check');
+
+
+  }
+  {
+    ok($cmp->has_next,'cmp has next check');
+
+    cmp_ok($cmp->get_iterator_by_id(0)->has_child,'==',1,'iterator has child check');
+    cmp_ok($cmp->get_iterator_by_id(0)->is_root,'==',1,'iterator is_root check');
+    cmp_ok($cmp->get_iterator_by_id(1)->has_child,'==',0,'iterator has child check');
+    cmp_ok($cmp->get_iterator_by_id(1)->has_root,'==',1,'iterator has child check');
+    cmp_ok($cmp->get_iterator_by_id(2)->has_root,'==',1,'iterator has child check');
+    cmp_ok($cmp->get_iterator_by_id(2)->has_child,'==',1,'iterator has child check');
+    cmp_ok($cmp->get_iterator_by_id(2)->is_child,'==',1,'iterator has child check');
+
+    cmp_ok($cmp->{raw_row}->[0]->get_common,'eq','1 - 1','internal raw_row check');
+    cmp_ok($cmp->{raw_row}->[1]->get_common,'eq','0 - 0','internal raw_row check');
+    cmp_ok($cmp->{raw_row}->[2]->get_common,'eq','0 - 0','internal raw_row check');
+    $cmp->delete_iterator(2);
+    cmp_ok($cmp->get_iterator_by_id(0)->has_child,'==',0,'iterator has child check');
+    cmp_ok($cmp->get_iterator_by_id(1)->has_child,'==',0,'iterator has child check');
+    cmp_ok($cmp->get_iterator_by_id(1)->has_root,'==',0,'iterator has_root check');
+
+    my $result=$cmp->get_next;
+
+    cmp_ok($cmp->get_iterator_by_id(0)->get_column_id,'==',0,'iterator column_id check');
+    cmp_ok($cmp->get_iterator_by_id(1)->get_column_id,'==',1,'iterator column_id check');
+    cmp_ok($cmp->get_column_count,'==',1,'column count check');
+
+    cmp_ok($result->get_common,'eq','1 - 1','column value check');
+    cmp_ok($result->get_overlap_count,'==',1,'overlap count check');
+
+  }
+  {
+    ok($cmp->has_next,'cmp has next check');
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common,'eq','2 - 2','column value check');
+    cmp_ok($result->get_overlap_count,'==',1,'overlap count check');
+
+    cmp_ok($cmp->get_iterator_by_id(0)->get_column_id,'==',0,'iterator column_id check');
+    cmp_ok($cmp->get_iterator_by_id(1)->get_column_id,'==',1,'iterator column_id check');
+    cmp_ok($cmp->get_column_count,'==',1,'column count check');
+
+  }
+  {
+    ok($cmp->has_next,'cmp has next check');
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common,'eq','3 - 3','column value check');
+    cmp_ok($result->get_overlap_count,'==',0,'overlap count check');
+
+    cmp_ok($cmp->get_iterator_by_id(0)->get_column_id,'==',0,'iterator column_id check');
+    cmp_ok($cmp->get_iterator_by_id(1)->get_column_id,'==',1,'iterator column_id check');
+    cmp_ok($cmp->get_column_count,'==',1,'column count check');
+
+  }
+  {
+    ok($cmp->has_next,'cmp has next check');
+    cmp_ok($cmp->{raw_row}->[0]->get_common,'eq','4 - 4','internal raw_row check');
+    cmp_ok($cmp->{raw_row}->[1]->get_common,'eq','0 - 0','internal raw_row check');
+
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common,'eq','4 - 4','column value check');
+    cmp_ok($result->get_overlap_count,'==',1,'overlap count check');
+  }
+  ok(!$cmp->has_next,'cmp should be empty');
 
 }

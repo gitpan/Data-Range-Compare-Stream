@@ -23,6 +23,24 @@ sub new {
 
 sub get_child { $_[0]->{consolidator} }
 
+sub delete_from_root {
+  my ($self)=@_;
+  if($self->has_child) {
+    my $child=$self->get_child;
+    delete $child->{root_iterator};
+  }
+  if($self->is_child) {
+    my $root=$self->get_root;
+    delete @{$root}{qw(iterator_array consolidator)};
+  }
+}
+
+sub get_child_column_id {
+  my ($self)=@_;
+  return undef unless $self->has_child;
+  $self->get_child->get_column_id;
+}
+
 sub on_consolidate {
   my ($self,$new_range,$last_range,$next_range)=@_;
 
@@ -36,15 +54,28 @@ sub on_consolidate {
      $iterator=$self->{iterator_array}=$self->NEW_ARRAY_ITERATOR_FROM->new(sorted=>1);
      $iterator->insert_range($next_range);
      my $consolidator=$self->{consolidator}=$self->NEW_CHILD_CONSOLIDATOR_FROM->new($iterator,$cmp);
-     $consolidator->set_root_column_id($self->get_column_id);
+     $consolidator->{root_iterator}=$self;
   }
 
 }
+
+sub get_root_column_id {
+  my ($self)=@_;
+  return $self->get_root->get_column_id if $self->is_child;
+  $self->get_column_id
+}
+
+sub is_child { defined($_[0]->{root_iterator}) }
+
+sub is_root { !$_[0]->is_child }
+sub has_child { defined($_[0]->{iterator_array}) }
+sub has_root { defined($_[0]->get_root)}
+
 sub get_compare { $_[0]->{compare} }
 
 sub get_root { 
   my ($self)=@_;
-  $self->get_compare->get_iterator_by_id($self->get_root_column_id)
+  $self->{root_iterator};
 }
 
 sub has_next {

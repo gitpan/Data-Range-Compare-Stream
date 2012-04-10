@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use Data::Dumper;
-use Test::More tests => 26;
+use Test::More tests => 31;
 
 BEGIN { use_ok('Data::Range::Compare::Stream') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Sort') };
@@ -59,6 +59,7 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc
     cmp_ok($range->get_common,'eq','0 - 3',"Consolidate ASC  Common range check 1");
     cmp_ok($range->get_start,'eq','0 - 0',"Consolidate ASC Start range check 1");
     cmp_ok($range->get_end,'eq','2 - 3',"Consolidate ASC End range check 1");
+    ok($range->is_generated,'generated check');
   }
 
   {
@@ -66,6 +67,7 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc
     cmp_ok($range->get_common,'eq','5 - 9',"Consolidate ASC  Common range check 2");
     cmp_ok($range->get_start,'eq','5 - 7',"Consolidate ASC Start range check 2");
     cmp_ok($range->get_end,'eq','5 - 9',"Consolidate ASC End range check 2");
+    ok($range->is_generated,'generated check');
   }
 
   {
@@ -73,6 +75,7 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc
     cmp_ok($range->get_common,'eq','11 - 15',"Consolidate ASC  Common range check 3");
     cmp_ok($range->get_start,'eq','11 - 15',"Consolidate ASC Start range check 3");
     cmp_ok($range->get_end,'eq','11 - 15',"Consolidate ASC End range check 3");
+    ok(!$range->is_generated,'generated check');
   }
 
   {
@@ -80,6 +83,7 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc
     cmp_ok($range->get_common,'eq','17 - 33',"Consolidate ASC  Common range check 4");
     cmp_ok($range->get_start,'eq','17 - 29',"Consolidate ASC Start range check 4");
     cmp_ok($range->get_end,'eq','30 - 33',"Consolidate ASC End range check 4") or diag(Dumper($range));
+    ok($range->is_generated,'generated check');
   }
 
   my $last_iterator=$iterator->has_next;
@@ -107,6 +111,7 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc
     cmp_ok($range->get_common,'eq','0 - 0',"Consolidate Single Common range check 1");
     cmp_ok($range->get_start,'eq','0 - 0',"Consolidate Single Start range check 1");
     cmp_ok($range->get_end,'eq','0 - 0',"Consolidate Single End range check 1");
+    ok(!$range->is_generated,'generated check');
   }
   my $last_iterator=$iterator->get_next;
   ok(!$last_iterator,"Iterator should be empty!") or diag(Dumper($last_iterator));

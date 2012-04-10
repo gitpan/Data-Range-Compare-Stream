@@ -33,7 +33,7 @@ foreach my $file (qw(source_a.src source_b.src source_c.src source_d.src)) {
 
       next if $result->is_empty;
 
-      my $columns=$result->get_root_results;
+      my $columns=$result->get_root_results($result);
       push @row, join ', ',map { $_->get_common } @{$columns->[0]};
 
       printf $format,@row;

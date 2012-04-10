@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use Data::Dumper;
-use Test::More tests => 211;
+use Test::More tests => 297;
 
 BEGIN { use_ok('Data::Range::Compare::Stream') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Sort') };
@@ -1077,6 +1077,265 @@ if(1){
   {
     my $row=$cmp->get_next;
     cmp_ok($row->get_common_range,'eq','20 - 20','1 3 column 2 ranges always overlap Row 1 check');
+  }
+  {
+    my $row=$cmp->has_next;
+    ok(!$row,'iterator should be empty now!');
+  }
+}
+
+{
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  {
+    {
+      my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+      my @range_set_a=qw(
+        0 0
+	1 4
+      );
+      while(my ($start,$end)=splice(@range_set_a,0,2)) { $obj->create_range($start,$end); }
+  
+      $obj->prepare_for_consolidate_asc;
+      my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+      cmp_ok($cmp->add_consolidator($iterator),'==',0,"Should add consolidator 0 without error");
+    }
+    {
+      my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+      my @range_set_a=qw(
+        0 0
+	2 3
+	4 5
+	11 19
+      );
+      while(my ($start,$end)=splice(@range_set_a,0,2)) { $obj->create_range($start,$end); }
+  
+      $obj->prepare_for_consolidate_asc;
+      my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+      ok($cmp->add_consolidator($iterator),"Should add the second consolidator without error");
+    }
+  }
+  ok($cmp->has_next,'should have next');
+  cmp_ok($cmp->get_column_count,'==',1,'Column count check');
+
+
+  {
+    ok($cmp->has_next,'has_next check');
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common_range,'eq','0 - 0','common range valuue check');
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0,1],$root_ids,"Result root id checks");
+  }
+  {
+    eval {$cmp->delete_iterator(0); };
+    ok($@,'deletion of a valid column should be fatal!');
+
+    ok($cmp->has_next,'has_next check');
+
+    cmp_ok($cmp->get_column_count,'==',1,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok(!$result->is_empty,'is empty check');
+    cmp_ok($result->get_common_range,'eq','1 - 1','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0,1],$root_ids,"Result root id checks");
+  }
+  {
+    ok($cmp->has_next,'has_next check');
+    eval {$cmp->delete_iterator(0); };
+    ok($@,'deletion of a valid column should be fatal!');
+
+    cmp_ok($cmp->get_column_count,'==',1,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok(!$result->is_empty,'result should not be empty');
+    cmp_ok($result->get_common_range,'eq','2 - 3','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0,1],$root_ids,"Result root id checks");
+  }
+  {
+    ok($cmp->has_next,'has_next check');
+    eval {$cmp->delete_iterator(0); };
+    ok($@,'deletion of a valid column should be fatal!');
+
+    cmp_ok($cmp->get_column_count,'==',1,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok(!$result->is_empty,'result should not be empty');
+    cmp_ok($result->get_common_range,'eq','4 - 4','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0,1],$root_ids,"Result root id checks");
+  }
+  {
+    ok($cmp->has_next,'has_next check');
+
+    eval {$cmp->delete_iterator(0); };
+    ok(!$@,'deletion of a valid column should be fatal!') or diag($@);
+    cmp_ok($cmp->get_column_count,'==',0,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok(!$result->is_empty,'result empty check');
+    cmp_ok($result->get_common_range,'eq','5 - 5','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0],$root_ids,"Result root id checks");
+  }
+  {
+    ok($cmp->has_next,'has_next check');
+
+    cmp_ok($cmp->get_column_count,'==',0,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok($result->is_empty,'result empty check');
+    cmp_ok($result->get_common_range,'eq','6 - 10','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0],$root_ids,"Result root id checks");
+  }
+  {
+    ok($cmp->has_next,'has_next check');
+
+    cmp_ok($cmp->get_column_count,'==',0,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok(!$result->is_empty,'result empty check');
+    cmp_ok($result->get_common_range,'eq','11 - 19','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0],$root_ids,"Result root id checks");
+  }
+  {
+    my $row=$cmp->has_next;
+    ok(!$row,'iterator should be empty now!');
+  }
+}
+{
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+  {
+    {
+      my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+      my @range_set_a=qw(
+       20 20
+      );
+      while(my ($start,$end)=splice(@range_set_a,0,2)) { $obj->create_range($start,$end); }
+  
+      $obj->prepare_for_consolidate_asc;
+      my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+      cmp_ok($cmp->add_consolidator($iterator),'==',0,"Should add consolidator 0 without error");
+    }
+    {
+      my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+      my @range_set_a=qw(
+        0 0
+	2 3
+	4 5
+	11 19
+      );
+      while(my ($start,$end)=splice(@range_set_a,0,2)) { $obj->create_range($start,$end); }
+  
+      $obj->prepare_for_consolidate_asc;
+      my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+      ok($cmp->add_consolidator($iterator),"Should add the second consolidator without error");
+    }
+  }
+  ok($cmp->has_next,'should have next');
+  cmp_ok($cmp->get_column_count,'==',1,'Column count check');
+
+
+  {
+    ok($cmp->has_next,'has_next check');
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common_range,'eq','0 - 0','common range valuue check');
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0,1],$root_ids,"Result root id checks");
+  }
+  {
+    eval {$cmp->delete_iterator(0); };
+    ok($@,'deletion of a valid column should be fatal!');
+
+    ok($cmp->has_next,'has_next check');
+
+    cmp_ok($cmp->get_column_count,'==',1,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok($result->is_empty,'is empty check');
+    cmp_ok($result->get_common_range,'eq','1 - 1','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0,1],$root_ids,"Result root id checks");
+  }
+  {
+    ok($cmp->has_next,'has_next check');
+    eval {$cmp->delete_iterator(0); };
+    ok($@,'deletion of a valid column should be fatal!');
+
+    cmp_ok($cmp->get_column_count,'==',1,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok(!$result->is_empty,'result should not be empty');
+    cmp_ok($result->get_common_range,'eq','2 - 3','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0,1],$root_ids,"Result root id checks");
+  }
+  {
+    ok($cmp->has_next,'has_next check');
+    eval {$cmp->delete_iterator(0); };
+    ok($@,'deletion of a valid column should be fatal!');
+
+    cmp_ok($cmp->get_column_count,'==',1,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok(!$result->is_empty,'result should not be empty');
+    cmp_ok($result->get_common_range,'eq','4 - 5','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0,1],$root_ids,"Result root id checks");
+  }
+  {
+    ok($cmp->has_next,'has_next check');
+
+    eval {$cmp->delete_iterator(0); };
+    ok($@,'deletion of a valid column should be fatal!');
+    cmp_ok($cmp->get_column_count,'==',1,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok($result->is_empty,'result empty check');
+    cmp_ok($result->get_common_range,'eq','6 - 10','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0,1],$root_ids,"Result root id checks");
+  }
+  {
+    ok($cmp->has_next,'has_next check');
+    eval {$cmp->delete_iterator(0); };
+    ok($@,'deletion of a valid column should be fatal!');
+
+    cmp_ok($cmp->get_column_count,'==',1,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok(!$result->is_empty,'result empty check');
+    cmp_ok($result->get_common_range,'eq','11 - 19','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0,1],$root_ids,"Result root id checks");
+  }
+  {
+    ok($cmp->has_next,'has_next check');
+    eval {$cmp->delete_iterator(1); };
+    ok(!$@,'deletion of a valid column should be fatal!');
+
+
+    cmp_ok($cmp->get_column_count,'==',0,'Column count check');
+
+    my $result=$cmp->get_next;
+    ok(!$result->is_empty,'result empty check');
+    cmp_ok($result->get_common_range,'eq','20 - 20','common range valuue check');
+
+    my $root_ids=$result->get_root_ids;
+    is_deeply([0],$root_ids,"Result root id checks");
   }
   {
     my $row=$cmp->has_next;

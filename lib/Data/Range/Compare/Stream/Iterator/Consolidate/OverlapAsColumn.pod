@@ -10,41 +10,29 @@ Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn - Consolida
   use Data::Range::Compare::Stream;
   use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
   use Data::Range::Compare::Stream::Iterator::Compare::Asc;
-  use Data::Range::Compare::Stream::Iterator::Compare::ColumnRelations;
   
   my $compare=new  Data::Range::Compare::Stream::Iterator::Compare::Asc();
-  my $relations=new Data::Range::Compare::Stream::Iterator::Compare::ColumnRelations($compare);
   
-  my $source_a=Data::Range::Compare::Stream::Iterator::File->new(filename=>'source_a.src');
-  my $consolidator_a=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($source_a,$compare);
-  $compare->add_consolidator($consolidator_a);
+  foreach my $file (qw(source_a.src source_b.src source_d.src source_c.src source_d.src)) {
+    my $src=Data::Range::Compare::Stream::Iterator::File->new(filename=>$file);
+    my $con=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($src,$compare);
+    $compare->add_consolidator($con);
+  }
   
-  my $source_b=Data::Range::Compare::Stream::Iterator::File->new(filename=>'source_b.src');
-  my $consolidator_b=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($source_b,$compare);
-  $compare->add_consolidator($consolidator_b);
-  
-  my $source_c=Data::Range::Compare::Stream::Iterator::File->new(filename=>'source_c.src');
-  my $consolidator_c=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($source_c,$compare);
-  $compare->add_consolidator($consolidator_c);
-  
-  my $source_d=Data::Range::Compare::Stream::Iterator::File->new(filename=>'source_d.src');
-  my $consolidator_d=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($source_d,$compare);
-  $compare->add_consolidator($consolidator_d);
-  
-  my $format='| %-12s | %-26s |  %-26s|  %-26s|  %-26s|'."\n";
-  my $break="+--------------+----------------------------+----------------------------+----------------------------+----------------------------+\n";
-  printf "$break$format$break","Intersection","Source A",'Source B','Source C','Source D';
+  my $format='  | %-12s | %-26s |  %-26s|  %-26s|  %-26s|'."\n";
+  my $break="  +--------------+----------------------------+----------------------------+----------------------------+----------------------------+\n";
+  printf "$break$format$break","Intersection","Set A",'Set B','Set C','Set D';
   
   while($compare->has_next) {
   
     my $result=$compare->get_next;
     next if $result->is_empty;
   
-    my $columns=$relations->get_root_results($result);
+    my $columns=$result->get_root_results($result);
     my @row=($result->get_common);
-    foreach my $id (@{$relations->get_root_ids}) {
-      if(exists $columns->{$id}) {
-      push @row, join ', ',map { $_->get_common } @{$columns->{$id}};
+    foreach my $id (@{$result->get_root_ids}) {
+      if($#{$columns->[$id]}!=-1) {
+        push @row, join ', ',map { $_->get_common } @{$columns->[$id]};
       } else {
         push @row,"No Data";
       }
@@ -90,10 +78,6 @@ Sets the column_id value.  This is used by the Compare Layer
 =item * my $id=$processor->get_column_id($id);
 
 Gets the column_id, returns undef if not set.
-
-=item * $processor->set_root_column_id($id)
-
-Sets the parent object's column id.
 
 =item * my $cmp=$processor->get_compare
 

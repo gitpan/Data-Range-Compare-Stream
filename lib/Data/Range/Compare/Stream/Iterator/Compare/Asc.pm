@@ -54,6 +54,7 @@ sub prepare {
   $self->{iterators_empty}=!$iterators_has_next_count;
 
   my $next_range=$min_range_end->get_common->NEW_FROM_CLASS->new($min_range_start->get_common->range_start,$min_range_end->get_common->range_end);
+  $next_range->on_create_range($min_range_start->get_common->range_start);
 
   for(my $id=0;$id<$self->get_column_count_human_readable;++$id)  {
     # stop here if this is the column started on
@@ -63,7 +64,9 @@ sub prepare {
 
     if($next_range->contains_value($cmp_end)) {
       if($next_range->cmp_values($next_range->range_end,$cmp_end)==1){
+        my $old_next_range=$next_range;
         $next_range=$next_range->NEW_FROM_CLASS->new($next_range->range_start,$cmp_end);
+	$next_range->on_create_range($old_next_range);
       }
     }
 
@@ -75,6 +78,36 @@ sub prepare {
 
   $self->{prepared}=1;
   1;
+}
+
+sub iterator_in_use {
+  my ($self,$id)=@_;
+  croak "id lt 0" if $id<0;
+  croak "id gt max" if $id>$self->get_column_count; 
+  my $raw=$self->{raw_row}->[$id]->get_common;
+  my $current=$self->get_current_row;
+
+  return 1 if $raw->overlap($current);
+  return $raw->cmp_range_end($current)!=-1;
+}
+
+sub delete_iterator {
+  my ($self,$id)=@_;
+  
+  croak 'cannot delete an iterator while its results are in use' if $self->iterator_in_use($id);
+
+  # odds are these objects are in use, so we need to create new ones
+  $self->{column_map}=[];
+  $self->{root_ids}=[];
+  $self->{dead_columns}=[];
+
+  my $con=$self->get_iterator_by_id($id);
+
+  splice(@{$self->{raw_row}},$id,1);
+  splice(@{$self->{consolidateors}},$id,1);
+
+  $con->delete_from_root;
+  
 }
 
 sub get_next {
@@ -96,13 +129,40 @@ sub get_next {
   my $non_overlap_ids=[];
   my $created_range=0;
   my $next_range;
+  my $dead_columns=$self->{dead_columns};
+  my $column_map=$self->{column_map};
+  my $root_ids=$self->{root_ids};
 
-  for(my $id=0;$id<$self->get_column_count_human_readable;++$id)  {
+  GET_ROW_LOOP: for(my $id=0;$id<$self->get_column_count_human_readable;++$id)  {
     
+    my $iterator=$self->{consolidateors}->[$id];
+    if($#$column_map<$id) {
+      $iterator->set_column_id($id);
+
+      if($iterator->is_child) {
+        my $walk=$iterator;
+	while($walk->is_child) {
+	  $walk=$self->get_iterator_by_id($walk->get_root_column_id);
+	}
+        $column_map->[$id]=$walk->get_column_id;
+      } else {
+        $column_map->[$id]=$id;
+        push @$root_ids,$id;
+      }
+    }
+
+    if($dead_columns->[$id] and !$iterator->has_next) {
+      push @$non_overlap_ids,$id;
+      push @$result,undef;
+      next GET_ROW_LOOP;
+    }
+
     # Objects we will use throught the loop
     my $raw_range=$self->{raw_row}->[$id];
-    my $iterator=$self->{consolidateors}->[$id];
     my $cmp=$raw_range->get_common;
+
+    my $is_dead=0;
+
 
     # current row computations
     if($current_row->overlap($cmp)) {
@@ -111,6 +171,9 @@ sub get_next {
       push @$overlap_ids,$id;
     } else {
       push @$result,undef;
+      if($current_row->cmp_range_end($cmp)==1) {
+        ++$is_dead 
+      }
       push @$non_overlap_ids,$id;
     }
 
@@ -124,23 +187,36 @@ sub get_next {
 	}
     } 
 
-    ++$iterators_has_next_count if $iterator->has_next;
+    if($iterator->has_next) {
+      ++$iterators_has_next_count;
+    } else {
+      ++$is_dead;
+    }
 
     if(defined($next_range)) {
       my $cmp_end=$cmp->previous_range_end;
       if($next_range->contains_value($cmp_end)) {
         if($next_range->cmp_values($next_range->range_end,$cmp_end)!=-1){
+	  
+          my $old_next_range=$next_range;
           $next_range=$next_range->NEW_FROM_CLASS->new($next_range->range_start,$cmp_end);
+	  $next_range->on_create_range($old_next_range);
         }
       } elsif($next_range->cmp_range_end($cmp)==1 and $cmp->cmp_values($next_range_start,$cmp->range_end)!=1) {
+          my $old_next_range=$next_range;
           $next_range=$next_range->NEW_FROM_CLASS->new($next_range->range_start,$cmp->range_end);
+	  $next_range->on_create_range($old_next_range);
       }
     } else {
       my $cmp_end=$cmp->previous_range_end;
       if($cmp->cmp_values($next_range_start,$cmp_end)!=1) {
+          my $old_next_range=$next_range;
           $next_range=$cmp->NEW_FROM_CLASS->new($next_range_start,$cmp_end);
+	  $next_range->on_create_range($old_next_range);
       } elsif($cmp->cmp_values($next_range_start,$cmp->range_end)!=1) {
+          my $old_next_range=$next_range;
           $next_range=$cmp->NEW_FROM_CLASS->new($next_range_start,$cmp->range_end);
+	  $next_range->on_create_range($old_next_range);
       }
     
     }
@@ -150,6 +226,7 @@ sub get_next {
     } else {
       $max_range_end=$cmp;
     }
+    $dead_columns->[$id]=$is_dead==2;
   }
 
   $self->{iterators_empty}=!$iterators_has_next_count;
@@ -160,6 +237,7 @@ sub get_next {
 
     unless(defined($next_range)) {
       $next_range=$current_row->NEW_FROM_CLASS->new($next_range_start,$next_range_start);
+      $next_range->on_create_range($current_row);
     }
 
     $self->{current_row}=$next_range;
@@ -172,6 +250,8 @@ sub get_next {
     $overlap_count,
     $overlap_ids,
     $non_overlap_ids,
+    $column_map,
+    $root_ids,
   );
   return $obj;
 }

@@ -6,14 +6,22 @@ Although similar to Data::Range::Compare, the module itself is complete depature
 and implementation.
 
 Take a look at the perl scripts in the "examples" folder to get a good idea of how to use and
-extend this module for your own use.
+extend this module for your own needs.
 
 INSTALLATION
 
-BEFORE YOU UPGRADE TO 2.xxx
+Before you upgrade to version 3.x.
 
-Major changes were made to the Data::Range::Compare::Stream::Iterator::Compare::Asc module
-before has_next must always be called before get_next!
+Changes that may break yoor code between version 2.020 and 3.021 and up.
+
+1. Data::Range::Compare::Stream::Iterator::Compare::ColumnRelations has been remoevd!
+   The features have been moved into Data::Range::Compare::Stream::Iterator::Compare::Result
+
+2. Iterator objects no longer support $iterator->set_root_column_id($id);
+
+3. Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn had a race condition that prevented 
+  root column_ids from being set, this has been resovled.
+
 
 To install this module type the following:
 

@@ -7,9 +7,11 @@ use Carp qw(croak);
 use Data::Range::Compare::Stream::Iterator::Compare::Result;
 use constant RESULT_CLASS=>'Data::Range::Compare::Stream::Iterator::Compare::Result';
 
+use base qw(Data::Range::Compare::Stream::Iterator::Base);
+
 sub new {
   my ($class,%args)=@_;
-  bless {last_row=>0,iterators_empty=>0,prepared=>0,consolidateors=>[],raw_row=>[],%args},$class;
+  $class->SUPER::new(column_map=>[],root_ids=>[],dead_columns=>[],last_row=>0,iterators_empty=>0,prepared=>0,consolidateors=>[],raw_row=>[],%args);
 }
 
 sub prepared { $_[0]->{prepared} }
@@ -24,16 +26,6 @@ sub add_consolidator {
   $consolidator->set_column_id($id);
   return $id
 }
-
-sub set_column_id { $_[0]->{column_id}=$_[1] }
-
-sub get_column_id { $_[0]->{column_id} }
-
-sub set_root_column_id { $_[0]->{root_id}=$_[1] }
-
-sub get_root_column_id { $_[0]->{root_id} }
-
-sub is_child { defined($_[0]->{root_id}) }
 
 sub insert_consolidator {
   my ($self,$consolidator)=@_;
@@ -64,10 +56,7 @@ sub get_consolidateors { @{$_[0]->{consolidateors}} }
 
 sub get_current_row { $_[0]->{current_row} } 
 
-sub has_next { 0 }
-
 sub iterators_empty { $_[0]->{iterators_empty} }
 
-sub get_next { undef }
 
 1;

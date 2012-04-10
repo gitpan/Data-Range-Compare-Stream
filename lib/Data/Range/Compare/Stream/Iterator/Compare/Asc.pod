@@ -57,7 +57,7 @@ Object constructor takes no arguments.
 
 =item * $compare->add_consolidator($iterator_a);
 
-An $iterator object must implement one of the following iterator classes: Data::Range::Compare::Stream::Iterator::Consolidate, Data::Range::Compare::Stream::Iterator::Compare::Asc.  Result objects must implement the $result->get_common interface, or one of the following classes: Data::Range::Compare::Stream::Iterator::Consolidate::Result, Data::Range::Compare::Stream::Iterator::Compare::Result.
+An $iterator object must implement: Data::Range::Compare::Stream::Iterator::Base. Result objects created by $iterator->has_next must implement: Data::Range::Compare::Stream::Result::Base.
 
 =item * while($compare->has_next) { do something }
 
@@ -65,7 +65,7 @@ Returns true when the there are more ranges to consolidate
 
 =item * my $result=$compare->get_next;
 
-if $compare->has_next returns true Returns a instance of Data::Range::Compare::Stream::Iterator::Compare::Result.
+If $compare->has_next returns true returns a instance of Data::Range::Compare::Stream::Iterator::Compare::Result.
 
 =item * my $count=$compare->get_column_count_human_readable;
 
