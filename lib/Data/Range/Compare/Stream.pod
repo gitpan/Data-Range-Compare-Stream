@@ -495,9 +495,13 @@ Example:
 
 Returns the name of the class new objects will be constructed from.
 
-=item *  my $new_range=$get_common_range([$range_a,$range_b,$range_c]);
+=item *  my $new_range=$range->get_common_range([$range_a,$range_b,$range_c]);
 
-Given an array reference of ranges that overlap $new_range will be the smallest intersecting range;
+Given an array reference of ranges that overlap $new_range will be the smallest intersecting range.  If the ranges do not overlap $new_range will be invalid.
+
+=item * my $range=$range->get_common;
+
+Result class support interface.
 
 =item * my $new_range=$range->get_overlapping_range([$range_a,$range_b,$range_c]);
 

@@ -37,26 +37,26 @@ sub get_next {
 
   while($self->{iterator}->has_next) {
     my $next_range=$self->{iterator}->get_next;
-    if($overlapping_range->overlap($next_range)) {
+    if($overlapping_range->get_common->overlap($next_range->get_common)) {
 
       $did_overlap=1;
-      my $new_range=$overlapping_range->get_overlapping_range([$overlapping_range,$next_range]);
-      $self->on_consolidate($new_range,$overlapping_range,$next_range);
-      $overlapping_range=$new_range;
+      my $new_range=$overlapping_range->get_overlapping_range([$overlapping_range->get_common,$next_range->get_common]);
+      $self->on_consolidate($new_range->get_common,$overlapping_range->get_common,$next_range->get_common);
+      $overlapping_range=$new_range->get_common;
 
 
-      ($start_range,$end_range)=$overlapping_range->find_smallest_outer_ranges([$start_range,$end_range,$next_range]);
+      ($start_range,$end_range)=$overlapping_range->get_common->find_smallest_outer_ranges([$start_range->get_common,$end_range->get_common,$next_range->get_common]);
     } else {
       $self->{last_range}=$next_range;
-      my ($start,$end)=$start_range->find_smallest_outer_ranges([$start_range,$end_range]);
-      return $self->RESULT_CLASS->new($overlapping_range,$start,$end,0,$did_overlap);
+      my ($start,$end)=$start_range->get_common->find_smallest_outer_ranges([$start_range->get_common,$end_range->get_common]);
+      return $self->RESULT_CLASS->new($overlapping_range->get_common,$start->get_common,$end->get_common,0,$did_overlap);
     }
 
     
   }
   $self->{last_range}=undef;
-  my ($start,$end)=$start_range->find_smallest_outer_ranges([$start_range,$end_range]);
-  return $self->RESULT_CLASS->new($overlapping_range,$start,$end,0,$did_overlap);
+  my ($start,$end)=$start_range->get_common->find_smallest_outer_ranges([$start_range->get_common,$end_range->get_common]);
+  return $self->RESULT_CLASS->new($overlapping_range->get_common,$start->get_common,$end->get_common,0,$did_overlap);
 }
 
 1;

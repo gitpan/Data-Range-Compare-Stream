@@ -50,10 +50,10 @@ sub get_next {
     my $overlap=$common->get_overlapping_range([$common,$next]);
     $self->on_consolidate($overlap,$common,$next);
 
-    my ($start,$end)=$common->find_smallest_outer_ranges([$result->get_start,$result->get_end,$last_result->get_start,$last_result->get_end]);
+    my ($start,$end)=$common->find_smallest_outer_ranges([$result->get_start->get_common,$result->get_end->get_common,$last_result->get_start->get_common,$last_result->get_end->get_common]);
 
     # get our new result
-    $result=$self->RESULT_CLASS->new($overlap,$start,$end,0,1);
+    $result=$self->RESULT_CLASS->new($overlap,$start->get_common,$end->get_common,0,1);
 
     # update the internals
     $self->{last_result}=undef;

@@ -27,7 +27,7 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc
   my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
   
   ok($obj,"Should construct the class object without error");
-  cmp_ok($obj,'eq','Data::Range::Compare::Stream::Iterator::Array',"The name of the class should be returned when calling the instance in a string context");
+  cmp_ok($obj.'','eq','Data::Range::Compare::Stream::Iterator::Array',"The name of the class should be returned when calling the instance in a string context");
 }
 
 
@@ -56,33 +56,33 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc
   my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc->new($obj);
   {
     my $range=$iterator->get_next;
-    cmp_ok($range->get_common,'eq','0 - 3',"Consolidate ASC  Common range check 1");
-    cmp_ok($range->get_start,'eq','0 - 0',"Consolidate ASC Start range check 1");
-    cmp_ok($range->get_end,'eq','2 - 3',"Consolidate ASC End range check 1");
+    cmp_ok($range->get_common.'','eq','0 - 3',"Consolidate ASC  Common range check 1");
+    cmp_ok($range->get_start.'','eq','0 - 0',"Consolidate ASC Start range check 1");
+    cmp_ok($range->get_end.'','eq','2 - 3',"Consolidate ASC End range check 1");
     ok($range->is_generated,'generated check');
   }
 
   {
     my $range=$iterator->get_next;
-    cmp_ok($range->get_common,'eq','5 - 9',"Consolidate ASC  Common range check 2");
-    cmp_ok($range->get_start,'eq','5 - 7',"Consolidate ASC Start range check 2");
-    cmp_ok($range->get_end,'eq','5 - 9',"Consolidate ASC End range check 2");
+    cmp_ok($range->get_common.'','eq','5 - 9',"Consolidate ASC  Common range check 2");
+    cmp_ok($range->get_start.'','eq','5 - 7',"Consolidate ASC Start range check 2");
+    cmp_ok($range->get_end.'','eq','5 - 9',"Consolidate ASC End range check 2");
     ok($range->is_generated,'generated check');
   }
 
   {
     my $range=$iterator->get_next;
-    cmp_ok($range->get_common,'eq','11 - 15',"Consolidate ASC  Common range check 3");
-    cmp_ok($range->get_start,'eq','11 - 15',"Consolidate ASC Start range check 3");
-    cmp_ok($range->get_end,'eq','11 - 15',"Consolidate ASC End range check 3");
+    cmp_ok($range->get_common.'','eq','11 - 15',"Consolidate ASC  Common range check 3");
+    cmp_ok($range->get_start.'','eq','11 - 15',"Consolidate ASC Start range check 3");
+    cmp_ok($range->get_end.'','eq','11 - 15',"Consolidate ASC End range check 3");
     ok(!$range->is_generated,'generated check');
   }
 
   {
     my $range=$iterator->get_next;
-    cmp_ok($range->get_common,'eq','17 - 33',"Consolidate ASC  Common range check 4");
-    cmp_ok($range->get_start,'eq','17 - 29',"Consolidate ASC Start range check 4");
-    cmp_ok($range->get_end,'eq','30 - 33',"Consolidate ASC End range check 4") or diag(Dumper($range));
+    cmp_ok($range->get_common.'','eq','17 - 33',"Consolidate ASC  Common range check 4");
+    cmp_ok($range->get_start.'','eq','17 - 29',"Consolidate ASC Start range check 4");
+    cmp_ok($range->get_end.'','eq','30 - 33',"Consolidate ASC End range check 4") or diag(Dumper($range));
     ok($range->is_generated,'generated check');
   }
 
@@ -108,9 +108,9 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc
   my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate::AdjacentAsc->new($obj);
   {
     my $range=$iterator->get_next;
-    cmp_ok($range->get_common,'eq','0 - 0',"Consolidate Single Common range check 1");
-    cmp_ok($range->get_start,'eq','0 - 0',"Consolidate Single Start range check 1");
-    cmp_ok($range->get_end,'eq','0 - 0',"Consolidate Single End range check 1");
+    cmp_ok($range->get_common.'','eq','0 - 0',"Consolidate Single Common range check 1");
+    cmp_ok($range->get_start.'','eq','0 - 0',"Consolidate Single Start range check 1");
+    cmp_ok($range->get_end.'','eq','0 - 0',"Consolidate Single End range check 1");
     ok(!$range->is_generated,'generated check');
   }
   my $last_iterator=$iterator->get_next;

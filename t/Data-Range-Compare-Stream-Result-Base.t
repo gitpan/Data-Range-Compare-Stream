@@ -8,8 +8,8 @@ use_ok('Data::Range::Compare::Stream::Result::Base');
 {
   my $base=new Data::Range::Compare::Stream::Result::Base(0,1);
   ok(defined($base),'base object should exist');
-  cmp_ok($base,'eq','0 - 1','instance in string context test');
-  cmp_ok($base,'eq',$base->get_common,'instance in string context test');
+  cmp_ok($base.'','eq',''.'0 - 1','instance in string context test');
+  cmp_ok($base.'','eq',''.$base->get_common,'instance in string context test');
   cmp_ok($base->boolean,'==',1,'boolean check');
   ok($base,'base should return true');
 
@@ -36,8 +36,8 @@ use_ok('Data::Range::Compare::Stream::Result::Base');
 {
   my $base=new MyTest(0,1);
   ok(defined($base),'base object should exist');
-  cmp_ok($base,'eq','test','instance in string context test');
-  cmp_ok($base,'eq',$base->get_common,'instance in string context test');
+  cmp_ok($base.'','eq',''.'test','instance in string context test');
+  cmp_ok($base.'','eq',''.$base->get_common,'instance in string context test');
   cmp_ok($base->boolean,'==',0,'boolean check');
   ok(!$base,'base should return true');
 

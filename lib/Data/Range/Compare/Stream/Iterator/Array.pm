@@ -15,8 +15,23 @@ sub set_sorted { $_[0]->{sorted}=$_[1] }
 
 sub sorted { $_[0]->{sorted} }
 
+sub prepared { $_[0]->{prepared} }
+
+sub prepare {
+  my ($self)=@_;
+  return 1 if $self->prepared;
+
+  $self->{prepared}=1;
+  return 1 if $self->sorted;
+  return 1 unless $self->{autosort};
+  return unless $self->can($self->{autosort});
+  my $func=$self->{autosort};
+  $self->$func();
+}
+
 sub has_next { 
   my ($self)=@_;
+  $self->prepare unless $self->prepared;
   return undef unless $self->sorted;
   return $#{$self->{range_list}}!=-1
 }

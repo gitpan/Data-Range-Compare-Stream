@@ -44,15 +44,15 @@ use Data::Range::Compare::Stream::Sort;
     push @ranges,new Data::Range::Compare::Stream($start,$end);
   }
   my @sorted=sort sort_in_consolidate_order_asc @ranges;
-  cmp_ok($sorted[0],'eq','0 - 0',"Consolidate sort 1");
-  cmp_ok($sorted[1],'eq','1 - 2',"Consolidate sort 2");
-  cmp_ok($sorted[2],'eq','2 - 3',"Consolidate sort 3");
-  cmp_ok($sorted[3],'eq','5 - 9',"Consolidate sort 4");
-  cmp_ok($sorted[4],'eq','5 - 7',"Consolidate sort 5");
-  cmp_ok($sorted[5],'eq','11 - 15',"Consolidate sort 6");
-  cmp_ok($sorted[6],'eq','17 - 29',"Consolidate sort 7");
-  cmp_ok($sorted[7],'eq','30 - 33',"Consolidate sort 8");
-  cmp_ok($sorted[8],'eq','30 - 31',"Consolidate sort 9");
+  cmp_ok($sorted[0].'','eq','0 - 0',"Consolidate sort 1");
+  cmp_ok($sorted[1].'','eq','1 - 2',"Consolidate sort 2");
+  cmp_ok($sorted[2].'','eq','2 - 3',"Consolidate sort 3");
+  cmp_ok($sorted[3].'','eq','5 - 9',"Consolidate sort 4");
+  cmp_ok($sorted[4].'','eq','5 - 7',"Consolidate sort 5");
+  cmp_ok($sorted[5].'','eq','11 - 15',"Consolidate sort 6");
+  cmp_ok($sorted[6].'','eq','17 - 29',"Consolidate sort 7");
+  cmp_ok($sorted[7].'','eq','30 - 33',"Consolidate sort 8");
+  cmp_ok($sorted[8].'','eq','30 - 31',"Consolidate sort 9");
 
 }
 
@@ -76,15 +76,15 @@ use Data::Range::Compare::Stream::Sort;
     push @ranges,new Data::Range::Compare::Stream($start,$end);
   }
   my @sorted=sort sort_in_presentation_order @ranges;
-  cmp_ok($sorted[0],'eq','0 - 0',"Present sort 1");
-  cmp_ok($sorted[1],'eq','1 - 2',"Present sort 2");
-  cmp_ok($sorted[2],'eq','2 - 3',"Present sort 3");
-  cmp_ok($sorted[3],'eq','5 - 7',"Present sort 4");
-  cmp_ok($sorted[4],'eq','5 - 9',"Present sort 5");
-  cmp_ok($sorted[5],'eq','11 - 15',"Present sort 6");
-  cmp_ok($sorted[6],'eq','17 - 29',"Present sort 7");
-  cmp_ok($sorted[7],'eq','30 - 31',"Present sort 8");
-  cmp_ok($sorted[8],'eq','30 - 33',"Present sort 9");
+  cmp_ok($sorted[0].'','eq','0 - 0',"Present sort 1");
+  cmp_ok($sorted[1].'','eq','1 - 2',"Present sort 2");
+  cmp_ok($sorted[2].'','eq','2 - 3',"Present sort 3");
+  cmp_ok($sorted[3].'','eq','5 - 7',"Present sort 4");
+  cmp_ok($sorted[4].'','eq','5 - 9',"Present sort 5");
+  cmp_ok($sorted[5].'','eq','11 - 15',"Present sort 6");
+  cmp_ok($sorted[6].'','eq','17 - 29',"Present sort 7");
+  cmp_ok($sorted[7].'','eq','30 - 31',"Present sort 8");
+  cmp_ok($sorted[8].'','eq','30 - 33',"Present sort 9");
 }
 
 #
@@ -106,15 +106,15 @@ use Data::Range::Compare::Stream::Sort;
     push @ranges,new Data::Range::Compare::Stream($start,$end);
   }
   my @sorted=sort sort_smallest_range_start_first @ranges;
-  cmp_ok($sorted[0],'eq','0 - 0',"Smallest Start Range sort 1");
-  cmp_ok($sorted[1],'eq','1 - 2',"Smallest Start Range sort 2");
-  cmp_ok($sorted[2],'eq','2 - 3',"Smallest Start Range sort 3");
-  cmp_ok($sorted[3],'eq','5 - 7',"Smallest Start Range sort 4");
-  cmp_ok($sorted[4],'eq','5 - 9',"Smallest Start Range sort 5");
-  cmp_ok($sorted[5],'eq','11 - 15',"Smallest Start Range sort 6");
-  cmp_ok($sorted[6],'eq','17 - 29',"Smallest Start Range sort 7");
-  cmp_ok($sorted[7],'eq','30 - 31',"Smallest Start Range sort 8");
-  cmp_ok($sorted[8],'eq','30 - 33',"Smallest Start Range sort 9");
+  cmp_ok($sorted[0].'','eq','0 - 0',"Smallest Start Range sort 1");
+  cmp_ok($sorted[1].'','eq','1 - 2',"Smallest Start Range sort 2");
+  cmp_ok($sorted[2].'','eq','2 - 3',"Smallest Start Range sort 3");
+  cmp_ok($sorted[3].'','eq','5 - 7',"Smallest Start Range sort 4");
+  cmp_ok($sorted[4].'','eq','5 - 9',"Smallest Start Range sort 5");
+  cmp_ok($sorted[5].'','eq','11 - 15',"Smallest Start Range sort 6");
+  cmp_ok($sorted[6].'','eq','17 - 29',"Smallest Start Range sort 7");
+  cmp_ok($sorted[7].'','eq','30 - 31',"Smallest Start Range sort 8");
+  cmp_ok($sorted[8].'','eq','30 - 33',"Smallest Start Range sort 9");
 }
 
 #
@@ -168,15 +168,15 @@ use Data::Range::Compare::Stream::Sort;
     push @ranges,new Data::Range::Compare::Stream($start,$end);
   }
   my @sorted=sort sort_largest_range_end_first @ranges;
-  cmp_ok($sorted[0],'eq','30 - 33',"Largest End Range sort 1");
-  cmp_ok($sorted[1],'eq','30 - 31',"Largest End Range sort 2");
-  cmp_ok($sorted[2],'eq','17 - 29',"Largest End Range sort 3");
-  cmp_ok($sorted[3],'eq','11 - 15',"Largest End Range sort 4");
-  cmp_ok($sorted[4],'eq','5 - 9',"Largest End Range sort 5");
-  cmp_ok($sorted[5],'eq','5 - 7',"Largest End Range sort 6");
-  cmp_ok($sorted[6],'eq','2 - 3',"Largest End Range sort 7");
-  cmp_ok($sorted[7],'eq','1 - 2',"Largest End Range sort 8");
-  cmp_ok($sorted[8],'eq','0 - 0',"Largest End Range sort 9");
+  cmp_ok($sorted[0].'','eq','30 - 33',"Largest End Range sort 1");
+  cmp_ok($sorted[1].'','eq','30 - 31',"Largest End Range sort 2");
+  cmp_ok($sorted[2].'','eq','17 - 29',"Largest End Range sort 3");
+  cmp_ok($sorted[3].'','eq','11 - 15',"Largest End Range sort 4");
+  cmp_ok($sorted[4].'','eq','5 - 9',"Largest End Range sort 5");
+  cmp_ok($sorted[5].'','eq','5 - 7',"Largest End Range sort 6");
+  cmp_ok($sorted[6].'','eq','2 - 3',"Largest End Range sort 7");
+  cmp_ok($sorted[7].'','eq','1 - 2',"Largest End Range sort 8");
+  cmp_ok($sorted[8].'','eq','0 - 0',"Largest End Range sort 9");
 }
 
 #
@@ -198,15 +198,15 @@ use Data::Range::Compare::Stream::Sort;
     push @ranges,new Data::Range::Compare::Stream($start,$end);
   }
   my @sorted=sort sort_smallest_range_end_first @ranges;
-  cmp_ok($sorted[0],'eq','0 - 0',"Smallest Range End sort 1");
-  cmp_ok($sorted[1],'eq','1 - 2',"Smallest Range End sort 2");
-  cmp_ok($sorted[2],'eq','2 - 3',"Smallest Range End sort 3");
-  cmp_ok($sorted[3],'eq','5 - 7',"Smallest Range End sort 5");
-  cmp_ok($sorted[4],'eq','5 - 9',"Smallest Range End sort 4");
-  cmp_ok($sorted[5],'eq','11 - 15',"Smallest Range End sort 6");
-  cmp_ok($sorted[6],'eq','17 - 29',"Smallest Range End sort 7");
-  cmp_ok($sorted[7],'eq','30 - 31',"Smallest Range End sort 9");
-  cmp_ok($sorted[8],'eq','30 - 33',"Smallest Range End sort 8");
+  cmp_ok($sorted[0].'','eq','0 - 0',"Smallest Range End sort 1");
+  cmp_ok($sorted[1].'','eq','1 - 2',"Smallest Range End sort 2");
+  cmp_ok($sorted[2].'','eq','2 - 3',"Smallest Range End sort 3");
+  cmp_ok($sorted[3].'','eq','5 - 7',"Smallest Range End sort 5");
+  cmp_ok($sorted[4].'','eq','5 - 9',"Smallest Range End sort 4");
+  cmp_ok($sorted[5].'','eq','11 - 15',"Smallest Range End sort 6");
+  cmp_ok($sorted[6].'','eq','17 - 29',"Smallest Range End sort 7");
+  cmp_ok($sorted[7].'','eq','30 - 31',"Smallest Range End sort 9");
+  cmp_ok($sorted[8].'','eq','30 - 33',"Smallest Range End sort 8");
 
 }
 
@@ -233,16 +233,16 @@ use Data::Range::Compare::Stream::Sort;
     push @ranges,new Data::Range::Compare::Stream($start,$end);
   }
   my @sorted=sort sort_in_consolidate_order_desc @ranges;
-  cmp_ok($sorted[0],'eq','30 - 33',"Consolidate DESC sort 1");
-  cmp_ok($sorted[1],'eq','27 - 31',"Consolidate DESC sort 2");
-  cmp_ok($sorted[2],'eq','30 - 31',"Consolidate DESC sort 3");
-  cmp_ok($sorted[3],'eq','17 - 29',"Consolidate DESC sort 4");
-  cmp_ok($sorted[4],'eq','11 - 15',"Consolidate DESC sort 5");
-  cmp_ok($sorted[5],'eq','4 - 9',"Consolidate DESC sort 6");
-  cmp_ok($sorted[6],'eq','5 - 9',"Consolidate DESC sort 7");
-  cmp_ok($sorted[7],'eq','5 - 7',"Consolidate DESC sort 8");
-  cmp_ok($sorted[8],'eq','2 - 3',"Consolidate DESC sort 9");
-  cmp_ok($sorted[9],'eq','1 - 2',"Consolidate DESC sort 10");
-  cmp_ok($sorted[10],'eq','0 - 0',"Consolidate DESC sort 11");
+  cmp_ok($sorted[0].'','eq','30 - 33',"Consolidate DESC sort 1");
+  cmp_ok($sorted[1].'','eq','27 - 31',"Consolidate DESC sort 2");
+  cmp_ok($sorted[2].'','eq','30 - 31',"Consolidate DESC sort 3");
+  cmp_ok($sorted[3].'','eq','17 - 29',"Consolidate DESC sort 4");
+  cmp_ok($sorted[4].'','eq','11 - 15',"Consolidate DESC sort 5");
+  cmp_ok($sorted[5].'','eq','4 - 9',"Consolidate DESC sort 6");
+  cmp_ok($sorted[6].'','eq','5 - 9',"Consolidate DESC sort 7");
+  cmp_ok($sorted[7].'','eq','5 - 7',"Consolidate DESC sort 8");
+  cmp_ok($sorted[8].'','eq','2 - 3',"Consolidate DESC sort 9");
+  cmp_ok($sorted[9].'','eq','1 - 2',"Consolidate DESC sort 10");
+  cmp_ok($sorted[10].'','eq','0 - 0',"Consolidate DESC sort 11");
 
 }

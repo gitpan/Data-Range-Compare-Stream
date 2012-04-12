@@ -12,7 +12,7 @@ INSTALLATION
 
 Before you upgrade to version 3.x.
 
-Changes that may break yoor code between version 2.020 and 3.021 and up.
+Changes that may break your code between version 2.020 and 3.021 and up.
 
 1. Data::Range::Compare::Stream::Iterator::Compare::ColumnRelations has been remoevd!
    The features have been moved into Data::Range::Compare::Stream::Iterator::Compare::Result

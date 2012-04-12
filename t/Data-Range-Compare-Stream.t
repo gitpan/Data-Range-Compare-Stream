@@ -58,9 +58,9 @@ BEGIN { use_ok('Data::Range::Compare::Stream') };
   my $range=new Data::Range::Compare::Stream(0,1,"SOME_STRING");
   cmp_ok($range->range_start,'==',0,"range_start should return: [0]");
   cmp_ok($range->range_end,'==',1,"range_end should return: [1]");
-  cmp_ok($range->data,'eq','SOME_STRING','data should return: [SOME_STRING]');
+  cmp_ok($range->data.'','eq','SOME_STRING','data should return: [SOME_STRING]');
   $range->data('NEW_STRING');
-  cmp_ok($range->data,'eq','NEW_STRING','data should return: [NEW_STRING]');
+  cmp_ok($range->data.'','eq','NEW_STRING','data should return: [NEW_STRING]');
 }
 
 
@@ -110,10 +110,10 @@ BEGIN { use_ok('Data::Range::Compare::Stream') };
 
 
   my $range_all=$range_a->get_overlapping_range([$range_a,$range_b,$range_c]);
-  cmp_ok($range_all,'eq','0 - 3','The overlapping range for all 3 ranges is [0 - 3]');
+  cmp_ok($range_all.'','eq','0 - 3','The overlapping range for all 3 ranges is [0 - 3]');
 
   my $range_common=Data::Range::Compare::Stream->get_common_range([$range_b,$range_c]);
-  cmp_ok($range_common,'eq','2 - 2','The overlapping range for all [2 - 2 and 2 - 3] is [2 - 2]');
+  cmp_ok($range_common.'','eq','2 - 2','The overlapping range for all [2 - 2 and 2 - 3] is [2 - 2]');
 }
 
 {
@@ -125,7 +125,7 @@ BEGIN { use_ok('Data::Range::Compare::Stream') };
   }
   my ($start,$end)=Data::Range::Compare::Stream->find_smallest_outer_ranges($ranges);
 
-  cmp_ok($start,'eq','0 - 1',"find_smallest_outer_ranges start");
-  cmp_ok($end,'eq','3 - 5',"find_smallest_outer_ranges end");
+  cmp_ok($start.'','eq','0 - 1',"find_smallest_outer_ranges start");
+  cmp_ok($end.'','eq','3 - 5',"find_smallest_outer_ranges end");
 }
 

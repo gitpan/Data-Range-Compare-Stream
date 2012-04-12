@@ -25,7 +25,7 @@ Data::Range::Compare::Stream::Sort - Low level sort functions
 
 =head1 DESCRIPTION
 
-This module defines the constants used by Data::Range::Compare::Stream
+This module defines the sort functions usable by by a list of objects that implement or extend L<Data::Range::Compare::Stream>.
 
 =Exports
 

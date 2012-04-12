@@ -96,3 +96,12 @@ Revision history for Perl extension Data::Range::Compare::Stream.
   -- ColumnRelations.pm has been removed!
   -- Consolidate/Result.pm has 2 new is_missing is_generated along with an updated set of constructor arguments
   -- Add generated state for existing consolidator objects!
+
+3.022
+  -- all Consolidate iterators have been updated to allow any iterator as their argument
+  -- added autosort option to Iterator/Array.pm
+  -- Stream.pod More updates
+  -- FillMissing.pod updated
+  -- Sort.pod updated
+  -- So it seems Test::More has had some major changes made to it....
+    most of the tests had to be updated to work around this.

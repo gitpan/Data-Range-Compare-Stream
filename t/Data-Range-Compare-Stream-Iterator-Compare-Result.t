@@ -76,13 +76,13 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Compare::Result') };
       my $column=$overlap_ids->[0];
       my $result=$obj->get_consolidator_result_by_id($column);
       ok(defined($result),'should get an object for column 0');
-      cmp_ok($result->get_common,'eq','1 - 1',"Should get a range of 1 - 1");
+      cmp_ok($result->get_common.'','eq','1 - 1',"Should get a range of 1 - 1");
     }
     {
       my $column=$overlap_ids->[1];
       my $result=$obj->get_consolidator_result_by_id($column);
       ok(defined($result),'should get an object for column 1');
-      cmp_ok($result->get_common,'eq','1 - 1',"Should get a range of 1 - 1");
+      cmp_ok($result->get_common.'','eq','1 - 1',"Should get a range of 1 - 1");
     }
   }
   {
@@ -144,13 +144,13 @@ BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::Compare::Result') };
       my $column=$overlap_ids->[0];
       my $result=$obj->get_consolidator_result_by_id($column);
       ok(defined($result),'should get an object for column 0');
-      cmp_ok($result->get_common,'eq','1 - 1',"Should get a range of 1 - 1");
+      cmp_ok($result->get_common.'','eq','1 - 1',"Should get a range of 1 - 1");
     }
     {
       my $column=$overlap_ids->[1];
       my $result=$obj->get_consolidator_result_by_id($column);
       ok(defined($result),'should get an object for column 1');
-      cmp_ok($result->get_common,'eq','1 - 1',"Should get a range of 1 - 1");
+      cmp_ok($result->get_common.'','eq','1 - 1',"Should get a range of 1 - 1");
     }
   }
   {
@@ -227,8 +227,8 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     ok($cmp->has_next,'should have next');
     my $result=$cmp->get_next;
     my $columns=$result->get_root_results;
-    cmp_ok(join(',',@{$result->get_root_ids}),'eq','0','Root_ids check');
-    cmp_ok($result->get_common,'eq','0 - 0','common range check');
+    cmp_ok(join(',',@{$result->get_root_ids}).'','eq','0','Root_ids check');
+    cmp_ok($result->get_common.'','eq','0 - 0','common range check');
     is_deeply(['0 - 0','0 - 0' ],[ map { $_->get_common."" } (map { @$_ } @{$columns}[ @{$result->get_root_ids}  ])],'column mapping');
     my $ids=$result->get_root_result_ids;
     is_deeply([[0,1]],$ids,'Column id Map check');
@@ -239,8 +239,8 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     ok($cmp->has_next,'should have next');
     my $result=$cmp->get_next;
     my $columns=$result->get_root_results;
-    cmp_ok(join(',',@{$result->get_root_ids}),'eq','0','Root_ids check');
-    cmp_ok($result->get_common,'eq','1 - 1','common range check');
+    cmp_ok(join(',',@{$result->get_root_ids}).'','eq','0','Root_ids check');
+    cmp_ok($result->get_common.'','eq','1 - 1','common range check');
     is_deeply(['1 - 4' ],[ map { $_->get_common."" } (map { @$_ } @{$columns}[ @{$result->get_root_ids}  ])],'column mapping');
     is_deeply([[0]],$result->get_root_result_ids,'Column id Map check');
   }
@@ -248,8 +248,8 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     ok($cmp->has_next,'should have next');
     my $result=$cmp->get_next;
     my $columns=$result->get_root_results;
-    cmp_ok(join(',',@{$result->get_root_ids}),'eq','0','Root_ids check');
-    cmp_ok($result->get_common,'eq','2 - 3','common range check');
+    cmp_ok(join(',',@{$result->get_root_ids}).'','eq','0','Root_ids check');
+    cmp_ok($result->get_common.'','eq','2 - 3','common range check');
     is_deeply(['1 - 4','2 - 3' ],[ map { $_->get_common."" } (map { @$_ } @{$columns}[ @{$result->get_root_ids}  ])],'column mapping');
     is_deeply([[0,1]],$result->get_root_result_ids,'Column id Map check');
     
@@ -258,8 +258,8 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     ok($cmp->has_next,'should have next');
     my $result=$cmp->get_next;
     my $columns=$result->get_root_results;
-    cmp_ok(join(',',@{$result->get_root_ids}),'eq','0','Root_ids check');
-    cmp_ok($result->get_common,'eq','4 - 4','common range check');
+    cmp_ok(join(',',@{$result->get_root_ids}).'','eq','0','Root_ids check');
+    cmp_ok($result->get_common.'','eq','4 - 4','common range check');
     is_deeply(['1 - 4','4 - 5' ],[ map { $_->get_common."" } (map { @$_ } @{$columns}[ @{$result->get_root_ids}  ])],'column mapping');
     is_deeply([[0,1]],$result->get_root_result_ids,'Column id Map check');
     
@@ -268,8 +268,8 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     ok($cmp->has_next,'should have next');
     my $result=$cmp->get_next;
     my $columns=$result->get_root_results;
-    cmp_ok(join(',',@{$result->get_root_ids}),'eq','0','Root_ids check');
-    cmp_ok($result->get_common,'eq','5 - 5','common range check');
+    cmp_ok(join(',',@{$result->get_root_ids}).'','eq','0','Root_ids check');
+    cmp_ok($result->get_common.'','eq','5 - 5','common range check');
     is_deeply(['4 - 5' ],[ map { $_->get_common."" } (map { @$_ } @{$columns}[ @{$result->get_root_ids}  ])],'column mapping');
     is_deeply([[1]],$result->get_root_result_ids,'Column id Map check');
     
@@ -283,8 +283,8 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     ok($cmp->has_next,'should have next');
     my $result=$cmp->get_next;
     my $columns=$result->get_root_results;
-    cmp_ok(join(',',@{$result->get_root_ids}),'eq','0','Root_ids check');
-    cmp_ok($result->get_common,'eq','10 - 10','common range check');
+    cmp_ok(join(',',@{$result->get_root_ids}).'','eq','0','Root_ids check');
+    cmp_ok($result->get_common.'','eq','10 - 10','common range check');
     is_deeply(['10 - 20' ],[ map { $_->get_common."" } (map { @$_ } @{$columns}[ @{$result->get_root_ids}  ])],'column mapping');
     is_deeply([[0]],$result->get_root_result_ids,'Column id Map check');
     
@@ -293,8 +293,8 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     ok($cmp->has_next,'should have next');
     my $result=$cmp->get_next;
     my $columns=$result->get_root_results;
-    cmp_ok(join(',',@{$result->get_root_ids}),'eq','0','Root_ids check');
-    cmp_ok($result->get_common,'eq','11 - 11','common range check');
+    cmp_ok(join(',',@{$result->get_root_ids}).'','eq','0','Root_ids check');
+    cmp_ok($result->get_common.'','eq','11 - 11','common range check');
     is_deeply(['10 - 20','11 - 19' ],[ map { $_->get_common."" } (map { @$_ } @{$columns}[ @{$result->get_root_ids}  ])],'column mapping');
     is_deeply([[0,1]],$result->get_root_result_ids,'Column id Map check');
     
@@ -303,8 +303,8 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     ok($cmp->has_next,'should have next');
     my $result=$cmp->get_next;
     my $columns=$result->get_root_results;
-    cmp_ok(join(',',@{$result->get_root_ids}),'eq','0','Root_ids check');
-    cmp_ok($result->get_common,'eq','12 - 18','common range check');
+    cmp_ok(join(',',@{$result->get_root_ids}).'','eq','0','Root_ids check');
+    cmp_ok($result->get_common.'','eq','12 - 18','common range check');
     is_deeply(['10 - 20','11 - 19','12 - 18' ],[ map { $_->get_common."" } (map { @$_ } @{$columns}[ @{$result->get_root_ids}  ])],'column mapping');
     is_deeply([[0,1,2]],$result->get_root_result_ids,'Column id Map check');
   }
@@ -312,8 +312,8 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     ok($cmp->has_next,'should have next');
     my $result=$cmp->get_next;
     my $columns=$result->get_root_results;
-    cmp_ok(join(',',@{$result->get_root_ids}),'eq','0','Root_ids check');
-    cmp_ok($result->get_common,'eq','19 - 19','common range check');
+    cmp_ok(join(',',@{$result->get_root_ids}).'','eq','0','Root_ids check');
+    cmp_ok($result->get_common.'','eq','19 - 19','common range check');
     is_deeply(['10 - 20','11 - 19'],[ map { $_->get_common."" } (map { @$_ } @{$columns}[ @{$result->get_root_ids}  ])],'column mapping');
     is_deeply([[0,1]],$result->get_root_result_ids,'Column id Map check');
     
@@ -322,8 +322,8 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     ok($cmp->has_next,'should have next');
     my $result=$cmp->get_next;
     my $columns=$result->get_root_results;
-    cmp_ok(join(',',@{$result->get_root_ids}),'eq','0','Root_ids check');
-    cmp_ok($result->get_common,'eq','20 - 20','common range check');
+    cmp_ok(join(',',@{$result->get_root_ids}).'','eq','0','Root_ids check');
+    cmp_ok($result->get_common.'','eq','20 - 20','common range check');
     is_deeply(['10 - 20',],[ map { $_->get_common."" } (map { @$_ } @{$columns}[ @{$result->get_root_ids}  ])],'column mapping');
     is_deeply([[0]],$result->get_root_result_ids,'Column id Map check');
     

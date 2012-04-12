@@ -40,7 +40,7 @@ Resulting Output:
 
 =head1 DESCRIPTION
 
-This class Extends Data::Range::Compare::Stream::Iterator::Base.  Unlike all other Consolidator object classes this class takes any consolidator as an argument and returns results that include both the data that was in the orginal set the gaps.  Results that represent gaps are tag as $result->is_missing.
+This class Extends L<Data::Range::Compare::Stream::Iterator::Base>.  Any gaps in the input data set are filled in and marked as missing.
 
 =head2 OO Methods
 

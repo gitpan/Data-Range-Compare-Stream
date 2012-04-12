@@ -46,8 +46,8 @@ if(1){
   {
     my $result=$cmp->get_next;
     cmp_ok($result->get_column_count,'==',1,'column count should be 1 for row 0') or diag(Dumper($result));
-    cmp_ok($result->get_common_range,'eq','0 - 1',"Iterator should return [0 - 1] as column 0 row 0");
-    cmp_ok($result->get_all_containers->[0]->get_common,'eq','0 - 1',"Iterator should return [0 - 1] as column 1 row 0");
+    cmp_ok($result->get_common_range.'','eq','0 - 1',"Iterator should return [0 - 1] as column 0 row 0");
+    cmp_ok($result->get_all_containers->[0]->get_common.'','eq','0 - 1',"Iterator should return [0 - 1] as column 1 row 0");
   }
 
   ok($cmp->has_next,'has next row 1 should work');
@@ -55,8 +55,8 @@ if(1){
   {
     my $result=$cmp->get_next;
     cmp_ok($result->get_column_count,'==',1,'column count should be 1 for row 1') or diag(Dumper($result));
-    cmp_ok($result->get_common_range,'eq','2 - 3',"Iterator should return [0 - 1] as column 0 row 1");
-    cmp_ok($result->get_all_containers->[0]->get_common,'eq','2 - 3',"Iterator should return [2 - 3] as column 1 row 1");
+    cmp_ok($result->get_common_range.'','eq','2 - 3',"Iterator should return [0 - 1] as column 0 row 1");
+    cmp_ok($result->get_all_containers->[0]->get_common.'','eq','2 - 3',"Iterator should return [2 - 3] as column 1 row 1");
   }
   ok(!$cmp->has_next,'has next should now be false');
   ok($cmp->iterators_empty,'iterators should still be empty');
@@ -87,16 +87,16 @@ if(1){
   {
     ok($cmp->has_next);
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','3 - 11','Row 0 check');
+    cmp_ok($row->get_common_range.'','eq','3 - 11','Row 0 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','12 - 16','Row 1 check');
+    cmp_ok($row->get_common_range.'','eq','12 - 16','Row 1 check');
   }
   {
     ok($cmp->has_next,'Row 2 check should have next') or die 'cannot continue testing!';
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','17 - 41','Row 2 check');
+    cmp_ok($row->get_common_range.'','eq','17 - 41','Row 2 check');
   }
   {
     my $row=$cmp->has_next;
@@ -128,13 +128,13 @@ if(1){
   {
     ok($cmp->has_next);
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','3 - 11','Row 0 ignore empty check');
+    cmp_ok($row->get_common_range.'','eq','3 - 11','Row 0 ignore empty check');
   }
   {
     ok($cmp->has_next,'Row 2 check should have next') or die 'cannot continue testing!';
     my $row=$cmp->get_next;
     ok($row->is_full,'row should always be full!') or die diag(Dumper($cmp));
-    cmp_ok($row->get_common_range,'eq','17 - 41','Row 1 ignore empty check');
+    cmp_ok($row->get_common_range.'','eq','17 - 41','Row 1 ignore empty check');
   }
   {
     my $row=$cmp->has_next;
@@ -184,47 +184,47 @@ if(1){
   {
     ok($cmp->has_next);
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','0 - 0','Row 0 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','0 - 0','Row 0 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','1 - 2','Row 1 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','1 - 2','Row 1 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','3 - 3','Row 2 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','3 - 3','Row 2 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','4 - 4','Row 3 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','4 - 4','Row 3 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','5 - 9','Row 4 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','5 - 9','Row 4 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','10 - 10','Row 5 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','10 - 10','Row 5 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','11 - 11','Row 6 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','11 - 11','Row 6 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','12 - 15','Row 7 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','12 - 15','Row 7 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','16 - 16','Row 8 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','16 - 16','Row 8 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','17 - 33','Row 9 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','17 - 33','Row 9 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','34 - 41','Row 10 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','34 - 41','Row 10 check 2 column complex data check');
   }
   {
     my $row=$cmp->has_next;
@@ -274,52 +274,52 @@ if(1){
   {
     my $row=$cmp->get_next;
     ok(!$row->is_empty,'row should not be empty!');
-    cmp_ok($row->get_common_range,'eq','0 - 0','Row 0 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','0 - 0','Row 0 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
     ok(!$row->is_empty,'row should not be empty!');
-    cmp_ok($row->get_common_range,'eq','1 - 2','Row 1 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','1 - 2','Row 1 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
     ok(!$row->is_empty,'row should not be empty!');
-    cmp_ok($row->get_common_range,'eq','3 - 3','Row 2 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','3 - 3','Row 2 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
     ok(!$row->is_empty,'row should not be empty!');
-    cmp_ok($row->get_common_range,'eq','4 - 4','Row 3 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','4 - 4','Row 3 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
     ok(!$row->is_empty,'row should not be empty!');
-    cmp_ok($row->get_common_range,'eq','5 - 9','Row 4 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','5 - 9','Row 4 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
     ok(!$row->is_empty,'row should not be empty!');
-    cmp_ok($row->get_common_range,'eq','10 - 10','Row 5 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','10 - 10','Row 5 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
     ok(!$row->is_empty,'row should not be empty!');
-    cmp_ok($row->get_common_range,'eq','11 - 11','Row 6 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','11 - 11','Row 6 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
     ok(!$row->is_empty,'row should not be empty!');
-    cmp_ok($row->get_common_range,'eq','12 - 15','Row 7 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','12 - 15','Row 7 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
     ok(!$row->is_empty,'row should not be empty!');
-    cmp_ok($row->get_common_range,'eq','17 - 33','Row 9 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','17 - 33','Row 9 check 2 column complex data check');
   }
   {
     my $row=$cmp->get_next;
     ok(!$row->is_empty,'row should not be empty!');
-    cmp_ok($row->get_common_range,'eq','34 - 41','Row 10 check 2 column complex data check');
+    cmp_ok($row->get_common_range.'','eq','34 - 41','Row 10 check 2 column complex data check');
   }
   {
     my $row=$cmp->has_next;
@@ -366,7 +366,7 @@ if(1){
   {
     $cmp->has_next;
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','3 - 11','Row 0 check for non overlap');
+    cmp_ok($row->get_common_range.'','eq','3 - 11','Row 0 check for non overlap');
     ok(!$row->is_full,'Row 0 check for non overlap should not show as matching every column');
     ok(!$row->is_empty,'Row 0 check for non overlap should not show as matching no columns');
     my $ids=$row->get_overlap_ids;
@@ -374,35 +374,35 @@ if(1){
     cmp_ok($ids->[0],'==',0,'Should just match id 0');
     my $overlaps=$row->get_overlapping_containers;
     cmp_ok($#$overlaps,'==',0,'Overlaps should contain only one object');
-    cmp_ok($overlaps->[0]->get_common_range,'eq','3 - 11','The only common range should be [3 - 11]');
+    cmp_ok($overlaps->[0]->get_common_range.'','eq','3 - 11','The only common range should be [3 - 11]');
 
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','12 - 14','Row 1 check for non overlap');
+    cmp_ok($row->get_common_range.'','eq','12 - 14','Row 1 check for non overlap');
     ok(!$row->is_full,'Row 1 check for non overlap should not show as matching every column');
     ok($row->is_empty,'Row 1 check for non overlap should show as empty!');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','15 - 17','Row 2 check for non overlap');
+    cmp_ok($row->get_common_range.'','eq','15 - 17','Row 2 check for non overlap');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','18 - 18','Row 3 check for non overlap');
+    cmp_ok($row->get_common_range.'','eq','18 - 18','Row 3 check for non overlap');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','19 - 21','Row 4 check for non overlap');
+    cmp_ok($row->get_common_range.'','eq','19 - 21','Row 4 check for non overlap');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','22 - 24','Row 5 check for non overlap');
+    cmp_ok($row->get_common_range.'','eq','22 - 24','Row 5 check for non overlap');
   }
   {
     ok($cmp->has_next,"should have next at the last row of non overlap cheks");
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','25 - 27','Row 5 check for non overlap');
+    cmp_ok($row->get_common_range.'','eq','25 - 27','Row 5 check for non overlap');
   }
   {
     my $row=$cmp->has_next;
@@ -435,15 +435,15 @@ if(1){
 
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','3 - 11','Parallel Row 0 check');
+    cmp_ok($row->get_common_range.'','eq','3 - 11','Parallel Row 0 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','12 - 16','Parallel Row 1 check');
+    cmp_ok($row->get_common_range.'','eq','12 - 16','Parallel Row 1 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','17 - 41','Parallel Row 2 check');
+    cmp_ok($row->get_common_range.'','eq','17 - 41','Parallel Row 2 check');
   }
   {
     my $row=$cmp->has_next;
@@ -477,15 +477,15 @@ if(1){
 
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','3 - 11','Parallel Row 0 check');
+    cmp_ok($row->get_common_range.'','eq','3 - 11','Parallel Row 0 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','12 - 16','Parallel Row 1 check');
+    cmp_ok($row->get_common_range.'','eq','12 - 16','Parallel Row 1 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','17 - 41','Parallel Row 2 check');
+    cmp_ok($row->get_common_range.'','eq','17 - 41','Parallel Row 2 check');
   }
   {
     my $row=$cmp->has_next;
@@ -540,27 +540,27 @@ if(1){
 
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','0 - 0','3 column sequetial Row 0 check');
+    cmp_ok($row->get_common_range.'','eq','0 - 0','3 column sequetial Row 0 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','1 - 1','3 column sequetial Row 1 check');
+    cmp_ok($row->get_common_range.'','eq','1 - 1','3 column sequetial Row 1 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','2 - 2','3 column sequetial Row 2 check');
+    cmp_ok($row->get_common_range.'','eq','2 - 2','3 column sequetial Row 2 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','3 - 3','3 column sequetial Row 3 check');
+    cmp_ok($row->get_common_range.'','eq','3 - 3','3 column sequetial Row 3 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','4 - 4','3 column sequetial Row 4 check');
+    cmp_ok($row->get_common_range.'','eq','4 - 4','3 column sequetial Row 4 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','5 - 5','3 column sequetial Row 5 check');
+    cmp_ok($row->get_common_range.'','eq','5 - 5','3 column sequetial Row 5 check');
   }
   {
     my $row=$cmp->has_next;
@@ -613,31 +613,31 @@ if(1){
 
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','0 - 0','3 column  non sequetial Row 0 check');
+    cmp_ok($row->get_common_range.'','eq','0 - 0','3 column  non sequetial Row 0 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','1 - 3','3 column  non sequetial Row 1 check');
+    cmp_ok($row->get_common_range.'','eq','1 - 3','3 column  non sequetial Row 1 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','4 - 4','4 column  non sequetial Row 2 check');
+    cmp_ok($row->get_common_range.'','eq','4 - 4','4 column  non sequetial Row 2 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','5 - 7','5 column  non sequetial Row 3 check');
+    cmp_ok($row->get_common_range.'','eq','5 - 7','5 column  non sequetial Row 3 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','8 - 8','6 column  non sequetial Row 4 check');
+    cmp_ok($row->get_common_range.'','eq','8 - 8','6 column  non sequetial Row 4 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','9 - 10','7 column non  sequetial Row 5 check');
+    cmp_ok($row->get_common_range.'','eq','9 - 10','7 column non  sequetial Row 5 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','11 - 12','8 column non sequetial Row 6 check');
+    cmp_ok($row->get_common_range.'','eq','11 - 12','8 column non sequetial Row 6 check');
   }
   {
     my $row=$cmp->has_next;
@@ -696,44 +696,44 @@ if(1){
 
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','0 - 0','3 column  complex Row 0 check');
+    cmp_ok($row->get_common_range.'','eq','0 - 0','3 column  complex Row 0 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','1 - 4','3 column  complex Row 1 check');
+    cmp_ok($row->get_common_range.'','eq','1 - 4','3 column  complex Row 1 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','5 - 6','3 column  complex Row 2 check');
+    cmp_ok($row->get_common_range.'','eq','5 - 6','3 column  complex Row 2 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','7 - 9','3 column  complex Row 3 check');
+    cmp_ok($row->get_common_range.'','eq','7 - 9','3 column  complex Row 3 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','10 - 10','3 column  complex Row 4 check');
+    cmp_ok($row->get_common_range.'','eq','10 - 10','3 column  complex Row 4 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','11 - 11','3 column  complex Row 5 check');
+    cmp_ok($row->get_common_range.'','eq','11 - 11','3 column  complex Row 5 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','12 - 12','3 column  complex Row 6 check');
+    cmp_ok($row->get_common_range.'','eq','12 - 12','3 column  complex Row 6 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','13 - 17','3 column  complex Row 7 check');
+    cmp_ok($row->get_common_range.'','eq','13 - 17','3 column  complex Row 7 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','18 - 29','3 column  complex Row 8 check');
+    cmp_ok($row->get_common_range.'','eq','18 - 29','3 column  complex Row 8 check');
   }
   {
     ok($cmp->has_next,"next row should be set corretly") or die 'cannot continue testing!';
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','30 - 31','3 column  complex Row 10 check');
+    cmp_ok($row->get_common_range.'','eq','30 - 31','3 column  complex Row 10 check');
   }
   {
     my $row=$cmp->has_next;
@@ -795,19 +795,19 @@ if(1){
 
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','0 - 1','4 column  complex Row 0 check');
+    cmp_ok($row->get_common_range.'','eq','0 - 1','4 column  complex Row 0 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','2 - 3','4 column  complex Row 1 check');
+    cmp_ok($row->get_common_range.'','eq','2 - 3','4 column  complex Row 1 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','4 - 4','4 column  complex Row 2 check');
+    cmp_ok($row->get_common_range.'','eq','4 - 4','4 column  complex Row 2 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','5 - 6','4 column  complex Row 3 check');
+    cmp_ok($row->get_common_range.'','eq','5 - 6','4 column  complex Row 3 check');
   }
   {
     my $row=$cmp->has_next;
@@ -860,15 +860,15 @@ if(1){
 
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','0 - 1','3 identical colum Row 0 check');
+    cmp_ok($row->get_common_range.'','eq','0 - 1','3 identical colum Row 0 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','2 - 3','3 identical colum Row 1 check');
+    cmp_ok($row->get_common_range.'','eq','2 - 3','3 identical colum Row 1 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','4 - 5','3 identical colum Row 2 check');
+    cmp_ok($row->get_common_range.'','eq','4 - 5','3 identical colum Row 2 check');
   }
   {
     my $row=$cmp->has_next;
@@ -926,71 +926,71 @@ if(1){
 
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','0 - 2','1 3 column 2 ranges always overlap Row 0 check');
+    cmp_ok($row->get_common_range.'','eq','0 - 2','1 3 column 2 ranges always overlap Row 0 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','3 - 4','1 3 column 2 ranges always overlap Row 1 check');
+    cmp_ok($row->get_common_range.'','eq','3 - 4','1 3 column 2 ranges always overlap Row 1 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','5 - 6','1 3 column 2 ranges always overlap Row 2 check');
+    cmp_ok($row->get_common_range.'','eq','5 - 6','1 3 column 2 ranges always overlap Row 2 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','7 - 8','1 3 column 2 ranges always overlap Row 3 check');
+    cmp_ok($row->get_common_range.'','eq','7 - 8','1 3 column 2 ranges always overlap Row 3 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','9 - 10','1 3 column 2 ranges always overlap Row 4 check');
+    cmp_ok($row->get_common_range.'','eq','9 - 10','1 3 column 2 ranges always overlap Row 4 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','11 - 12','1 3 column 2 ranges always overlap Row 5 check');
+    cmp_ok($row->get_common_range.'','eq','11 - 12','1 3 column 2 ranges always overlap Row 5 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','13 - 14','1 3 column 2 ranges always overlap Row 6 check');
+    cmp_ok($row->get_common_range.'','eq','13 - 14','1 3 column 2 ranges always overlap Row 6 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','15 - 16','1 3 column 2 ranges always overlap Row 7 check');
+    cmp_ok($row->get_common_range.'','eq','15 - 16','1 3 column 2 ranges always overlap Row 7 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','17 - 18','1 3 column 2 ranges always overlap Row 8 check');
+    cmp_ok($row->get_common_range.'','eq','17 - 18','1 3 column 2 ranges always overlap Row 8 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','19 - 20','1 3 column 2 ranges always overlap Row 9 check');
+    cmp_ok($row->get_common_range.'','eq','19 - 20','1 3 column 2 ranges always overlap Row 9 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','21 - 24','1 3 column 2 ranges always overlap Row 10 check');
+    cmp_ok($row->get_common_range.'','eq','21 - 24','1 3 column 2 ranges always overlap Row 10 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','25 - 28','1 3 column 2 ranges always overlap Row 11 check');
+    cmp_ok($row->get_common_range.'','eq','25 - 28','1 3 column 2 ranges always overlap Row 11 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','29 - 34','1 3 column 2 ranges always overlap Row 12 check');
+    cmp_ok($row->get_common_range.'','eq','29 - 34','1 3 column 2 ranges always overlap Row 12 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','35 - 38','1 3 column 2 ranges always overlap Row 13 check');
+    cmp_ok($row->get_common_range.'','eq','35 - 38','1 3 column 2 ranges always overlap Row 13 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','39 - 44','1 3 column 2 ranges always overlap Row 14 check');
+    cmp_ok($row->get_common_range.'','eq','39 - 44','1 3 column 2 ranges always overlap Row 14 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','45 - 48','1 3 column 2 ranges always overlap Row 15 check');
+    cmp_ok($row->get_common_range.'','eq','45 - 48','1 3 column 2 ranges always overlap Row 15 check');
   }
   {
     my $row=$cmp->get_next;
-    cmp_ok($row->get_common_range,'eq','49 - 54','1 3 column 2 ranges always overlap Row 16 check');
+    cmp_ok($row->get_common_range.'','eq','49 - 54','1 3 column 2 ranges always overlap Row 16 check');
   }
   {
     my $row=$cmp->has_next;
@@ -1038,19 +1038,19 @@ if(1){
   {
     ok($cmp->has_next,"ignore full row: 0") or diag(Dumper($cmp));
     my $result=$cmp->get_next;
-    cmp_ok($result->get_common,'eq','2 - 2','first row should be: 2 - 2');
+    cmp_ok($result->get_common.'','eq','2 - 2','first row should be: 2 - 2');
     ok($result,"Should have a result");
   }
   {
     ok($cmp->has_next,"ignore full row: 1") or diag(Dumper($cmp));
     my $result=$cmp->get_next;
-    cmp_ok($result->get_common,'eq','5 - 6','second row should be: 5 - 6');
+    cmp_ok($result->get_common.'','eq','5 - 6','second row should be: 5 - 6');
     ok($result,"Should have a result");
   }
   {
     ok($cmp->has_next,"ignore full row: 2") or diag(Dumper($cmp));
     my $result=$cmp->get_next;
-    cmp_ok($result->get_common,'eq','7 - 7','last row should be: 7 - 7');
+    cmp_ok($result->get_common.'','eq','7 - 7','last row should be: 7 - 7');
     ok($result,"Should have a result");
   }
   ok(!$cmp->has_next,'ignore full row test should be empty now');

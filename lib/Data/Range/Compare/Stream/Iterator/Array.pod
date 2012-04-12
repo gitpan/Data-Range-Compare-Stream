@@ -29,7 +29,7 @@ Data::Range::Compare::Stream::Iterator::Array - simple array iterator
 
 =head1 DESCRIPTION
 
-This module implements an array iterator.
+This module implements Data::Range::Compare::Stream::Iterator::Base and provides an array iterator.
 
 
 =head2 OO Methods
@@ -52,6 +52,10 @@ Instance Constructor, all arguments are optional:
 
         # Sets the sorted state
 
+       autosort  =>  'prepare_for_consolidate_asc' or 'prepare_for_consolidate_desc'
+         
+	 # Allows for dynamic sort support when has_next is called
+
 =item * $iterator->add_range($obj)
 
 Adds $obj to the internal array.  This function returns false once $iterator has been sorted
@@ -72,13 +76,13 @@ Sorts the internal array and sets the sorted flag: $iterator->has_next returns f
 
 Used to set the internal array sorted flag
 
-=item * if($iterator->sorted) { do something }
+=item * if($iterator->sorted) { ... }
 
 Returns the sorted state
 
-=item * while($iterator->has_next) { do something }
+=item * while($iterator->has_next) { ... }
 
-Returns true when the internal array has been sorted and still contains data
+Returns true when the internal array has been sorted and still contains data.  If autosrot has been set, then it will return true if the array contains data.
 
 =item * my $range=$iterator->get_next;
 
@@ -91,6 +95,14 @@ Returns the instance name of $iterator
 =item * $iterator->insert_range($range);
 
 Inserts a range into a the iterator regardless of the "sorted" state. Use with caution!
+
+=item * if($iterator->prepared) { ... }
+
+Returns the prepared state
+
+=item * $iterator->prepare
+
+Prepares the object to be used for iteration.
 
 =back
 

@@ -46,15 +46,15 @@ SKIP: {
   
   ok($s->has_next,'instance should have next');
 
-  cmp_ok($s->get_next,'eq','1 - 2','first row should be: 1 - 2');
+  cmp_ok($s->get_next.'','eq',''.'1 - 2','first row should be: 1 - 2');
   ok($s->has_next,'instance should have row 2');
-  cmp_ok($s->get_next,'eq','3 - 4','first row should be: 3 - 4');
+  cmp_ok($s->get_next.'','eq',''.'3 - 4','first row should be: 3 - 4');
 
   ok($s->has_next,'instance should have row 3');
-  cmp_ok($s->get_next,'eq','5 - 6','first row should be: 7 - 8');
+  cmp_ok($s->get_next.'','eq',''.'5 - 6','first row should be: 7 - 8');
 
   ok($s->has_next,'instance should have row 3');
-  cmp_ok($s->get_next,'eq','7 - 8','first row should be: 1 - 2');
+  cmp_ok($s->get_next.'','eq',''.'7 - 8','first row should be: 1 - 2');
 
   ok(!$s->has_next,'instance should have no more rows!');
 }
