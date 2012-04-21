@@ -14,6 +14,8 @@ sub new {
   $class->SUPER::new(column_map=>[],root_ids=>[],dead_columns=>[],last_row=>0,iterators_empty=>0,prepared=>0,consolidateors=>[],raw_row=>[],%args);
 }
 
+sub on_dead_iterator { 1 }
+
 sub prepared { $_[0]->{prepared} }
 
 sub add_consolidator {

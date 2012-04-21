@@ -36,6 +36,22 @@ sub has_child { 0 }
 sub is_root { 1 }
 sub has_root {0}
 
+sub result_to_line {
+  my ($self,$result)=@_;
+  return $self->{result_to_line}->($result) if defined($self->{result_to_line});
+
+  my $range=$result->get_common;
+  my $line=$range->range_start_to_string.' '.$range->range_end_to_string."\n";
+  return $line;
+}
+
+sub parse_line {
+  my ($self,$line)=@_;
+  return $self->{parse_line}->($line) if defined($self->{parse_line});
+  chomp $line;
+  [split /\s+/,$line];
+}
+
 
 1;
 

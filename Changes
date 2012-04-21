@@ -105,3 +105,23 @@ Revision history for Perl extension Data::Range::Compare::Stream.
   -- Sort.pod updated
   -- So it seems Test::More has had some major changes made to it....
     most of the tests had to be updated to work around this.
+
+3.023
+  -- Added an on disk only merge sort iterator package
+    this means you can sort massive files on distk now!
+
+  -- Iterator::Base now supports call back handlers
+    as a result all iterator objects now support thse call back handlers
+  -- Iterator::File updates
+    -- Now supports passing in the NEW_FROM class argument to the constructor
+    -- also gains all the nifty new features from the base class!
+  -- Added an iterator stack interface.
+  -- added an on disck stack allowing for uber big work flows to be handled in temp files.
+    why a 2nd stack objects? one is for iterators the other is for files..
+  -- Compare::Asc 
+     -- added on dead callback 
+     --  added set_raw_result
+     --  add get_raw_result
+     --  delete_iterator bug fix( required for new interface Compare::Asc.pm->iterator_is_dead($id) ), no longer resets dead column
+     --  add iterator_is_dead($id)
+    

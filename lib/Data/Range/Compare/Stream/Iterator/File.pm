@@ -3,19 +3,31 @@ package Data::Range::Compare::Stream::Iterator::File;
 use strict;
 use warnings;
 use IO::File;
+use Carp qw(croak);
 use base qw(Data::Range::Compare::Stream::Iterator::Base);
 use Data::Range::Compare::Stream;
 
 
-use constant NEW_FROM=>'Data::Range::Compare::Stream';
-
+sub NEW_FROM { $_[0]->{NEW_FROM} }
 
 sub new {
   my ($class,%args)=@_;
   my $has_next;
-  my $self=$class->SUPER::new(%args);
+  my $self=$class->SUPER::new(NEW_FROM=>'Data::Range::Compare::Stream',%args);
+  $self->{pos}=0;
 
-  if(defined($args{filename})) {
+  if(defined($args{fh})) {
+    $self->{fh}=$args{fh};
+    $self->{filename}=ref($args{fh});
+    my $fh=$self->{fh};
+
+    croak 'fh=>$fh does not suppot getline' unless $fh->can('getline');
+
+    my $line=$fh->getline;
+    $self->{next_line}=$line;
+    $has_next=defined($line);
+
+  } elsif(defined($args{filename})) {
     my $fh=IO::File->new($args{filename});
     if($fh) {
        $self->{fh}=$fh;
@@ -34,6 +46,24 @@ sub new {
   return $self;
 }
 
+sub get_size {
+  my ($self)=@_;
+  return $self->{size} if defined($self->{size});
+
+  my $fh=$self->get_fh;
+  my $pos=tell($fh);
+  seek($fh,0,0);
+  my $size=0;
+  while($fh->getline) {
+    ++$size;
+  }
+  $self->{size}=$size;
+  seek($fh,$pos,0);
+  $size;
+}
+
+sub get_pos { $_[0]->{pos} }
+
 sub in_error {
   my ($self)=@_;
   return 1 if defined($self->{msg});
@@ -50,6 +80,7 @@ sub to_string {
 sub get_next {
   my ($self)=@_;
   return undef unless $self->has_next;
+  ++$self->{pos};
 
   my $line=$self->{next_line};
   $self->{next_line}=$self->{fh}->getline;
@@ -58,10 +89,6 @@ sub get_next {
   return $self->NEW_FROM->new(@{$self->parse_line($line)});
 }
 
-sub parse_line {
-  my ($self,$line)=@_;
-  chomp $line;
-  [split /\s+/,$line];
-}
+sub get_fh { $_[0]->{fh} }
 
 1;

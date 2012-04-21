@@ -8,7 +8,7 @@ use Data::Range::Compare::Stream::Constants qw(RANGE_START RANGE_END RANGE_DATA)
 
 use constant NEW_FROM_CLASS=>'Data::Range::Compare::Stream';
 
-our $VERSION='3.022';
+our $VERSION='3.023';
 
 sub to_string {
   my $notation=join ' - ',$_[0]->range_start_to_string,$_[0]->range_end_to_string;

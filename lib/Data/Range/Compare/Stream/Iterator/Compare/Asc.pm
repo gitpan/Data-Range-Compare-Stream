@@ -91,6 +91,12 @@ sub iterator_in_use {
   return $raw->cmp_range_end($current)!=-1;
 }
 
+sub iterator_is_dead {
+  my ($self,$id)=@_;
+  croak 'column id out of bounds' if !defined($id) or $id < 0 or $id > $#{$self->{raw_row}};
+  $self->{dead_columns}->[$id]
+}
+
 sub delete_iterator {
   my ($self,$id)=@_;
   
@@ -99,15 +105,28 @@ sub delete_iterator {
   # odds are these objects are in use, so we need to create new ones
   $self->{column_map}=[];
   $self->{root_ids}=[];
-  $self->{dead_columns}=[];
 
   my $con=$self->get_iterator_by_id($id);
 
+  splice(@{$self->{dead_columns}},$id,1);
   splice(@{$self->{raw_row}},$id,1);
   splice(@{$self->{consolidateors}},$id,1);
 
   $con->delete_from_root;
   
+}
+
+sub get_raw_result {
+  my ($self,$id)=@_;
+  croak 'column id out of bounds' if !defined($id) or $id < 0 or $id > $#{$self->{raw_row}};
+  $self->{raw_row}->[$id]
+}
+
+sub set_raw_result {
+  my ($self,$id,$raw_result)=@_;
+  croak 'column id out of bounds' if !defined($id) or $id < 0 or $id > $#{$self->{raw_row}};
+  croak 'raw_result not defined' unless defined($raw_result);
+  $self->{raw_row}->[$id]=$raw_result;
 }
 
 sub get_next {
@@ -182,9 +201,9 @@ sub get_next {
         my $next_range=$iterator->get_next;
 
         $raw_range=$next_range;
-	  $cmp=$raw_range->get_common;
+	$cmp=$raw_range->get_common;
         $self->{raw_row}->[$id]=$next_range;
-	}
+      }
     } 
 
     if($iterator->has_next) {
@@ -195,28 +214,43 @@ sub get_next {
 
     if(defined($next_range)) {
       my $cmp_end=$cmp->previous_range_end;
+
       if($next_range->contains_value($cmp_end)) {
+
         if($next_range->cmp_values($next_range->range_end,$cmp_end)!=-1){
 	  
           my $old_next_range=$next_range;
           $next_range=$next_range->NEW_FROM_CLASS->new($next_range->range_start,$cmp_end);
 	  $next_range->on_create_range($old_next_range);
+
         }
+
       } elsif($next_range->cmp_range_end($cmp)==1 and $cmp->cmp_values($next_range_start,$cmp->range_end)!=1) {
+
           my $old_next_range=$next_range;
+      
           $next_range=$next_range->NEW_FROM_CLASS->new($next_range->range_start,$cmp->range_end);
 	  $next_range->on_create_range($old_next_range);
+
       }
     } else {
+
       my $cmp_end=$cmp->previous_range_end;
+
       if($cmp->cmp_values($next_range_start,$cmp_end)!=1) {
+
           my $old_next_range=$next_range;
+
           $next_range=$cmp->NEW_FROM_CLASS->new($next_range_start,$cmp_end);
 	  $next_range->on_create_range($old_next_range);
+
       } elsif($cmp->cmp_values($next_range_start,$cmp->range_end)!=1) {
+
           my $old_next_range=$next_range;
+
           $next_range=$cmp->NEW_FROM_CLASS->new($next_range_start,$cmp->range_end);
 	  $next_range->on_create_range($old_next_range);
+
       }
     
     }
@@ -226,7 +260,11 @@ sub get_next {
     } else {
       $max_range_end=$cmp;
     }
-    $dead_columns->[$id]=$is_dead==2;
+    if($is_dead==2) {
+      $dead_columns->[$id]=$self->on_dead_iterator($id);
+    } else {
+      $dead_columns->[$id]=0;
+    }
   }
 
   $self->{iterators_empty}=!$iterators_has_next_count;
