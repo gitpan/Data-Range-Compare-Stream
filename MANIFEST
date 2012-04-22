@@ -84,6 +84,7 @@ examples/FILE_EXAMPLE.pl
 examples/LayerCake.pl
 examples/FillMissing.pl
 examples/PrintConsolidatedSources.pl
+examples/BigFileRangeCompare.pl
 examples/HTML_EXAMPLE.pl
 examples/PrintConsolidatedSourcesResult.pl
 examples/ConsolidateAdjacent.pl
@@ -91,6 +92,8 @@ examples/source_a.src
 examples/source_b.src
 examples/source_c.src
 examples/source_d.src
+examples/custom_file_1.src
+examples/custom_file_2.src
 examples/file_example.src
 examples/posix_time_a.src
 examples/posix_time_b.src

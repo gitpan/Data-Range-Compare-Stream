@@ -125,3 +125,7 @@ Revision history for Perl extension Data::Range::Compare::Stream.
      --  delete_iterator bug fix( required for new interface Compare::Asc.pm->iterator_is_dead($id) ), no longer resets dead column
      --  add iterator_is_dead($id)
     
+3.024
+  -- Bug fix for windows: File.pm and MergeSortAsc.pm resolved race condition that prevented temp files from being deleted!
+  -- Pod clean ups for Compare::Result
+  -- Added a BigFile Example to the examples folder

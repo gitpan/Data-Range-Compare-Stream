@@ -91,6 +91,7 @@ sub DESTROY {
   return unless defined($self);
 
   if(defined($self->{result_file})) {
+    $self->{iterator}=undef;
     unlink $self->{result_file} if $self->{unlink_result_file};
   }
 

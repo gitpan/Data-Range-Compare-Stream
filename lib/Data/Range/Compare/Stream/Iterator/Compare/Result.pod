@@ -125,11 +125,11 @@ Returns a unique copy of the column map array ref.
 
 Returns a unique copy of the column map array ref.
 
-=item * my $ref=$relations->get_root_results;
+=item * my $ref=$result->get_root_results;
 
 Returns an anonymous array: element ids represent the root_ids.  Values are anonymous arrays that contain the result objects from the consolidation process associated with the root_id.
 
-=item * my $ref=$relations->get_root_result_ids;
+=item * my $ref=$result->get_root_result_ids;
 
 Returns an anonymous array: element ids represent the root_ids.  Values are anonymous arrays that contain the result ids from the consolidation process associated with the root_id.
 

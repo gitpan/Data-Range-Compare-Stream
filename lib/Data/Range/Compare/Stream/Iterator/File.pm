@@ -91,4 +91,11 @@ sub get_next {
 
 sub get_fh { $_[0]->{fh} }
 
+sub DESTROY {
+  my ($self)=@_;
+  return unless defined($self);
+  return unless defined($self->{fh});
+  $self->{fh}->close;
+}
+
 1;
