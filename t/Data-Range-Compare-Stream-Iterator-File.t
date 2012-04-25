@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 use IO::File;
-use Test::More tests => 46;
+use Test::More tests => 46 + 7;
 
 BEGIN { use_ok('Data::Range::Compare::Stream::Iterator::File') };
 
@@ -56,6 +56,7 @@ SKIP: {
   cmp_ok($s->get_next.'','eq',''.'7 - 8','first row should be: 1 - 2');
 
   ok(!$s->has_next,'instance should have no more rows!');
+  undef $s;
 }
 
 SKIP: {
@@ -146,4 +147,44 @@ SKIP: {
     cmp_ok($string,'eq',"COL_3 3 4\n",'raw data check');
   }
   ok(!$s->has_next,'has_next check');
+}
+
+
+SKIP: {
+  skip 'Cannot read from file_test.src',7 unless $custom_file;
+  my $check=0;
+  {
+    package MyFilePkg;
+    use base qw(Data::Range::Compare::Stream::Iterator::File);
+    sub DESTROY {
+      my ($self)=@_;
+      ++$check if defined($self->{fh});
+      $self->SUPER::DESTROY;
+      ++$check unless defined($self->{fh});
+      
+    }
+
+    1;
+  }
+  cmp_ok($check,'==',0,'check status');
+  {
+    my $s=new MyFilePkg(filename=>$custom_file);
+    ok(defined($s->get_fh),'should fetch the file handle without error');
+    ok($s->created_fh,'get created file handle state');
+    undef $s;
+  }
+  cmp_ok($check,'==',2,'check status');
+  $check=0;
+  {
+    my $fh=IO::File->new($custom_file,'r');
+    my $s=new MyFilePkg(fh=>$fh);
+    ok(!$s->created_fh,'get created file handle state');
+    ok(defined($s->get_fh),'should fetch the file handle without error');
+    undef $s;
+  }
+  cmp_ok($check,'==',1,'check status');
+
+
+
+
 }

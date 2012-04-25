@@ -27,7 +27,10 @@ This is a very simple module that handles data pushed onto the stack in temp fil
 
 =item * my $stack=new Data::Range::Compare::Stream::Iterator::File::MergeSortAsc::Stack;
 
-Instance Constructor takes no arguments.
+Instance constructor takes one optional argument:
+
+  tmpdir=>undef|'/some/folder'
+      # tmpdir is defined its value is passed to to File::Temp->new(DIR=>$self->{tmpdir});
 
 =item * while(my $state=$stack->has_next) { ... }
 
@@ -40,6 +43,10 @@ Returns the next value from the stack if $stack->get_next is true.
 =item * $stack->push('some string');
 
 Pushes the string onto the stack.
+
+=item * my $fh=$stack->get_temp;
+
+Returns a temporary file created from File::Temp->new;
 
 =back
 

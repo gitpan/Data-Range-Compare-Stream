@@ -28,12 +28,13 @@ sub new {
     $has_next=defined($line);
 
   } elsif(defined($args{filename})) {
-    my $fh=IO::File->new($args{filename});
+    my $fh=IO::File->new($args{filename},'r');
     if($fh) {
        $self->{fh}=$fh;
        my $line=$fh->getline;
        $self->{next_line}=$line;
        $has_next=defined($line);
+       $self->{created_fh}=1;
     } else {
       $self->{msg}="Error could not open $args{filename} error was: $!";
     }
@@ -91,11 +92,15 @@ sub get_next {
 
 sub get_fh { $_[0]->{fh} }
 
+sub created_fh { $_[0]->{created_fh} }
+
 sub DESTROY {
   my ($self)=@_;
   return unless defined($self);
   return unless defined($self->{fh});
+  return unless $self->{created_fh};
   $self->{fh}->close;
+  $self->{fh}=undef;
 }
 
 1;

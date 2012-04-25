@@ -5,6 +5,10 @@ use Test::More qw(no_plan);
 use Data::Range::Compare::Stream::Iterator::Array;
 use Data::Range::Compare::Stream;
 
+use File::Temp qw(tempdir);
+use File::Basename;
+
+
 use_ok('Data::Range::Compare::Stream::Iterator::Stack');
 
 {

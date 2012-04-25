@@ -129,3 +129,17 @@ Revision history for Perl extension Data::Range::Compare::Stream.
   -- Bug fix for windows: File.pm and MergeSortAsc.pm resolved race condition that prevented temp files from being deleted!
   -- Pod clean ups for Compare::Result
   -- Added a BigFile Example to the examples folder
+
+3.025
+  -- Minor tweak to Iterator::File.pm now only tries to close file handles it creates
+  -- Added a base tempfile class
+  -- Added tmpdir constructor argument to all classes that support temp files
+  -- Cookook additions! YAY very long time in the making!
+  -- Some pod clean ups 
+  -- Finally implemented the Data::Range::Compare::Stream->boolean interface
+  -- Added an Iterator::Validate package
+  -- Added a ValidateRanges.pl to the examples folder.
+  -- added OutagesDurringBusinessDays.pl to the examples folder
+    The example shows how to compute events durring regular business hours excluding holidays.
+  -- LayerCake added a new constructor argument filter=>undef|code_ref
+   LayerCake may acutally get some use now.. who knows.

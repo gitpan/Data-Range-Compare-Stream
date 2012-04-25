@@ -8,7 +8,7 @@ use Data::Range::Compare::Stream::Constants qw(RANGE_START RANGE_END RANGE_DATA)
 
 use constant NEW_FROM_CLASS=>'Data::Range::Compare::Stream';
 
-our $VERSION='3.024';
+our $VERSION='3.025';
 
 sub to_string {
   my $notation=join ' - ',$_[0]->range_start_to_string,$_[0]->range_end_to_string;
@@ -145,6 +145,16 @@ sub cmp_ranges ($) {
     return $range_a->cmp_range_end($range_b);
   }
   return $cmp;
+}
+
+sub boolean () {
+  my ($self)=@_;
+  my $start=$self->range_start;
+  my $end=$self->range_end;
+  return 0 unless defined($start);
+  return 0 unless defined($end);
+  return 0 if $self->cmp_values($start,$end)==1;
+  1;
 }
 
 sub overlap ($) {

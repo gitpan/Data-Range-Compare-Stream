@@ -56,13 +56,19 @@ Data::Range::Compare::Stream::Iterator::Compare::LayerCake compares results from
 
 =item * my $compare=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake(key=>value);
 
-Object constructor supports the following optional arguments:
+The constructor takes all the same arguments Data::Range::Compare::Stream::Iterator::Compare::Asc does along with the following optional arguments:
 
     ignore_empty=>0|1 # default 0
       # when set to true all empty result sets are returned
 
     ignore_full=>0|1 # default 0
       # when set to true all full result sets are returned
+
+    filter=>undef|code_ref
+      # Default: undef  
+      # When Defined: code_ref is used to filter results, code_ref->($result);
+      #   if the code_ref returns false the result is ignored
+      #   if the code_ref returns true the result will be used as the next valid result
 
 =item * $compare->add_consolidator($iterator);
 

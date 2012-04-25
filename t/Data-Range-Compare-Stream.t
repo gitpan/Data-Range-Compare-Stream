@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use Data::Dumper;
-use Test::More tests => 31;
+use Test::More tests => 39;
 
 BEGIN { use_ok('Data::Range::Compare::Stream') };
 
@@ -129,3 +129,39 @@ BEGIN { use_ok('Data::Range::Compare::Stream') };
   cmp_ok($end.'','eq','3 - 5',"find_smallest_outer_ranges end");
 }
 
+# range validation checks
+{
+  my $c='Data::Range::Compare::Stream';
+  {
+    my $check=$c->new();
+    ok(!$check->boolean,'bad range check');
+  }
+  {
+    my $check=$c->new(undef,0);
+    ok(!$check->boolean,'bad range check');
+  }
+  {
+    my $check=$c->new(0,undef);
+    ok(!$check->boolean,'bad range check');
+  }
+  {
+    my $check=$c->new(0,undef,'data');
+    ok(!$check->boolean,'bad range check');
+  }
+  {
+    my $check=$c->new(0,-1,'data');
+    ok(!$check->boolean,'bad range check');
+  }
+  {
+    my $check=$c->new(0,1,'data');
+    ok($check->boolean,'good range check');
+  }
+  {
+    my $check=$c->new(0,0,'data');
+    ok($check->boolean,'good range check');
+  }
+  {
+    my $check=$c->new(1,2,'data');
+    ok($check->boolean,'good range check');
+  }
+}

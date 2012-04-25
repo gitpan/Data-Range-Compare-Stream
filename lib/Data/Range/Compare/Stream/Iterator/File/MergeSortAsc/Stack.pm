@@ -1,19 +1,23 @@
 package Data::Range::Compare::Stream::Iterator::File::MergeSortAsc::Stack;
+
 use strict;
 use warnings;
-use Data::Dumper;
 
 use IO::File;
-use File::Temp qw/ :seekable /;
+use base qw(Data::Range::Compare::Stream::Iterator::File::Temp);
 
 sub new {
-   my ($class)=@_;
-   return bless {next_stack=>File::Temp->new(UNLINK=>0),next_stack_count=>0,stack_count=>0},$class;
+   my ($class,%args)=@_;
+   my $self=bless {next_stack_count=>0,stack_count=>0,%args},$class;
+
+   $self->{next_stack}=$self->get_temp;
+
+   return $self;
 }
 
 sub push {
   my ($self,$todo)=@_;
-  $self->{next_stack}->print($todo."\n");
+  $self->{next_stack}->print($todo,"\n");
   $self->{next_stack_count}++;
 
 }
@@ -41,7 +45,7 @@ sub roll_stack {
   $self->{stack}=$self->{next_stack};
   $self->{stack}->flush;
   seek($self->{stack},0,0);
-  $self->{next_stack}=File::Temp->new(UNLINK=>0);
+  $self->{next_stack}=$self->get_temp;
 }
 
 sub get_next {
@@ -70,4 +74,5 @@ sub DESTROY {
     unlink $name;
   }
 }
+
 1;

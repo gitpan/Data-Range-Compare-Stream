@@ -539,6 +539,10 @@ Returns true if $range_a overlaps with $range_b
 
 Returns the smallest outer most ranges as $start and $end
 
+=item * if($range->boolean) { ... }
+
+This function is used for validation of a range object. Returns false if the range start or end values are undef also returns false if range start is before the range end other wise returns true.
+
 =back
 
 =head1 SEE ALSO

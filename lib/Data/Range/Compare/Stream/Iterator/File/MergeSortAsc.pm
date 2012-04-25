@@ -4,7 +4,6 @@ package Data::Range::Compare::Stream::Iterator::File::MergeSortAsc;
 
 use strict;
 use warnings;
-use File::Temp qw/ :seekable /;
 use Carp qw(croak);
 use IO::File;
 
@@ -15,7 +14,7 @@ use Data::Range::Compare::Stream::Iterator::File::MergeSortAsc::Stack;
 use Data::Range::Compare::Stream::Iterator::File;
 
 
-use base qw(Data::Range::Compare::Stream::Iterator::Base);
+use base qw(Data::Range::Compare::Stream::Iterator::Base Data::Range::Compare::Stream::Iterator::File::Temp);
 
 
 sub new {
@@ -134,7 +133,7 @@ sub walk_stack {
 sub create_stack {
   my ($self,$list)=@_;
 
-  my $merged=new Data::Range::Compare::Stream::Iterator::File::MergeSortAsc::Stack;
+  my $merged=new Data::Range::Compare::Stream::Iterator::File::MergeSortAsc::Stack(tmpdir=>$self->{tmpdir});
   $self->{stack}=$merged;
 
   my $stack=new Data::Range::Compare::Stream::Iterator::Stack(stack=>$list);
@@ -176,7 +175,7 @@ sub create_stack {
     @$array=sort { $self->sort_method($a,$b) } @$array;
 
     my $it=$self->NEW_ARRAY_ITERATOR_FROM->new(sorted=>1,range_list=>$array);
-    my $tmp=File::Temp->new(UNLINK=>0);
+    my $tmp=$self->get_temp;
 
     while($it->has_next) {
       my $result=$it->get_next;
@@ -202,7 +201,7 @@ sub sort_method {
 sub merge {
   my ($self,$left,$right)=@_;
 
-  my $tmp_result=File::Temp->new(UNLINK=>0);
+  my $tmp_result=$self->get_temp;
   
   my ($left_range,$right_range);
   

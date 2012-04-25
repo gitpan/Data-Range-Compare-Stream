@@ -62,6 +62,10 @@ Returns true when one or more objects on the stack has_next.
 
 Returns the next $result from the given source file.
 
+=item * $stack->stack_push($iterator);
+
+This interface can be used to add an iterator onto the stack.  Objects being added to the stack need to implement or extend Data::Range::Compare::Iterator::Base.
+
 =back
 
 =head1 SEE ALSO

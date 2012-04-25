@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use Data::Dumper;
-use Test::More tests => 215;
+use Test::More tests => 224;
 
 BEGIN { use_ok('Data::Range::Compare::Stream') };
 BEGIN { use_ok('Data::Range::Compare::Stream::Sort') };
@@ -1052,6 +1052,43 @@ if(1){
     my $result=$cmp->get_next;
     cmp_ok($result->get_common.'','eq','7 - 7','last row should be: 7 - 7');
     ok($result,"Should have a result");
+  }
+  ok(!$cmp->has_next,'ignore full row test should be empty now');
+}
+{
+
+  my $filter=sub { $_[0]->is_full };
+  my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::LayerCake(filter=>$filter);
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    $obj->create_range(0,1);
+    $obj->create_range(3,4);
+    $obj->prepare_for_consolidate_asc;
+    my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+    cmp_ok($cmp->add_consolidator($iterator),'==',0,'should just have 1 column when creating our ignore_full2 set');
+  }
+  {
+    my $obj=Data::Range::Compare::Stream::Iterator::Array->new();
+    $obj->create_range(0,1);
+    $obj->create_range(3,4);
+    $obj->create_range(7,7);
+    $obj->prepare_for_consolidate_asc;
+    my $iterator=Data::Range::Compare::Stream::Iterator::Consolidate->new($obj);
+    cmp_ok($cmp->add_consolidator($iterator),'==',1,'should have 2 columns when creating our ignore_full2 set');
+  }
+
+  #$DB::single=1;
+  {
+    ok($cmp->has_next,"should have row") or diag(Dumper($cmp));
+    my $result=$cmp->get_next;
+    cmp_ok($result->get_common.'','eq','0 - 1','first row should be: 0 - 1') or diag(Dumper($cmp));
+    ok($result,"Should have a result");
+  }
+  {
+    ok($cmp->has_next,"should have row");
+    my $result=$cmp->get_next;
+    ok($result,"Should have a result");
+    cmp_ok($result->get_common.'','eq','3 - 4','last row should be: 3 - 4') or diag(Dumper($cmp));
   }
   ok(!$cmp->has_next,'ignore full row test should be empty now');
 }

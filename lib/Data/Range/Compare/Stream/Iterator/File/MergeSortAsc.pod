@@ -79,6 +79,10 @@ Optional Arguments:
      # Default: undef, Sets the code ref used for comparing objects in the sort process
      # if not set the default internals are used.
 
+  tmpdir=>undef|'/some/folder'
+      # tmpdir is defined its value is passed to to File::Temp->new(DIR=>$self->{tmpdir});
+
+
 =item * my $class=$iterator->NEW_FROM;
 
 Returns the Class that new Range objects are constructed from.

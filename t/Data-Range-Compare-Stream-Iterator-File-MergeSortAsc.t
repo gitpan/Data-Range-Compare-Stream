@@ -2,7 +2,12 @@ use strict;
 use warnings;
 use Data::Dumper;
 
-use Test::More tests=>8290;
+use Test::More tests=>8291;
+
+use File::Temp qw(tempdir);
+use File::Basename;
+my $dir= tempdir( CLEANUP => 1 );
+
 
 use Data::Range::Compare::Stream::Iterator::File;
 use Data::Range::Compare::Stream::Iterator::Array;
@@ -319,7 +324,8 @@ SKIP: {
       parse_line=>$parse_line,
       NEW_FROM=>'MyTestPkg',
       result_to_line=>$result_to_line,
-      filename=>$custom_file
+      filename=>$custom_file,
+      tmpdir=>$dir
   );
   ok($s,'object should exist');
   {
@@ -356,5 +362,8 @@ SKIP: {
     cmp_ok($string,'eq',"COL_3 3 4\n",'raw data check');
   }
   ok(!$s->has_next,'has_next check');
+  cmp_ok(dirname($s->get_result_file),'eq',$dir,'temp file check');
+
+
 }
 
