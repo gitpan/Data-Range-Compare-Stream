@@ -131,7 +131,7 @@ This problem has 2 areas that need to be looked at.  1. Iterator arguments.  2 c
     NEW_FROM=>'MyRangeClass'
   );
 
-1. Make sure you overload the constant NEW_FROM_CLASS in your range class as well.
+2. Make sure you overload the constant NEW_FROM_CLASS in your range class as well.
 
   package MyRangeClass;
 

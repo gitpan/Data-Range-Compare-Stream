@@ -143,3 +143,6 @@ Revision history for Perl extension Data::Range::Compare::Stream.
     The example shows how to compute events durring regular business hours excluding holidays.
   -- LayerCake added a new constructor argument filter=>undef|code_ref
    LayerCake may acutally get some use now.. who knows.
+
+3.025
+  -- Cookbook clean ups

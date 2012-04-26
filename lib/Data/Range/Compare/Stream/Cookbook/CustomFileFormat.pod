@@ -181,7 +181,7 @@ File2 Sorted Iterator Example:
     filename=>'custom_file_2.src',
   );
 
-=head2 Solving Problem_3
+=head3 Showing what ranges overlap ( Solving Problem_3 )
 
 Our data in File1 given the sample contains overlaps, we can safely assume File22 will as well.  Given that fact we will need to retain each range overlap as the files are iterated through.
 

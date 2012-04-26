@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Data-Range-Compare-Stream
-version:             3.025
+version:             3.026
 abstract:            Compute intersections of Ranges with Iterators
 license:             ~
 author:              
