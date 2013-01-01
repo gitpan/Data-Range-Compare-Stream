@@ -426,6 +426,8 @@ This section covers the OO Methods in the package.
 
 =item * my $range=new Data::Range::Compare::Stream($range_start,$range_end,$data);
 
+=item * my $instance_factory=new Data::Range::Compare::Stream;
+
 Object constructor: Creates a new instance of Data::Range::Compare::Stream.
 
 Arguments an their meanings:
@@ -438,6 +440,16 @@ Arguments an their meanings:
 
   $data -- Optional
     Used to tag this range with your data
+
+In the context of no arguments the object can be used as an instance factory.
+
+=item * my $range=$range->factory($range_start,$range_end);
+
+=item * my $range=$instance_factory->factory($range_start,$range_end,$data);
+
+Once an instance of Data::Range::Compare::Stream has been created all child objects can be generated from the factory interface.  This interface is used by all classes that create Range objects to manufacture new instances.  
+
+When subclassing Data::Range::Compare::Stream make sure you overload this interface when appropriate.
 
 =item * my $value=$range->range_start
 
@@ -482,11 +494,11 @@ Used to get and set the data value for this range.
 Sets when called with an argument
 
 Example:
-        
+
   $range->data('some value');
 
 Gets the current data value when called without any arguments
-    
+
 Example:
 
   my $value=$range->data;

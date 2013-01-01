@@ -53,7 +53,7 @@ sub prepare {
 
   $self->{iterators_empty}=!$iterators_has_next_count;
 
-  my $next_range=$min_range_end->get_common->NEW_FROM_CLASS->new($min_range_start->get_common->range_start,$min_range_end->get_common->range_end);
+  my $next_range=$self->create_from_factory($min_range_start->get_common->range_start,$min_range_end->get_common->range_end);
   $next_range->on_create_range($min_range_start->get_common->range_start);
 
   for(my $id=0;$id<$self->get_column_count_human_readable;++$id)  {
@@ -65,7 +65,7 @@ sub prepare {
     if($next_range->contains_value($cmp_end)) {
       if($next_range->cmp_values($next_range->range_end,$cmp_end)==1){
         my $old_next_range=$next_range;
-        $next_range=$next_range->NEW_FROM_CLASS->new($next_range->range_start,$cmp_end);
+        $next_range=$self->create_from_factory($next_range->range_start,$cmp_end);
 	$next_range->on_create_range($old_next_range);
       }
     }
@@ -220,7 +220,7 @@ sub get_next {
         if($next_range->cmp_values($next_range->range_end,$cmp_end)!=-1){
 	  
           my $old_next_range=$next_range;
-          $next_range=$next_range->NEW_FROM_CLASS->new($next_range->range_start,$cmp_end);
+          $next_range=$self->create_from_factory($next_range->range_start,$cmp_end);
 	  $next_range->on_create_range($old_next_range);
 
         }
@@ -229,7 +229,7 @@ sub get_next {
 
           my $old_next_range=$next_range;
       
-          $next_range=$next_range->NEW_FROM_CLASS->new($next_range->range_start,$cmp->range_end);
+          $next_range=$self->create_from_factory($next_range->range_start,$cmp->range_end);
 	  $next_range->on_create_range($old_next_range);
 
       }
@@ -241,14 +241,14 @@ sub get_next {
 
           my $old_next_range=$next_range;
 
-          $next_range=$cmp->NEW_FROM_CLASS->new($next_range_start,$cmp_end);
+          $next_range=$self->create_from_factory($next_range_start,$cmp_end);
 	  $next_range->on_create_range($old_next_range);
 
       } elsif($cmp->cmp_values($next_range_start,$cmp->range_end)!=1) {
 
           my $old_next_range=$next_range;
 
-          $next_range=$cmp->NEW_FROM_CLASS->new($next_range_start,$cmp->range_end);
+          $next_range=$self->create_from_factory($next_range_start,$cmp->range_end);
 	  $next_range->on_create_range($old_next_range);
 
       }
@@ -274,7 +274,7 @@ sub get_next {
   } else {
 
     unless(defined($next_range)) {
-      $next_range=$current_row->NEW_FROM_CLASS->new($next_range_start,$next_range_start);
+      $next_range=$self->create_from_factory($next_range_start,$next_range_start);
       $next_range->on_create_range($current_row);
     }
 

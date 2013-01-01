@@ -3,20 +3,25 @@ package Data::Range::Compare::Stream;
 use strict;
 use warnings;
 
-use base qw(Data::Range::Compare::Stream::Result::Base);
-use Data::Range::Compare::Stream::Constants qw(RANGE_START RANGE_END RANGE_DATA);
+use base qw(Data::Range::Compare::Stream::Result::Base Data::Range::Compare::Stream::Constants);
 
 use constant NEW_FROM_CLASS=>'Data::Range::Compare::Stream';
 
-our $VERSION='3.026';
+our $VERSION='4.027';
+
+sub factory {
+  my ($self,@args)=@_;
+  my $new=$self->NEW_FROM_CLASS->new(@args);
+  return $new;
+}
 
 sub to_string {
   my $notation=join ' - ',$_[0]->range_start_to_string,$_[0]->range_end_to_string;
   $notation;
 }
 
-sub range_start () { $_[0]->[RANGE_START] }
-sub range_end () { $_[0]->[RANGE_END] }
+sub range_start () { $_[0]->[$_[0]->RANGE_START] }
+sub range_end () { $_[0]->[$_[0]->RANGE_END] }
 
 sub range_start_to_string () { $_[0]->range_start }
 sub range_end_to_string () { $_[0]->range_end }
@@ -44,7 +49,7 @@ sub previous_range_end () { $_[0]->sub_one($_[0]->range_start)  }
 
 sub data {
   my ($self,$data)=@_;
-  return $self->[RANGE_DATA] unless defined($data);
+  return $self->[$self->RANGE_DATA] unless defined($data);
   $self->[$self->RANGE_DATA]=$data;
 }
 
@@ -58,7 +63,7 @@ sub get_common_range ($) {
     $range_end=$ranges->[$x] if $class->cmp_values($range_end->range_end,$ranges->[$x]->range_end)==1;
   }
 
-  my $new_range=$class->NEW_FROM_CLASS->new($range_start->range_start,$range_end->range_end);
+  my $new_range=$class->factory($range_start->range_start,$range_end->range_end);
 
   $new_range->on_create_range($range_start);
 
@@ -101,7 +106,7 @@ sub get_overlapping_range ($) {
     $range_end=$ranges->[$x] if $class->cmp_values($range_end->range_end,$ranges->[$x]->range_end)==-1;
   }
 
-  my $new_range=$class->NEW_FROM_CLASS->new($range_start->range_start,$range_end->range_end);
+  my $new_range=$class->factory($range_start->range_start,$range_end->range_end);
   $new_range->on_create_range($range_start);
   $new_range;
 }

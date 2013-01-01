@@ -50,6 +50,14 @@ This class Extends L<Data::Range::Compare::Stream::Iterator::Base>.  Any gaps in
 
 Instance Constructor:  $consolidator needs to be an object that implements or extends Data::Range::Compare::Stream::Iterator::Consolidate.
 
+Optional Arguments:
+
+      factory_instance =>$obj
+        
+        # defines the object that implements the $obj->factory($start,$end,$data).
+        # new ranges are constructed from the factory interfcae.  If a factory interface
+        # is not created an instance of Data::Range::Compare::Stream is assumed.
+
 =item * my $class=$iterator->NEW_RESULT_FROM;
 
 $class will contain the name of the class new result objects will be constructed from.  Default value is L<Data::Range::Compare::Stream::Iterator::Consolidate::Result>.

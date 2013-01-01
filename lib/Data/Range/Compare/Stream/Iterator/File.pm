@@ -12,9 +12,11 @@ sub NEW_FROM { $_[0]->{NEW_FROM} }
 
 sub new {
   my ($class,%args)=@_;
-  my $has_next;
-  my $self=$class->SUPER::new(NEW_FROM=>'Data::Range::Compare::Stream',%args);
+
+  my $self=$class->SUPER::new(%args);
+
   $self->{pos}=0;
+  my $has_next;
 
   if(defined($args{fh})) {
     $self->{fh}=$args{fh};
@@ -87,7 +89,7 @@ sub get_next {
   $self->{next_line}=$self->{fh}->getline;
   $self->{has_next}=defined($self->{next_line});
 
-  return $self->NEW_FROM->new(@{$self->parse_line($line)});
+  return $self->create_from_factory(@{$self->parse_line($line)});
 }
 
 sub get_fh { $_[0]->{fh} }

@@ -4,8 +4,6 @@ use strict;
 use warnings;
 use Carp qw(croak);
 
-use Data::Dumper;
-
 use base qw(Data::Range::Compare::Stream::Iterator::Consolidate);
 use Data::Range::Compare::Stream::Iterator::Array;
 
@@ -13,12 +11,10 @@ use constant NEW_ARRAY_ITERATOR_FROM=>'Data::Range::Compare::Stream::Iterator::A
 use constant NEW_CHILD_CONSOLIDATOR_FROM=>'Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn';
 
 sub new {
-  my ($class,$it,$cmp)=@_;
+  my ($class,$it,$cmp,%args)=@_;
   croak('Required Arguments are: $iterator,$compare') unless defined($cmp);
-  my $self=$class->SUPER::new($it);
-  $self->{compare}=$cmp;
-  $self->{buffer}=[];
-  $self;
+  my $self=$class->SUPER::new($it,compare=>$cmp,buffer=>[],%args);
+  return $self;
 }
 
 sub get_child { $_[0]->{consolidator} }

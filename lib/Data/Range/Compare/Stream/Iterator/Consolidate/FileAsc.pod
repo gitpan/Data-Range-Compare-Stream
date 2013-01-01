@@ -33,6 +33,14 @@ Instance Constructor Arguments:
       filename=>'source_file.csv'  
         # the file is assumed to be an absolute or relative path to the file location.
 
+Optional Arguments:
+
+      factory_instance =>$obj
+        
+        # defines the object that implements the $obj->factory($start,$end,$data).
+        # new ranges are constructed from the factory interfcae.  If a factory interface
+        # is not created an instance of Data::Range::Compare::Stream is assumed.
+
 =item * if($iterator->in_error) { ... }
 
 Returns true if there was a problem opening the file.

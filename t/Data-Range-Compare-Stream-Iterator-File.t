@@ -99,6 +99,7 @@ SKIP: {
     use strict;
 
     use base qw(Data::Range::Compare::Stream);
+    use constant NEW_FROM_CLASS=>'MyTestPkg';
 
     1;
   }

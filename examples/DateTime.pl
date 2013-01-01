@@ -8,9 +8,9 @@ use Data::Range::Compare::Stream::Iterator::Array;
 use Data::Range::Compare::Stream::Iterator::Consolidate;
 use Data::Range::Compare::Stream::Iterator::Compare::Asc;
 
-my $vpn_a=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'Data::Range::Compare::Stream::DateTime');
-my $vpn_b=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'Data::Range::Compare::Stream::DateTime');;
-my $vpn_c=new Data::Range::Compare::Stream::Iterator::Array(new_from=>'Data::Range::Compare::Stream::DateTime');;
+my $vpn_a=new Data::Range::Compare::Stream::Iterator::Array(factory_instance=>'Data::Range::Compare::Stream::DateTime');
+my $vpn_b=new Data::Range::Compare::Stream::Iterator::Array(factory_instance=>'Data::Range::Compare::Stream::DateTime');;
+my $vpn_c=new Data::Range::Compare::Stream::Iterator::Array(factory_instance=>'Data::Range::Compare::Stream::DateTime');;
 
 #
 # Outage block for vpn_a
@@ -76,7 +76,7 @@ my $column_c=Data::Range::Compare::Stream::Iterator::Consolidate->new($vpn_c);
 
 #
 # Create our compare object
-my $compare=Data::Range::Compare::Stream::Iterator::Compare::Asc->new;
+my $compare=Data::Range::Compare::Stream::Iterator::Compare::Asc->new(factory_instance=>'Data::Range::Compare::Stream::DateTime');
 
 $compare->add_consolidator($column_a);
 $compare->add_consolidator($column_b);

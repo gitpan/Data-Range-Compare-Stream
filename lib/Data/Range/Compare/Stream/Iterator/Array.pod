@@ -10,7 +10,7 @@ Data::Range::Compare::Stream::Iterator::Array - simple array iterator
   use Data::Range::Compare::Stream::Iterator::Array;
 
   my $iterator=Data::Range::Compare::Stream::Iterator::Array->new(
-    new_from=>'Data::Range::Compare::Stream',
+    factory_instance=>'Data::Range::Compare::Stream',
   );
 
   # create a new range and add it to the iterator
@@ -40,8 +40,15 @@ This module implements Data::Range::Compare::Stream::Iterator::Base and provides
 
 Instance Constructor, all arguments are optional:
   
+      factory_instance =>$obj
+        
+	# defines the object that implements the $obj->factory($start,$end,$data).
+	# new ranges are constructed from the factory interfcae.  If a factory interface
+	# is not created an instance of Data::Range::Compare::Stream is assumed.
+
       new_from   =>  'Data::Range::Compare::Stream'
         
+	# depricated, but supported
 	# Defines what class to call new against for $iterator->create_range(x,x,x)
 
       range_list =>  []

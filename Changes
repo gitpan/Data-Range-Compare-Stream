@@ -144,5 +144,16 @@ Revision history for Perl extension Data::Range::Compare::Stream.
   -- LayerCake added a new constructor argument filter=>undef|code_ref
    LayerCake may acutally get some use now.. who knows.
 
-3.025
+3.026
   -- Cookbook clean ups
+
+4.027  
+-- In general, standardized the NEW_FROM new_from iterator interface options to factory_instance
+  This fundimental change, can break compatibility with older code, so as a fair warning the version
+  is being shifted to a 4.x generation release
+  -- Added how to compare date ranges for overlaps example
+    See the examples folder
+  -- Added common argument to all iterator and compare objects factory_instance=>$instance
+    This superceeds NEW_FROM and all of its misc incarnations.
+  -- Added Data::Range::Compare::Stream::CallBack
+    Supports using a callback hash in the constructor much like the original Data::Range::Compare.

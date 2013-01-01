@@ -56,8 +56,15 @@ Consolidation Asc range_start asc,range_end desc.
 
 =item * my $processor=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($iterator,$cmp);
 
-Object constructor takes 2 argument: $processor and $cmp:  An $iterator object must implement Data::Range::Compare::Stream::Iterator::Base.  A $cmp object must implement  Data::Range::Compare::Stream::Iterator::Compare::Asc.
+Object constructor has 2 required arguments: $processor and $cmp:  An $iterator object must implement Data::Range::Compare::Stream::Iterator::Base.  A $cmp object must implement  Data::Range::Compare::Stream::Iterator::Compare::Asc.
 
+Optional Arguments:
+
+      factory_instance =>$obj
+        
+        # defines the object that implements the $obj->factory($start,$end,$data).
+        # new ranges are constructed from the factory interfcae.  If a factory interface
+        # is not created an instance of Data::Range::Compare::Stream is assumed.
 
 =item * while($processor->has_next) { do something }
 

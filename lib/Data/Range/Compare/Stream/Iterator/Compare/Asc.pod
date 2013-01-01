@@ -53,7 +53,13 @@ Data::Range::Compare::Stream::Iterator::Compare::Asc compares results from Data:
 
 =item * my $compare=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
 
-Object constructor takes no arguments.
+Optional constructor arguments:
+
+      factory_instance =>$obj
+
+        # defines the object that implements the $obj->factory($start,$end,$data).
+        # new ranges are constructed from the factory interfcae.  If a factory interface
+        # is not created an instance of Data::Range::Compare::Stream is assumed.
 
 =item * $compare->add_consolidator($iterator_a);
 

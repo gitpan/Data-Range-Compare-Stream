@@ -63,6 +63,7 @@ sub create_file_iterator {
     NEW_FROM=>$self->NEW_FROM,
     parse_line=>$self->{parse_line},
     result_to_line=>$self->{result_to_line},
+    factory_instance=>$self->{factory_instance},
     %args
   );
 
@@ -155,8 +156,8 @@ sub create_stack {
         @$left=sort { $self->sort_method($a,$b) } @$left;
         @$right=sort { $self->sort_method($a,$b) } @$right;
 
-	my $it_left=$self->NEW_ARRAY_ITERATOR_FROM->new(sorted=>1,range_list=>$left);
-	my $it_right=$self->NEW_ARRAY_ITERATOR_FROM->new(sorted=>1,range_list=>$right);
+	my $it_left=$self->NEW_ARRAY_ITERATOR_FROM->new(factory_instance=>$self->{factory_instance},sorted=>1,range_list=>$left);
+	my $it_right=$self->NEW_ARRAY_ITERATOR_FROM->new(factory_instance=>$self->{factory_instance},sorted=>1,range_list=>$right);
 
 	$merged->push($self->merge($it_left,$it_right));
 	@$right=();
@@ -174,7 +175,7 @@ sub create_stack {
 
     @$array=sort { $self->sort_method($a,$b) } @$array;
 
-    my $it=$self->NEW_ARRAY_ITERATOR_FROM->new(sorted=>1,range_list=>$array);
+    my $it=$self->NEW_ARRAY_ITERATOR_FROM->new(factory_instance=>$self->{factory_instance},sorted=>1,range_list=>$array);
     my $tmp=$self->get_temp;
 
     while($it->has_next) {

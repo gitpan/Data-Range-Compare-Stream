@@ -8,7 +8,15 @@ use Data::Range::Compare::Stream::Sort;
 
 sub new {
   my ($class,%args)=@_;
-  return $class->SUPER::new(qw(sorted 0 new_from Data::Range::Compare::Stream),range_list=>[],%args);
+
+  my $self=$class->SUPER::new(qw(
+    sorted            0 
+    new_from          Data::Range::Compare::Stream 
+    ),
+    range_list=>[],%args
+  );
+
+  return $self;
 }
 
 sub set_sorted { $_[0]->{sorted}=$_[1] }
@@ -50,7 +58,7 @@ sub insert_range {
 sub create_range {
   my ($self,@args)=@_;
   croak "Object: [$self] has all ready been sorted" if $self->sorted;
-  $self->add_range($self->{new_from}->new(@args));
+  $self->add_range($self->create_from_factory(@args));
 }
 
 sub get_next {

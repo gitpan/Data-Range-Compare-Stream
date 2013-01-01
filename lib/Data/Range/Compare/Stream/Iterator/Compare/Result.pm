@@ -15,7 +15,7 @@ use constant NON_OVERLAP_IDS=>4;
 use constant COLUMN_MAP=>5;
 use constant ROOT_IDS=>6;
 
-use constant PRINT_FORMAT=>'Commoon Range: [%s] Column id(s) that Overlap: [%s]';
+use constant PRINT_FORMAT=>'Common Range: [%s] Column id(s) that Overlap: [%s]';
 
 use base qw(Data::Range::Compare::Stream::Result::Base);
 

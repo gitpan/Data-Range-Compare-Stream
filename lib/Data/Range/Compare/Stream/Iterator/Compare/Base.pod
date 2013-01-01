@@ -14,7 +14,13 @@ This module extends Data::Range::Compare::Stream::Iterator::Base and provides th
 
 =item * my $compare=new Data::Range::Compare::Stream::Iterator::Compare::Base;
 
-  Object constructor takes no arguments
+Optional arguments:
+
+     factory_instance =>$obj
+        
+        # defines the object that implements the $obj->factory($start,$end,$data).
+        # new ranges are constructed from the factory interfcae.  If a factory interface
+        # is not created an instance of Data::Range::Compare::Stream is assumed.
 
 =item * $compare->add_consolidator($iterator_a);
 

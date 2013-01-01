@@ -22,7 +22,7 @@ sub parse_line {
   return $ref;
 }
 
-my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc;
+my $cmp=new Data::Range::Compare::Stream::Iterator::Compare::Asc(factory_instance=>'Data::Range::Compare::Stream::PosixTime');
 
 my @it_list;
 foreach my $file (qw(posix_time_a.src posix_time_b.src posix_time_c.src posix_time_d.src posix_time_e.src)) {
@@ -30,13 +30,13 @@ foreach my $file (qw(posix_time_a.src posix_time_b.src posix_time_c.src posix_ti
   my $iterator=new Data::Range::Compare::Stream::Iterator::File(
     parse_line=>\&parse_line,
     filename=>$file,
-    NEW_FROM=>'Data::Range::Compare::Stream::PosixTime',
+    factory_instance=>'Data::Range::Compare::Stream::PosixTime',
   );
 
   # save our file iterator so we can figure out how many lines were in each file
   push @it_list,$iterator;
 
-  my $con=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($iterator,$cmp);
+  my $con=new Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn($iterator,$cmp,factory_instance=>'Data::Range::Compare::Stream::PosixTime');
   $cmp->add_consolidator($con);
 }
 

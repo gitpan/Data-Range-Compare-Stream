@@ -4,9 +4,27 @@ use strict;
 use warnings;
 use overload '""'=>\&to_string,fallback=>1;
 
+use constant NEW_FROM_CLASS=>'Data::Range::Compare::Stream';
+
+sub NEW_FROM { $_[0]->{NEW_FROM} }
+
 sub new { 
   my ($class,%args)=@_;
-  return bless {%args},$class;
+  my $self=bless {NEW_FROM=>$class->NEW_FROM_CLASS,%args},$class;
+
+  unless(exists $self->{factory_instance}) {
+    $self->{factory_instance}= exists $self->{new_from} ? $self->{new_from} : $self->NEW_FROM;
+  }
+
+  return $self;
+}
+
+sub create_from_factory {
+  my ($self,@args)=@_;
+  
+  my $range=$self->{factory_instance}->factory(@args);
+
+  return $range;
 }
 
 sub on_consolidate { }

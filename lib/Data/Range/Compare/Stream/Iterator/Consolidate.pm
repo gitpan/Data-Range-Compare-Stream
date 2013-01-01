@@ -8,8 +8,9 @@ use constant RESULT_CLASS=>'Data::Range::Compare::Stream::Iterator::Consolidate:
 use Data::Range::Compare::Stream::Iterator::Consolidate::Result;
 
 sub new {
-  my ($class,$iterator)=@_;
-  bless {iterator=>$iterator},$class;
+  my ($class,$iterator,%args)=@_;
+  my $self=$class->SUPER::new(iterator=>$iterator,%args);
+  return $self;
 }
 
 sub has_next {

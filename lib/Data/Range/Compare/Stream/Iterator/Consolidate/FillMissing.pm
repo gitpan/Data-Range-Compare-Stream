@@ -10,10 +10,10 @@ use Carp qw(croak);
 use constant NEW_RESULT_FROM=>'Data::Range::Compare::Stream::Iterator::Consolidate::Result';
 
 sub new {
-  my ($class,$con)=@_;
+  my ($class,$con,%args)=@_;
   croak 'Consolidator object must be defined' unless defined($con);
   
-  $class->SUPER::new(con=>$con);
+  $class->SUPER::new(con=>$con,%args);
 }
 
 sub has_next {
@@ -51,7 +51,7 @@ sub get_next {
       return $last_result;
     } else {
       $self->{last_result_obj}=$result;
-      my $new_result=$result->get_common->NEW_FROM_CLASS->new($last_result->get_common->next_range_start,$result->get_common->previous_range_end);
+      my $new_result=$self->create_from_factory($last_result->get_common->next_range_start,$result->get_common->previous_range_end);
       $new_result->get_common->on_create_range($last_result->get_common);
       $self->{missing_result}=$self->NEW_RESULT_FROM->new($new_result,$new_result,$new_result,1,1);
 
