@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::More tests=>95;
 use Data::Dumper;
 
 # full feature unit test for:
@@ -24,13 +24,15 @@ use Data::Range::Compare::Stream::Iterator::Compare::Asc;
 use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
 
 # factory overload testing
-{
+eval {
 
-  my $helper={%HELPER};
   my $count=0;
-  while( my ($key,$value)=each %$helper) {
-    $helper->{$key}=sub { ++$count;$value->(@_) };
-  }
+
+  my $helper={
+    sub_one=>sub { ++$count;$_[0] -1 },
+    add_one=>sub { ++$count;$_[0] + 1 },
+    cmp_values=>sub { ++$count;$_[0] <=> $_[1] }
+  };
   my $obj=new Data::Range::Compare::Stream::CallBack($helper,0,0);
   isa_ok($obj,'Data::Range::Compare::Stream::CallBack');
 
@@ -58,10 +60,10 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
   my $bad=$obj->factory(1,0);
   isa_ok($bad,'Data::Range::Compare::Stream::CallBack');
   ok(!$bad,'instance should be false!');
-}
+};
 
 # Iterator::Array testing
-{
+eval {
   my $factory_instance=new Data::Range::Compare::Stream::CallBack(\%HELPER);
   isa_ok($factory_instance,'Data::Range::Compare::Stream::CallBack');
 
@@ -97,10 +99,10 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     my $string=$next->to_string;
     cmp_ok($string,'eq','1 - 1');
   }
-}
+};
 
 # Iterator::File testing
-{
+eval {
   my $factory_instance=new Data::Range::Compare::Stream::CallBack(\%HELPER);
   isa_ok($factory_instance,'Data::Range::Compare::Stream::CallBack');
 
@@ -121,10 +123,10 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
   ok(!$bad,'should not have any bad ranges');
   
 
-}
+};
 
 # MergeSortAsc testing
-{
+eval {
   my $factory_instance=new Data::Range::Compare::Stream::CallBack(\%HELPER);
   my $it=new Data::Range::Compare::Stream::Iterator::File::MergeSortAsc(
     file_list=>[qw(t/file_test.src t/merg_sort_test.src)],
@@ -137,10 +139,11 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     isa_ok($next,'Data::Range::Compare::Stream::CallBack');
   }
 
-}
+};
+diag $@ if $@;
 
 # Consolidation test
-{
+eval {
   my $factory_instance=new Data::Range::Compare::Stream::CallBack(\%HELPER);
   my $fit=new Data::Range::Compare::Stream::Iterator::File::MergeSortAsc(
     file_list=>[qw(t/file_test.src t/merg_sort_test.src)],
@@ -176,9 +179,9 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
 
   }
   ok(!$it->has_next);
-}
+};
 
-{
+eval {
   my $factory_instance=new Data::Range::Compare::Stream::CallBack(\%HELPER);
   my $fit=new Data::Range::Compare::Stream::Iterator::File::MergeSortAsc(
     file_list=>[qw(t/file_test.src t/merg_sort_test.src)],
@@ -197,9 +200,9 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
   }
 
   ok(!$it->has_next);
-}
+};
 # testing of Data::Range::Compare::Stream::Iterator::Consolidate::FillMissing;
-{
+eval {
   my $factory_instance=new Data::Range::Compare::Stream::CallBack(\%HELPER);
   isa_ok($factory_instance,'Data::Range::Compare::Stream::CallBack');
 
@@ -255,10 +258,10 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
   }
 
   ok(!$it->has_next,'should be empty now');
-}
+};
 
 # Data::Range::Compare::Stream::Iterator::Compare::Asc
-{
+eval {
   my $factory_instance=new Data::Range::Compare::Stream::CallBack(\%HELPER);
   my $sets=[
     [ qw( 
@@ -290,10 +293,10 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     my $common=$next->get_common;
     isa_ok($common,'Data::Range::Compare::Stream::CallBack');
   }
-}
+};
 
 
-{
+eval {
   my $factory_instance=new Data::Range::Compare::Stream::CallBack(\%HELPER);
   my $sets=[
     [ qw( 
@@ -331,9 +334,9 @@ use Data::Range::Compare::Stream::Iterator::Consolidate::OverlapAsColumn;
     my $common=$next->get_common;
     isa_ok($common,'Data::Range::Compare::Stream::CallBack');
   }
-}
+};
 
 
 
 # End of the unit tests!
-done_testing();
+#done_testing();

@@ -157,3 +157,8 @@ Revision history for Perl extension Data::Range::Compare::Stream.
     This superceeds NEW_FROM and all of its misc incarnations.
   -- Added Data::Range::Compare::Stream::CallBack
     Supports using a callback hash in the constructor much like the original Data::Range::Compare.
+
+4.028
+-- Bug fishing?
+   -- This release was added to help track down some odd unit test deaths on cpan for the new Dynamic range compare object
+
