@@ -162,3 +162,5 @@ Revision history for Perl extension Data::Range::Compare::Stream.
 -- Bug fishing?
    -- This release was added to help track down some odd unit test deaths on cpan for the new Dynamic range compare object
 
+4.029
+-- README and TODO updates ( wish list completed! )

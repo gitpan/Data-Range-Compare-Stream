@@ -7,7 +7,7 @@ use base qw(Data::Range::Compare::Stream::Result::Base Data::Range::Compare::Str
 
 use constant NEW_FROM_CLASS=>'Data::Range::Compare::Stream';
 
-our $VERSION='4.028';
+our $VERSION='4.029';
 
 sub factory {
   my ($self,@args)=@_;
